@@ -141,3 +141,33 @@ char *ft_listtostr(t_list **alst, char *str)
 
     return str;
 }
+
+char **ft_lst_to_argv(t_list **alst)
+{
+    char **argv;
+    size_t argv_len;
+    size_t len = 0;
+
+    t_list *lst;
+
+    size_t y = 0;
+    size_t i = 0;
+
+    if(!(alst))
+        return NULL;
+        
+    lst = *alst;    
+    argv_len = ft_lstsize(*alst);
+
+    if(!(argv = (char**) malloc(sizeof(char*) * (argv_len + 1))))
+        return NULL;
+    while(y < argv_len && lst != NULL)
+    {
+        argv[y] = ft_strdup((char*) lst->content);
+        lst = lst->next;
+        y++;
+    }
+    argv[y] = NULL;
+
+    return argv;
+}

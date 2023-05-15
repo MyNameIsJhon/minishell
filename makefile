@@ -15,7 +15,7 @@ SRC = ./Libft/Libft/libft.c \
 
 HEADS = ./Libft/Libft/libft.h \
 		./Libft/List/list.h \
-		./file_access/f_access.c \
+		./file_access/f_access.h \
 		./get_shell/g_shell.h
 		
 OBJ = $(SRC:.c=.o)

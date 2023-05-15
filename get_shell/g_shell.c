@@ -24,7 +24,7 @@ size_t char_len_shells(const char *str, size_t start)
     {
         if(str[i] == '\"' || str[i] == '\'')
             bo *= (-1);
-        else if(str[i] == ' ' && bo == -1)
+        else if(str[i] == ' ' && bo == (-1))
             break;
         i++;
     }
@@ -56,7 +56,7 @@ char *get_shell()
         i++;
     }
     
-    str[i] = '\0';
+    str[i-1] = '\0';
 
     shell = ft_strdup(str);
 

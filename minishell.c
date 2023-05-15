@@ -9,8 +9,12 @@ int FILE_NOT_FOUND = 0;
 void ft_errno(char *str)
 {
     if(FILE_NOT_FOUND == 1)
-        printf("    No program of this name found : %s !", str);
-    
+    {
+        ft_putstr("Ce programme est introuvable : ");
+        ft_putstr(str);
+        ft_putstr(" !");
+        ft_putstr("\n\n");
+    }
 }
 
 void lst_printall(t_list **alst)
@@ -42,7 +46,10 @@ char *finder_to_path(char *prog_name)
     int i = 0;
 
     astr = ft_strsplit(PATH, ':');
-
+    if(prog_name == NULL)
+        return NULL;
+    if(ft_strcmp(prog_name, "exit") == 0)
+        return NULL;
     while(astr[i] != NULL)
     {
         r_path = ft_strsjoin(3, astr[i], "/", prog_name);
@@ -65,21 +72,41 @@ int main()
     char *shell = NULL;
     t_list *lst = NULL;
 
+    int infinite_stop = 1;
+
     char *prog_path = NULL;
-    
-    shell = get_shell();
 
-    lst = shell_sep(shell);
+    char **args = NULL;
 
-    prog_path = finder_to_path((char*) lst->content);
 
-    if(prog_path != NULL)
-        ft_printf("%s \n", prog_path);
+    while(infinite_stop == 1)
+    {
+        FILE_NOT_FOUND = 0;
 
-    ft_errno((char*) lst->content);
+        shell = get_shell();
 
-    ft_lstclearall(&lst, &free);
-    free(shell);
+        lst = shell_sep(shell);
 
+        args = ft_lst_to_argv(&lst);
+        
+        if(lst != NULL)
+            prog_path = finder_to_path((char*) lst->content);
+        if(prog_path != NULL)
+        {
+            ft_printf("%s \n", prog_path);
+            //execve(prog_path, args, NULL);
+        }
+        if(lst != NULL)
+        {
+            if(ft_strcmp((char*) lst->content, "exit") == 0)
+                infinite_stop = 0;
+            ft_errno((char*) lst->content);
+            ft_lstclearall(&lst, &free);
+        }
+        if(shell != NULL)
+            free(shell);
+        if(args != NULL)
+            ft_free_strsplit(args);
+    }
     return 0;
 }
