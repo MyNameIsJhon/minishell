@@ -1,116 +1,16 @@
 #include <unistd.h>
 #include "libft.h"
 #include "list.h"
+#include "g_shell.h"
+#include "stdio.h"
 
-#define BUFF_CARACTS 350
+int FILE_NOT_FOUND = 0;
 
-
-size_t char_len_shells(const char *str, size_t start)
+void ft_errno(char *str)
 {
-    size_t i = start;
-    int bo = (-1);
-
-    if(!str)
-        return 0;
-    while(str[i] == ' ')
-        i++;
-    while(str[i] != '\0')
-    {
-        if(str[i] == '\"' || str[i] == '\'')
-            bo *= (-1);
-        else if(str[i] == ' ' && bo == -1)
-            break;
-        i++;
-    }
-    return i - start;
-}
-
-
-char get_char() {
-    char c;
-    read(STDIN_FILENO, &c, 1);
-    return c;
-}
-
-void minishell_prompt()
-{
-    ft_putstr("minishell㉿kali$>");
-}
-
-char *get_shell()
-{
-    char *str = NULL;
-    char *shell = NULL;
-    char c = 'i';
-    int i = 0;
-
-    if(!(str = (char*) malloc(sizeof(char) * BUFF_CARACTS)))
-        return NULL;
-
-    minishell_prompt();
+    if(FILE_NOT_FOUND == 1)
+        printf("    No program of this name found : %s !", str);
     
-    while(c != '\n' && i < BUFF_CARACTS)
-    {
-        c = get_char();
-        str[i] = c;
-        i++;
-    }
-    
-    str[i] = '\0';
-
-    shell = ft_strdup(str);
-
-    free(str);
-
-    return shell;
-}
-
-t_list *shell_sep(char *shell)
-{
-    t_list *lst = NULL;
-    int i = 0;
-    int y = 0;
-    int z = 0; // compteur pour LST
-    size_t len_val = 0;
-    char *str = NULL;
-    char c;
-
-    size_t start = 0;    
-
-    if(!shell)
-        return NULL;
-    while(shell[start] != '\0')
-    {
-        len_val = char_len_shells(shell, start);
-
-        if(!(str = (char*) malloc(sizeof(char) * (len_val + 1))))
-        {
-            if(lst != NULL)
-                ft_lstclearall(&lst, &free);
-            return NULL;
-        }
-        while(i < len_val)
-        {
-            str[i] = shell[start+i];
-            i++;
-        }
-        str[i] = '\0';
-        if(z == 0)
-            lst = ft_lstnew((char*) ft_strdup(str));
-        else
-            ft_lstadd_back(&lst, ft_lstnew((char*) ft_strdup(str)));
-        
-        start += len_val;
-
-        while(shell[start] == ' ' && shell[start] != '\0')
-            start++;
-        
-        free(str);
-        z++;
-        i = 0;
-    }
-
-    return lst;
 }
 
 void lst_printall(t_list **alst)
@@ -126,18 +26,60 @@ void lst_printall(t_list **alst)
     }
 }
 
+int program_finder(char *path, int flag)
+{
+    if(access(path, flag) == 0)
+        return 1;
+}
+
+char *finder_to_path(char *prog_name)
+{
+    char *PATH = getenv("PATH");
+    char **astr = NULL;
+
+    char *r_path = NULL;
+
+    int i = 0;
+
+    astr = ft_strsplit(PATH, ':');
+
+    while(astr[i] != NULL)
+    {
+        r_path = ft_strsjoin(3, astr[i], "/", prog_name);
+
+        if(access(r_path, X_OK) == 0)
+        {
+            ft_free_strsplit(astr);
+            return r_path;
+        }
+        i++;
+        free(r_path);
+    }
+    FILE_NOT_FOUND = 1;
+    ft_free_strsplit(astr);
+    return NULL;
+}
+
 int main()
 {
     char *shell = NULL;
     t_list *lst = NULL;
 
+    char *prog_path = NULL;
+    
     shell = get_shell();
 
     lst = shell_sep(shell);
 
-    lst_printall(&lst);
+    prog_path = finder_to_path((char*) lst->content);
+
+    if(prog_path != NULL)
+        ft_printf("%s \n", prog_path);
+
+    ft_errno((char*) lst->content);
 
     ft_lstclearall(&lst, &free);
     free(shell);
+
     return 0;
 }

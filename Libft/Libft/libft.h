@@ -50,6 +50,7 @@ char *ft_strsub(char const *s, unsigned int start, size_t len);
 char *ft_strjoin(char const *s1, char const *s2);
 char *ft_strtrim(char const *s);
 char **ft_strsplit(char const *s, char c);
+void ft_free_strsplit(char **split);
 void ft_putchar(char c);
 void ft_putstr(const char *str);
 void  ft_putnbr(int nb);

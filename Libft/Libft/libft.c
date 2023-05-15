@@ -585,6 +585,19 @@ char	**ft_strsplit(char const *s, char c)
 	return (split);
 }
 
+void ft_free_strsplit(char **split)
+{
+    int i = 0;
+
+    while (split[i] != NULL)
+    {
+        free(split[i]);
+        i++;
+    }
+    free(split);
+}
+
+
 
 void ft_putchar(char c)
 {
