@@ -33,7 +33,7 @@ size_t char_len_shells(const char *str, size_t start)
 
 void minishell_prompt()
 {
-    ft_putstr("minishell㉿kali$>");
+    ft_putstr("\nminishell㉿kali$>");
 }
 
 char *get_shell()

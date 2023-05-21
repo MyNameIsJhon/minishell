@@ -4,6 +4,7 @@
 #include "g_shell.h"
 #include "ft_errno.h"
 #include "p_finder.h"
+#include "exec_shell.h"
 #include <stdio.h>
 
 
@@ -26,16 +27,12 @@ int main()
     char *shell = NULL;
     t_list *lst = NULL;
 
-    int infinite_stop = 1;
-
     char *prog_path = NULL;
 
     char **args = NULL;
 
-
-    while(infinite_stop == 1)
+    while(INFINITE_STOP == 1)
     {
-        FILE_NOT_FOUND = 0;
 
         shell = get_shell();
 
@@ -47,13 +44,12 @@ int main()
             prog_path = finder_to_path((char*) lst->content);
         if(prog_path != NULL)
         {
-            ft_printf("%s \n", prog_path);
-            //execve(prog_path, args, NULL);
+            exec_prog(prog_path, args, (char*) lst->content);
         }
         if(lst != NULL)
         {
             if(ft_strcmp((char*) lst->content, "exit") == 0)
-                infinite_stop = 0;
+                INFINITE_STOP = 0;
             ft_errno((char*) lst->content);
             ft_lstclearall(&lst, &free);
         }
