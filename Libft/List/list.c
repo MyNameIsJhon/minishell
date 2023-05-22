@@ -157,7 +157,7 @@ char **ft_lst_to_argv(t_list **alst)
         return NULL;
         
     lst = *alst;    
-    argv_len = ft_lstsize(*alst);
+    argv_len = ft_lstsize(*alst) + 1;
 
     if(!(argv = (char**) malloc(sizeof(char*) * (argv_len + 1))))
         return NULL;
