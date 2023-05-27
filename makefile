@@ -47,16 +47,27 @@ clean :
 
 mrproper : clean
 	rm -rf $(EXEC)
+	sudo rm -rf /usr/share/minishell
+	sudo rm -rf /opt/minishell
 	$(MAKE) mrproper -C builtins/src/echo
 	$(MAKE) mrproper -C builtins/src/cd
 	$(MAKE) mrproper -C builtins/src/env
 	$(MAKE) mrproper -C builtins/src/setenv
 
 builtins: all
+	sudo cp -r ./var /usr/share/minishell
+	sudo mkdir /opt/minishell/
+	sudo chmod -R a+rwX /usr/share/minishell
 	$(MAKE) -C builtins/src/echo
 	$(MAKE) -C builtins/src/cd
 	$(MAKE) -C builtins/src/env
 	$(MAKE) -C builtins/src/setenv
+	sudo cp -r ./builtins/execs /opt/minishell
+	sudo chmod -R a+rwX /opt/minishell/execs
+
+
+	
+
 
 
 

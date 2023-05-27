@@ -2,13 +2,16 @@
 #include <fcntl.h>
 #include <stdlib.h> 
 
+#define  MEM_PATH "/usr/share/minishell/env"
+
 int main() // problème lorsque le programme est utilisé en dehors du repertoire minishell
 {
     int fd = 0;
     char *line;
     int i = 0;
 
-    if ((fd = open("var/env.txt", O_RDONLY)) == -1)
+
+    if ((fd = open(MEM_PATH, O_RDONLY)) == -1)
     {
         ft_putstr("Erreur lors de l'ouverture du fichier.\n");
         return 1;
@@ -25,6 +28,7 @@ int main() // problème lorsque le programme est utilisé en dehors du repertoir
     if (ret == -1)
     {
         ft_putstr("Erreur lors de la lecture du fichier.\n");
+        close(fd);
         return 1;
     }
     
