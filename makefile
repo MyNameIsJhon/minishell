@@ -13,6 +13,7 @@ SRC = ./Libft/Libft/libft.c \
 		./exec_shell/path_finder/p_finder.c \
 		./exec_shell/exec_shell.c \
 		./errnoft/ft_errno.c \
+		./Libft/get_next_line.c \
 		./minishell.c
 
 HEADS = ./Libft/Libft/libft.h \
@@ -35,11 +36,27 @@ $(OBJ) : $(HEADS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 	
 
-.PHONY : clean mrproper
+.PHONY: all clean mrproper builtin_echo 
 
 clean : 
 	rm -rf $(OBJ)
+	$(MAKE) clean -C builtins/src/echo
+	$(MAKE) clean -C builtins/src/cd
+	$(MAKE) clean -C builtins/src/env
+	$(MAKE) clean -C builtins/src/setenv
 
 mrproper : clean
 	rm -rf $(EXEC)
+	$(MAKE) mrproper -C builtins/src/echo
+	$(MAKE) mrproper -C builtins/src/cd
+	$(MAKE) mrproper -C builtins/src/env
+	$(MAKE) mrproper -C builtins/src/setenv
+
+builtins: all
+	$(MAKE) -C builtins/src/echo
+	$(MAKE) -C builtins/src/cd
+	$(MAKE) -C builtins/src/env
+	$(MAKE) -C builtins/src/setenv
+
+
 

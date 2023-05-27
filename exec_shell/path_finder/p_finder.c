@@ -15,7 +15,7 @@ char *builtins_to_path(char *PATH, char *built_path)
 {
     char *str = NULL;
 
-    str = ft_strsjoin(3, PATH, ":", built_path);
+    str = ft_strsjoin(3, built_path, ":", PATH);
 
     return str;
 }

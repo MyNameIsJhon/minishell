@@ -6,6 +6,7 @@
 #include "p_finder.h"
 #include "exec_shell.h"
 #include <stdio.h>
+#include <fcntl.h>
 
 
 void lst_printall(t_list **alst)
@@ -23,7 +24,7 @@ void lst_printall(t_list **alst)
 
 
 int main()
-{
+{ 
     char *shell = NULL;
     t_list *lst = NULL;
 

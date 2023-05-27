@@ -8,8 +8,8 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/minishell",
-            "args": [],
+            "program": "${workspaceFolder}/builtins/execs/env",
+            "args": ["papa","outai"],
             "cwd": "${workspaceFolder}"
         }
     ]

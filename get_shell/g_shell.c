@@ -33,7 +33,11 @@ size_t char_len_shells(const char *str, size_t start)
 
 void minishell_prompt()
 {
-    ft_putstr("\nminishell㉿kali$>");
+    char cwd[1024];
+
+    getcwd(cwd, sizeof(cwd));
+
+    ft_printf("\nminishell㉿kali$%s>", cwd);
 }
 
 char *get_shell()
