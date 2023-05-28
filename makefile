@@ -1,7 +1,7 @@
 CC =gcc
 CFLAGS =-I/usr/include -g 
 LDFLAGS = 
-EXEC =minishell
+EXEC =/usr/bin/minishell
 
 INCLUDES = -I ./Libft/Libft -I ./Libft/List -I ./Libft -I ./get_shell  -I ./exec_shell -I ./exec_shell/path_finder -I ./errnoft
 

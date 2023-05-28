@@ -12,6 +12,8 @@ int exec_prog(char *path, char **args, char *prog_name)
 
     pid = fork();
 
+    ft_printf("%s\n", path);
+
     if (pid == -1) 
     {
         perror("fork");
@@ -26,14 +28,6 @@ int exec_prog(char *path, char **args, char *prog_name)
     {
         if(waitpid(pid, &status, 0) == -1) 
             return 0;
-        if (WIFEXITED(status)) 
-        {
-            int exit_status = WEXITSTATUS(status);
-        }
-        else if (WIFSIGNALED(status))
-        { 
-            int terminating_signal = WTERMSIG(status);
-        }
     }
     return 1;
 }
