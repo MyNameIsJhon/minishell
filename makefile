@@ -58,12 +58,12 @@ builtins: all
 	sudo cp -r ./var /usr/share/minishell
 	sudo mkdir /opt/minishell/
 	sudo chmod -R a+rwX /usr/share/minishell
+	sudo chmod -R a+rwX /opt/minishell/
 	$(MAKE) -C builtins/src/echo
 	$(MAKE) -C builtins/src/cd
 	$(MAKE) -C builtins/src/env
 	$(MAKE) -C builtins/src/setenv
 	sudo cp -r ./builtins/execs /opt/minishell
-	sudo chmod -R a+rwX /opt/minishell/
 
 
 	
