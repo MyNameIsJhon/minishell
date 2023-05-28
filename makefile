@@ -63,7 +63,7 @@ builtins: all
 	$(MAKE) -C builtins/src/env
 	$(MAKE) -C builtins/src/setenv
 	sudo cp -r ./builtins/execs /opt/minishell
-	sudo chmod -R a+rwX /opt/minishell/execs
+	sudo chmod -R a+rwX /opt/minishell/
 
 
 	
