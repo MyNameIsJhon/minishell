@@ -1,10 +1,10 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <stdlib.h> 
+#include "shell_builtins.h"
 
-#define  MEM_PATH "/usr/share/minishell/env"
 
-int main(int argc, char **argv) // problème lorsque le programme est utilisé en dehors du repertoire minishell
+int shell_setenv(int argc, char **argv) // problème lorsque le programme est utilisé en dehors du repertoire minishell
 {
     int fd = 0;
     char *line;

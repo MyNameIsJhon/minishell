@@ -1,6 +1,8 @@
 #ifndef EXEC_SHELL
 #define EXEC_SHELL
 
-int exec_prog(char *path, char **args, char *prog_name);
+int exec_builtin(char **args);
+int exec_prog(char *path, char **args);
+int shell_exec(char *path, char **args);
 
 #endif 

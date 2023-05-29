@@ -13,7 +13,7 @@ void print_out_char(char *str, char c)
     }
 }
 
-int main(int argc, char **argv)
+int shell_echo(int argc, char **argv)
 {
     int i = 1;
     int y = 1;

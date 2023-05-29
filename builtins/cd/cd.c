@@ -28,7 +28,7 @@ int ft_is_dir(const char *path)
     return 0;
 }
 
-int main(int argc, char **argv)
+int shell_cd(int argc, char **argv)
 {
     if (argc < 2)
     {

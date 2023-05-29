@@ -10,6 +10,24 @@ int program_finder(char *path, int flag)
     if(access(path, flag) == 0)
         return 1;
 }
+int if_builtin(char *path)
+{
+    if(ft_strcmp(path, "./builtins/env") == 0)
+        return 1;
+
+    else if(ft_strcmp(path, "./builtins/setenv") == 0)
+        return 1;
+
+    else if(ft_strcmp(path, "./builtins/cd") == 0)
+        return 1;
+
+    else if(ft_strcmp(path, "./builtins/echo") == 0)
+        return 1;
+
+    else
+        return 0;
+
+}
 
 char *builtins_to_path(char *PATH, char *built_path)
 {
@@ -31,7 +49,7 @@ char *finder_to_path(char *prog_name)
 
     int i = 0;
 
-    PATHS = builtins_to_path(PATH, BUILTINS);
+    PATHS = builtins_to_path(PATH, BUILTINS); //pour le moment totalement inutile mais en attente amélioration pour des builts extérieur
 
     astr = ft_strsplit(PATHS, ':');
     if(prog_name == NULL)
@@ -42,7 +60,12 @@ char *finder_to_path(char *prog_name)
     {
         r_path = ft_strsjoin(3, astr[i], "/", prog_name);
 
-        if(access(r_path, X_OK) == 0)
+        if(if_builtin(r_path))
+        {
+            ft_free_strsplit(astr);
+            return r_path;
+        }
+        else if(access(r_path, X_OK) == 0 )
         {
             ft_free_strsplit(astr);
             return r_path;

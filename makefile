@@ -1,9 +1,9 @@
 CC =gcc
 CFLAGS =-I/usr/include -g 
 LDFLAGS = 
-EXEC =/usr/bin/minishell
+EXEC =minishell
 
-INCLUDES = -I ./Libft/Libft -I ./Libft/List -I ./Libft -I ./get_shell  -I ./exec_shell -I ./exec_shell/path_finder -I ./errnoft
+INCLUDES = -I ./Libft/Libft -I ./Libft/List -I ./Libft -I ./get_shell  -I ./exec_shell -I ./exec_shell/path_finder -I ./errnoft -I ./builtins/ -I ./builtins/cd -I ./builtins/echo -I ./builtins/env -I ./builtins/setenv 
 
 SRC = ./Libft/Libft/libft.c \
 		./Libft/Libft/ft_strsjoin.c \
@@ -14,6 +14,10 @@ SRC = ./Libft/Libft/libft.c \
 		./exec_shell/exec_shell.c \
 		./errnoft/ft_errno.c \
 		./Libft/get_next_line.c \
+		./builtins/cd/cd.c \
+		./builtins/echo/echo.c \
+		./builtins/env/env.c \
+		./builtins/setenv/setenv.c \
 		./minishell.c
 
 HEADS = ./Libft/Libft/libft.h \
@@ -21,6 +25,7 @@ HEADS = ./Libft/Libft/libft.h \
 		./exec_shell/path_finder/p_finder.h \
 		./exec_shell/exec_shell.h \
 		./errnoft/ft_errno.h \
+		./builtins/shell_builtins.h \
 		./get_shell/g_shell.h
 		
 OBJ = $(SRC:.c=.o)
@@ -36,34 +41,20 @@ $(OBJ) : $(HEADS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 	
 
-.PHONY: all clean mrproper builtin_echo 
+.PHONY: all clean mrproper builtins
 
 clean : 
 	rm -rf $(OBJ)
-	$(MAKE) clean -C builtins/src/echo
-	$(MAKE) clean -C builtins/src/cd
-	$(MAKE) clean -C builtins/src/env
-	$(MAKE) clean -C builtins/src/setenv
 
 mrproper : clean
 	rm -rf $(EXEC)
 	sudo rm -rf /usr/share/minishell
-	sudo rm -rf /opt/minishell
-	$(MAKE) mrproper -C builtins/src/echo
-	$(MAKE) mrproper -C builtins/src/cd
-	$(MAKE) mrproper -C builtins/src/env
-	$(MAKE) mrproper -C builtins/src/setenv
 
 builtins: all
-	sudo cp -r ./var /usr/share/minishell
-	sudo mkdir /opt/minishell/
+	sudo mkdir /usr/share/minishell/
+	sudo cp ./var/env  /usr/share/minishell/
 	sudo chmod -R a+rwX /usr/share/minishell
-	sudo chmod -R a+rwX /opt/minishell/
-	$(MAKE) -C builtins/src/echo
-	$(MAKE) -C builtins/src/cd
-	$(MAKE) -C builtins/src/env
-	$(MAKE) -C builtins/src/setenv
-	sudo cp -r ./builtins/execs /opt/minishell
+	
 
 
 	

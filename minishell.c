@@ -45,7 +45,7 @@ int main()
             prog_path = finder_to_path((char*) lst->content);
         if(prog_path != NULL)
         {
-            exec_prog(prog_path, args, (char*) lst->content);
+            shell_exec(prog_path, args);
         }
         if(lst != NULL)
         {
