@@ -60,11 +60,6 @@ char    *ft_itoa(int n);
 int ft_octal(int nb);
 char    *ft_unsigned_itoa(unsigned int n);
 
-void ft_putchar_fd(char c, int fd);
-void ft_putstr_fd(char const *s, int fd);
-void ft_putnbr_fd(int n, int fd);
-int ft_get_next_line(int fd, char **line);
-
 void ft_printf(char *str, ...);
 char *ft_strsjoin(int count, ...);
 

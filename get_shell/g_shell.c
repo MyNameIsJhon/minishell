@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "list.h"
 #include "g_shell.h"
+#include "file.h"
 
 #define BUFF_CARACTS 350
 

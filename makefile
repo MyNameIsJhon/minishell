@@ -3,25 +3,28 @@ CFLAGS =-I/usr/include -g
 LDFLAGS = 
 EXEC =minishell
 
-INCLUDES = -I ./Libft/Libft -I ./Libft/List -I ./Libft -I ./get_shell  -I ./exec_shell -I ./exec_shell/path_finder -I ./errnoft -I ./builtins/ -I ./builtins/cd -I ./builtins/echo -I ./builtins/env -I ./builtins/setenv 
+INCLUDES = -I ./Libft/Libft -I ./Libft/List -I ./Libft -I Libft/files/ -I ./get_shell  -I ./exec_shell -I ./exec_shell/path_finder -I ./errnoft -I ./builtins/ -I ./builtins/cd -I ./builtins/echo -I ./builtins/env -I ./builtins/setenv -I ./builtins/unsetenv 
 
 SRC = ./Libft/Libft/libft.c \
 		./Libft/Libft/ft_strsjoin.c \
 		./Libft/List/list.c \
 		./Libft/ft_printf.c \
+		./Libft/files/file.c \
+		./Libft/files/get_next_line.c \
 		./get_shell/g_shell.c \
 		./exec_shell/path_finder/p_finder.c \
 		./exec_shell/exec_shell.c \
 		./errnoft/ft_errno.c \
-		./Libft/get_next_line.c \
 		./builtins/cd/cd.c \
 		./builtins/echo/echo.c \
 		./builtins/env/env.c \
 		./builtins/setenv/setenv.c \
+		./builtins/unsetenv/unsetenv.c \
 		./minishell.c
 
 HEADS = ./Libft/Libft/libft.h \
 		./Libft/List/list.h \
+		./Libft/files/file.h \
 		./exec_shell/path_finder/p_finder.h \
 		./exec_shell/exec_shell.h \
 		./errnoft/ft_errno.h \

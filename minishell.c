@@ -23,7 +23,7 @@ void lst_printall(t_list **alst)
 }
 
 
-int main()
+/*int main()
 { 
     char *shell = NULL;
     t_list *lst = NULL;
@@ -60,4 +60,4 @@ int main()
             ft_free_strsplit(args);
     }
     return 0;
-}
+}*/

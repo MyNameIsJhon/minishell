@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "file.h"
 
 void print_out_char(char *str, char c)
 {

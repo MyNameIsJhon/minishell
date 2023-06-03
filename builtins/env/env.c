@@ -2,8 +2,9 @@
 #include <fcntl.h>
 #include <stdlib.h> 
 #include "shell_builtins.h"
+#include "file.h"
 
-int shell_env() // problème lorsque le programme est utilisé en dehors du repertoire minishell
+int shell_env()
 {
     int fd = 0;
     char *line;

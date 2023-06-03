@@ -7,6 +7,7 @@ int shell_env();
 int shell_cd(int argc, char **argv);
 int shell_echo(int argc, char **argv);
 int shell_setenv(int argc, char **argv);
+int shell_unsetenv(int argc, char **args);
 
 
 #endif

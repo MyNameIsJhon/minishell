@@ -4,6 +4,7 @@
 #include "g_shell.h"
 #include "ft_errno.h"
 #include "p_finder.h"
+#include "file.h"
 
 int program_finder(char *path, int flag)
 {
@@ -23,7 +24,10 @@ int if_builtin(char *path)
 
     else if(ft_strcmp(path, "./builtins/echo") == 0)
         return 1;
-
+        
+    else if(ft_strcmp(path, "./builtins/unsetenv") == 0)
+        return 1;
+        
     else
         return 0;
 

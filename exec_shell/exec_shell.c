@@ -6,6 +6,7 @@
 #include "ft_errno.h"
 #include "exec_shell.h"
 #include "shell_builtins.h"
+#include "file.h"
 
 size_t multitab_len(char **args)
 {
@@ -31,6 +32,9 @@ int exec_builtin(char **args)
     else if(ft_strcmp(args[0], "echo") == 0)
         shell_echo(multitab_len(args), args);
 
+    else if(ft_strcmp(args[0], "unsetenv") == 0)
+        shell_unsetenv(multitab_len(args), args);
+
     else
         return 0;
 
@@ -43,7 +47,6 @@ int exec_prog(char *path, char **args)
     int status;
 
     pid = fork();
-
 
     if (pid == -1) 
     {

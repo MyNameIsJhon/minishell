@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <stdio.h>
+#include "file.h"
 
 void cd_error(char *path)
 {
@@ -42,16 +43,10 @@ int shell_cd(int argc, char **argv)
         return 1;
     }
 
-    ft_putnbr(1);
-
     if (chdir(argv[1]) != 0)
     {
         perror("Erreur lors du changement de répertoire");
         return 1;
-    }
-    else
-    {
-        ft_putnbr(2);
     }
 
     return 0;
