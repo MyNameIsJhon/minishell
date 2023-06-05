@@ -12,17 +12,16 @@ FT_FILE *ft_fopen(const char *path, int right)
     FT_FILE *file;
 
     file = (FT_FILE*) malloc(sizeof(FT_FILE));
-    if (file == NULL)
+    if(file == NULL)
         return NULL;
 
     file->fd = open(path, right);
-    if (file->fd == -1)
+    if(file->fd == -1)
     {
         free(file);
         return NULL;
     }
     
-    file->pos = 0;
     file->flags = right;
     file->path = ft_strdup(path);
 
@@ -31,7 +30,7 @@ FT_FILE *ft_fopen(const char *path, int right)
 
 void ft_fclose(FT_FILE *file)
 {
-    if (file == NULL)
+    if(file == NULL)
         return;
 
     close(file->fd);
@@ -39,89 +38,98 @@ void ft_fclose(FT_FILE *file)
     free(file);
 }
 
-void newbuff_fd()
 
-size_t ft_fdlen(int fd)
+
+int ft_fget_next_line(FT_FILE *file, char **line)
 {
+    int fd;
     char c;
     size_t i = 0;
 
-    if (fd == 0)
-        return 0;
+    if (!file|| !line || access(file->path, R_OK) == (-1))
+        return (-1);
 
-    while (read(fd, &c, 1))
-        i++;
-    
-    return i;
-}
+    char *str = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
 
-int ft_fseek(FT_FILE *file, unsigned int seek_loc, long nb_c)
-{
-    long i = 0;
-    char c;
-    char *path;
-    int right;
+    fd = file->fd;
 
-    if (file == NULL || seek_loc > 3 || access(file->path, R_OK))
-        return 0;
-    
-    if (seek_loc == SEEK_BEGIN)
+    if (!str)
+        return (-1);
+
+
+    while (i < BUFF_SIZE && read(fd, &c, 1) > 0)
     {
-        path = ft_strdup(file->path);
-        right = file->flags;
-        ft_fclose(file);
-        file = ft_fopen(path, right);
-        free(path);
-    }
-    else if (seek_loc == SEEK_END)
-        nb_c = ft_fdlen(file->fd) - nb_c;
-
-    while (i < nb_c && read(file->fd, &c, 1) > 0)
+        str[i] = c;
         i++;
+        if (c == '\n')
+        {
+            str[i] = '\0';
+            *line = strdup_chr(str, c);
+            free(str);
+            return 1;
+        }
+    }
 
+    if (i == 0)
+    {
+        free(str);
+        return 0;
+    }
+
+    str[i] = '\0';
+    *line = strdup_chr(str, '\0');
+    free(str);
     return 1;
 }
 
-void ft_putchar_fd(char c, int fd)
+int resetloc_file(FT_FILE *file)
 {
-    write(fd, &c, 1);
+    if(!file || access(file->path, R_OK))
+        return 0;
+
+    close(file->fd);
+    open(file->path, file->flags);
+
+    return (file->fd != -1) ? 1 : 0;
 }
 
-void ft_putstr_fd(char const *s, int fd)
+
+
+size_t ft_flen(FT_FILE *file)
 {
-    write(fd, s, ft_strlen(s));
+    int fd;
+    char c;
+    size_t i = 0;
+
+    if((fd = open(file->path, O_RDONLY)) == (-1))
+        return 0;
+    
+    while(read(fd, &c, 1))
+        i++;
+    return i;
 }
 
-void ft_putnbr_fd(int n, int fd)
+
+int ft_fseek(FT_FILE *file, unsigned int seek_pos, size_t nb_c)
 {
-    if (n < 0)
+    size_t i = 0;
+    char c;
+
+    if(!file || file->flags > 2 || access(file->path, R_OK) == (-1))
+        return 0;
+    
+    if(seek_pos == SEEK_SET)
+        resetloc_file(file);
+    else if(seek_pos == SEEK_END)
     {
-        ft_putchar_fd('-', fd);
-        n = -n;
+        resetloc_file(file);
+        nb_c = ft_flen(file) - (nb_c + 1);
     }
-    if (n > 9)
-        ft_putnbr_fd(n / 10, fd);
-    ft_putchar_fd(n % 10 + '0', fd);
+    
+    while(read(file->fd, &c, 1) && i < nb_c)
+        i++;
+    return 1;
 }
 
-int main(void)
-{
-    FT_FILE *file;
-    char *line;
 
-    file = ft_fopen("./file.txt", O_RDWR);
-    if (file == NULL)
-    {
-        ft_putstr("bug");
-        return 1;
-    }
 
-    ft_fseek(file, SEEK_BEGIN, 0);
-
-    ft_get_next_line(file->fd, &line);
-    ft_putstr(line);
-
-    ft_fclose(file);
-
-    return 0;
-}

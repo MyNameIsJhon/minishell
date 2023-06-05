@@ -63,6 +63,14 @@ char    *ft_unsigned_itoa(unsigned int n);
 void ft_printf(char *str, ...);
 char *ft_strsjoin(int count, ...);
 
+void ft_putchar_fd(char c, int fd);
+void ft_putstr_fd(char const *s, int fd);
+void ft_putnbr_fd(int n, int fd);
+
+int ft_get_next_line(int fd, char **line);
+char *strdup_chr(const char *str, char c);
+
+
 size_t ft_chrlen(const char *str, char c);//copie jusqu'à renconté un char specifique
 
 #endif

@@ -1,26 +1,32 @@
 #ifndef FILES_INT
 #define FILES_INT
 
-#define SEEK_BEGIN 1
-#define SEEK_ACTUAL 2
-#define SEEK_ND 3
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+
+#define BUFF_POS_SAVE 1
+#define BUFF_POS_UNSAVE 0
+
+#define BUFF_SIZE 120 //afin de géré fget_next_line
+
 
 typedef struct FT_FILE{
 
     int fd;
-    int pos;
     int flags;
     char *path;
 
 } FT_FILE;
 
-int ft_get_next_line(int fd, char **line);
+
+size_t ft_flen(FT_FILE *file);
+int resetloc_file(FT_FILE *file);
 FT_FILE *ft_fopen(const char *path, int right);
 void ft_fclose(FT_FILE *file);
-int ft_fseek(FT_FILE *file, unsigned int seek_loc, long nb_c);
+int ft_fget_next_line(FT_FILE *file, char **line);
+int ft_fseek(FT_FILE *file, unsigned int seek_pos, size_t nb_c);
 
-void ft_putchar_fd(char c, int fd);
-void ft_putstr_fd(char const *s, int fd);
-void ft_putnbr_fd(int n, int fd);
+
 
 #endif

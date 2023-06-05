@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include "libft.h"
 #include "list.h"
+#include "file.h"
 
 #define BUFF_SIZE 120 // nombre max de caractères lus
 
@@ -54,4 +55,6 @@ int ft_get_next_line(int fd, char **line)
     free(str);
     return 1;
 }
+
+
 

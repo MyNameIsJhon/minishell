@@ -10,7 +10,7 @@ SRC = ./Libft/Libft/libft.c \
 		./Libft/List/list.c \
 		./Libft/ft_printf.c \
 		./Libft/files/file.c \
-		./Libft/files/get_next_line.c \
+		./Libft/get_next_line.c \
 		./get_shell/g_shell.c \
 		./exec_shell/path_finder/p_finder.c \
 		./exec_shell/exec_shell.c \
