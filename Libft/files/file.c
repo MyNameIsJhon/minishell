@@ -39,7 +39,6 @@ void ft_fclose(FT_FILE *file)
 }
 
 
-
 int ft_fget_next_line(FT_FILE *file, char **line)
 {
     int fd;
@@ -94,7 +93,6 @@ int resetloc_file(FT_FILE *file)
 }
 
 
-
 size_t ft_flen(FT_FILE *file)
 {
     int fd;
@@ -128,6 +126,35 @@ int ft_fseek(FT_FILE *file, unsigned int seek_pos, size_t nb_c)
     
     while(read(file->fd, &c, 1) && i < nb_c)
         i++;
+    return 1;
+}
+
+
+int file_2_lst(t_list **alst, char *path)
+{
+    t_list *lst = NULL;
+    char *line = NULL;
+    FT_FILE *file = NULL;
+
+    if(access(path, R_OK) == -1)
+        return 0;
+    if(!(file = ft_fopen(path, O_RDONLY)))
+        return 0;
+    
+    ft_fget_next_line(file, &line);
+    lst = ft_lstnew((char*) ft_strdup(line));
+    free(line);
+
+    while(ft_fget_next_line(file, &line))
+    {
+        ft_lstadd_back(&lst, ft_lstnew((char*) ft_strdup(line)));
+        free(line);
+    }
+
+    *alst = lst;
+
+    ft_fclose(file);
+
     return 1;
 }
 
