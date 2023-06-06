@@ -5,6 +5,8 @@
 #include "libft.h"
 #include "list.h"
 #include "file.h"
+#include "exec_shell.h"
+#include "p_finder.h"
 
 
 FT_FILE *ft_fopen(const char *path, int right)
@@ -158,5 +160,49 @@ int file_2_lst(t_list **alst, char *path)
     return 1;
 }
 
+
+int del_file(char *path)
+{
+    char *exec = NULL;
+    char *args[2];
+
+    args[0] = ft_strdup("rm");
+    args[1] = ft_strdup(path);
+    args[2] = NULL;
+    
+    exec = finder_to_path("rm");
+
+    if(access(path, F_OK) == (-1) || access(exec, F_OK) == (-1))
+        return 0;
+
+    exec_prog(exec, args);
+
+    free(args[1]);
+    free(args[2]);
+
+    return 1;
+}
+
+int new_file(char *path)
+{
+    char *exec = NULL;
+    char *args[2];
+
+    args[0] = ft_strdup("rm");
+    args[1] = ft_strdup(path);
+    args[2] = NULL;
+    
+    exec = finder_to_path("touch");
+
+    if(access(exec, F_OK) == (-1))
+        return 0;
+
+    exec_prog(exec, args);
+
+    free(args[1]);
+    free(args[2]);
+
+    return 1;
+}
 
 

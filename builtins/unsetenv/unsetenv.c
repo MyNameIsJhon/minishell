@@ -11,17 +11,27 @@ int shell_unsetenv(int argc, char **args)
     t_list **alst;
     t_list *lst = NULL;
 
-    if(!(*args))
+    if(!(*args) || !(args[1]))
+    {
+        ft_putstr("désoler mais vous devez rentrer une valeur\n");
         return 0;
-    if(!(file = ft_fopen(MEM_PATH, O_WRONLY)))
+    }
+    if(!(file_2_lst(&lst, MEM_PATH)))
         return 0;
-    if(!(file_2_lst(alst, MEM_PATH)))
+    alst = &lst;
+    if(!(del_file(MEM_PATH)))
         return 0;
-    lst = *alst;
+    if(!(new_file(MEM_PATH)))
+        return 0;
+
+
+    if(!(file = ft_fopen(MEM_PATH, O_RDWR)))
+        return 0;
 
     while(lst != NULL)
     {
-        if(ft_strncmp(lst->content, args[1], ft_strlen(args[1])) != 0)
+        printf("%s\n ", lst->content);
+        if(ft_strncmp((const char*) lst->content, args[1], ft_chrlen(args[1], '=')) != 0)
         {
             ft_putstr_fd(lst->content, file->fd);
             ft_putchar_fd('\n', file->fd);
@@ -34,3 +44,4 @@ int shell_unsetenv(int argc, char **args)
 
     return 1;    
 }
+

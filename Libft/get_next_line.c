@@ -24,7 +24,7 @@ int ft_get_next_line(int fd, char **line)
     if (fd < 0 || !line)
         return (-1);
 
-    char *str = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
+    char *str = (char*) malloc(sizeof(char) * (BUFF_SIZE + 1));
     if (!str)
         return (-1);
 

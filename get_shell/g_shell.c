@@ -6,7 +6,8 @@
 
 #define BUFF_CARACTS 350
 
-char get_char() {
+char get_char() 
+{
     char c;
     read(STDIN_FILENO, &c, 1);
     return c;
@@ -32,16 +33,17 @@ size_t char_len_shells(const char *str, size_t start)
     return i - start;
 }
 
-void minishell_prompt()
+void minishell_prompt(char *username)
 {
     char cwd[1024];
 
     getcwd(cwd, sizeof(cwd));
 
-    ft_printf("\nminishell㉿kali$%s>", cwd);
+    ft_printf("\n┌──(%s㉿minishell)-[%s]",username, cwd);
+    ft_putstr("\n└─$ ");
 }
 
-char *get_shell()
+char *get_shell(char *username)
 {
     char *str = NULL;
     char *shell = NULL;
@@ -51,7 +53,7 @@ char *get_shell()
     if(!(str = (char*) malloc(sizeof(char) * BUFF_CARACTS)))
         return NULL;
 
-    minishell_prompt();
+    minishell_prompt(username);
     
     while(c != '\n' && i < BUFF_CARACTS)
     {

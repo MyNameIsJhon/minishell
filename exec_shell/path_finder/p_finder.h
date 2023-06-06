@@ -5,5 +5,7 @@
 
 int program_finder(char *path, int flag);
 char *finder_to_path(char *prog_name);
+char *get_user_repertory();
+char *get_username() ;
 
 #endif

@@ -1,4 +1,6 @@
 #include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include "libft.h"
 #include "list.h"
 #include "g_shell.h"
@@ -80,4 +82,28 @@ char *finder_to_path(char *prog_name)
     FILE_NOT_FOUND = 1;
     ft_free_strsplit(astr);
     return NULL;
+}
+
+char *get_user_repertory() 
+{
+    uid_t uid = getuid();
+    struct passwd *pw = getpwuid(uid);
+    char *user_pwd = NULL;
+
+    if(pw != NULL)
+        user_pwd = ft_strdup(pw->pw_dir);
+
+    return user_pwd;
+}
+
+char *get_username() 
+{
+    uid_t uid = getuid();
+    struct passwd *pw = getpwuid(uid);
+    char *username = NULL;
+
+    if(pw != NULL) 
+        username = ft_strdup(pw->pw_name);
+
+    return username;
 }

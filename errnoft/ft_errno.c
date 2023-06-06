@@ -14,7 +14,7 @@ void ft_errno(char *str)
         ft_putstr(str);
         ft_putstr(" !");
         ft_putstr("\n\n");
-        INFINITE_STOP = 0;
+        FILE_NOT_FOUND = 0;
     }
     if(PROG_NOT_WORK == 1)
     {

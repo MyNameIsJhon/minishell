@@ -32,10 +32,15 @@ int main()
 
     char **args = NULL;
 
+    char *username = NULL;
+
+
+    username = get_username();
+
     while(INFINITE_STOP == 1)
     {
 
-        shell = get_shell();
+        shell = get_shell(username);
 
         lst = shell_sep(shell);
 
@@ -59,5 +64,7 @@ int main()
         if(args != NULL)
             ft_free_strsplit(args);
     }
+
+    free(username);
     return 0;
 }

@@ -278,15 +278,16 @@ int ft_strcmp(const char *str, const char *str2)
 
 int ft_strncmp(const char *str, const char *str2, size_t n)
 {
-    while (*str && *str2 && n--) 
+    n = n-1;
+
+    while (str[n] && str2[n] && n >= 0) 
     {
-        if (*str != *str2)
-            return *str - *str2;
-        str++;
-        str2++;
+        if(str[n] != str2[n])
+            return str[n] - str2[n];
+        n--;
     }
 
-    return *str2 - *str;
+    return str2[n] - str[n];
 }
 
 

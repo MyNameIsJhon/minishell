@@ -7,12 +7,12 @@
 
 int shell_setenv(int argc, char **argv) // problème lorsque le programme est utilisé en dehors du repertoire minishell
 {
-    int fd = 0;
+    FT_FILE *file = NULL;
     char *line;
     int i = 1;
     int d = 0;
 
-    if((fd = open(MEM_PATH, O_RDWR)) == -1)
+    if(!(file = ft_fopen(MEM_PATH, O_RDWR)))
     {
         ft_printf("%s : Erreur lors de l'ouverture du fichier.\n", argv[0]);
         return 1;
@@ -20,21 +20,23 @@ int shell_setenv(int argc, char **argv) // problème lorsque le programme est ut
     if(!argv[1])
     {
         ft_printf("%s : Désoler mais vous devez introduire une valeur\n", argv[0]);
-        close(fd);
+        ft_fclose(file);
         return 1;
     }
+    
+    shell_unsetenv(argc, argv);
 
-    while(ft_get_next_line(fd, &line))
+    ft_fseek(file, SEEK_END, 0);
 
-    ft_putstr_fd(argv[1], fd);
-    ft_putchar_fd('=', fd);
+    ft_putstr_fd(argv[1], file->fd);
+    ft_putchar_fd('=', file->fd);
 
     if(argv[2] != NULL)
-        ft_putstr_fd(argv[2], fd);
+        ft_putstr_fd(argv[2], file->fd);
 
-    ft_putchar_fd('\n', fd);
+    ft_putchar_fd('\n', file->fd);
     
-    close(fd);
+    ft_fclose(file);
 
     return 0;
 }

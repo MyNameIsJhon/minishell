@@ -29,6 +29,8 @@ void ft_fclose(FT_FILE *file);
 int ft_fget_next_line(FT_FILE *file, char **line);
 int ft_fseek(FT_FILE *file, unsigned int seek_pos, size_t nb_c);
 int file_2_lst(t_list **alst, char *path);
+int del_file(char *path);
+int new_file(char *path);
 
 
 
