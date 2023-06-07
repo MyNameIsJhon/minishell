@@ -30,7 +30,6 @@ int shell_unsetenv(int argc, char **args)
 
     while(lst != NULL)
     {
-        printf("%s\n ", lst->content);
         if(ft_strncmp((const char*) lst->content, args[1], ft_chrlen(args[1], '=')) != 0)
         {
             ft_putstr_fd(lst->content, file->fd);
