@@ -5,33 +5,34 @@ char *pointer_create(char *str)
 {
     char *pointt;
 
-    if(!(pointt = (char*) malloc(sizeof(char) * (ft_strlen(str) + 1)))) // +1 pour inclure le caractère de fin de chaîne '\0'
+    if (!(pointt = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1))))
         return NULL;
-    
+
     ft_strcpy(pointt, str);
-    
+
     return (pointt);
 }
 
 
+
 void ft_printf(char *str, ...)
 {
-    t_list **alst = NULL;
-    t_list *lst;
+    t_list *lst = NULL;
+    t_list **alst = &lst;
     va_list ap;
 
     int i = 0;
     int z = 0;
-
     int g = 0;
 
     va_start(ap, str);
 
-    while(str[i])
+    while (str[i])
     {
-        if(str[i] == '%' && str[i+1] != '%' && str[i-1] != '%')
+        if (str[i] == '%' && str[i + 1] != '%' && str[i - 1] != '%')
         {
-            switch(str[i+1]){
+            switch (str[i + 1])
+            {
 
                 case 'd':
                     if(z > 0)
@@ -114,17 +115,17 @@ void ft_printf(char *str, ...)
                     break;
 
                 case 'c':
-                    char *c = (char*) malloc(sizeof(char) * 1);
-                    int lt = va_arg(ap, int);
-                    c = (char*) &lt;
-                    if(z > 0)
-                        ft_lstadd_back(alst, ft_lstnew(c));
-                    else if(z == 0)
+                {
+                    char c = va_arg(ap, int);
+                    if (z > 0)
+                        ft_lstadd_back(alst, ft_lstnew(&c));
+                    else if (z == 0)
                     {
-                        lst = ft_lstnew(c);
+                        lst = ft_lstnew(&c);
                         alst = &lst;
                     }
                     break;
+                }
                 
                 
                 
@@ -151,27 +152,24 @@ void ft_printf(char *str, ...)
 
     lst = *alst;
 
-    while(str[g])
+    while (str[g])
     {
         reloader:
-        while(str[g] && str[g] != '%')
+        while (str[g] && str[g] != '%')
             ft_putchar(str[g++]);
-        if(str[g+1] == '%')
+        if (str[g + 1] == '%')
             goto reloader;
-        while(str[g] != 'u' && str[g] != 'U' && str[g] != 'd' && str[g] != 'D' && str[g] != 'u' && str[g] != 'U' && str[g] != 's' && str[g] != 'S' && str[g] != 'o' && str[g] != 'O' && str[g] != 'c' && str[g])
+        while (str[g] != 'u' && str[g] != 'U' && str[g] != 'd' && str[g] != 'D' && str[g] != 'u' && str[g] != 'U' && str[g] != 's' && str[g] != 'S' && str[g] != 'o' && str[g] != 'O' && str[g] != 'c' && str[g])
             g++;
-        if(str[g] && lst != NULL)
+        if (str[g] && lst != NULL)
         {
             g++;
-            ft_putstr((char*) lst->content);
+            ft_putstr((char *)lst->content);
             lst = lst->next;
         }
-        
     }
-
 
     ft_lstclearall(alst, &free);
 
     va_end(ap);
 }
-

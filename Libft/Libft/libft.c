@@ -34,48 +34,58 @@ void *ft_memcpy(void *dest, void *src, size_t n) // me permet de copier les bite
     return dest;
 }
 
-void *ft_memccpy(void *dest, void *src, int c, size_t n)// me permet de copier les bites d'un tableau à un autre avec une limite de n en permettant de stopper lors de la rencontres d'un bite specifiaue
+void *ft_memccpy(void *dest, void *src, int c, size_t n)
 {
-    int i = 0;
+    if (dest == NULL || src == NULL) // Vérification des pointeurs nuls
+        return NULL;
+
     unsigned char* dest_bis = (unsigned char*) dest;
     unsigned char* src_bis = (unsigned char*) src;
 
-    while(n--)
+    while (n > 0)
     {
-        dest_bis[i] = src_bis[i];
-        if(dest_bis[i] == (unsigned char) c)
-            return (void*) dest + i + 1; 
-    }
+        *dest_bis = *src_bis;
+        if (*dest_bis == (unsigned char) c)
+            return (void*) dest_bis + 1;
         
+        dest_bis++;
+        src_bis++;
+        n--;
+    }
 
-    return dest;
+    return NULL;
 }
 
-void	*ft_memmove(void *dst, const void *src, size_t n)//similaire a memccpy mais en evitant le chevauchement(bites) 
+void *ft_memmove(void *dst, const void *src, size_t n)
 {
-	size_t			i;
-	unsigned char	*ptr_dst;
-	unsigned char	*ptr_src;
+    unsigned char *ptr_dst = (unsigned char *)dst;
+    const unsigned char *ptr_src = (const unsigned char *)src;
 
-	ptr_dst = (unsigned char *)dst;
-	ptr_src = (unsigned char *)src;
-	i = n;
-	if (src == 0 && dst == 0)
-		return (0);
-	if (ptr_dst > ptr_src && ptr_dst < (ptr_src + n))
-		while (n > 0)
-		{
-			ptr_dst[n - 1] = ptr_src[n - 1];
-			n--;
-		}
-	else
-	{
-		i = -1;
-		while (++i < n)
-			ptr_dst[i] = ptr_src[i];
-	}
-	return (dst);
+    if (dst == NULL || src == NULL) 
+        return NULL;
+
+    if (ptr_dst > ptr_src && ptr_dst < (ptr_src + n))
+    {
+        while (n > 0)
+        {
+            ptr_dst[n - 1] = ptr_src[n - 1];
+            n--;
+        }
+    }
+    else
+    {
+        while (n > 0)
+        {
+            *ptr_dst = *ptr_src;
+            ptr_dst++;
+            ptr_src++;
+            n--;
+        }
+    }
+
+    return dst;
 }
+
 
 const void *ft_memchr (const void *ptr, int c, size_t n)//rechercche caractere dans string (bites)
 {
@@ -92,7 +102,7 @@ const void *ft_memchr (const void *ptr, int c, size_t n)//rechercche caractere d
     return NULL;
 }
 
-int ft_memcmp(const void *str1, const void* str2, size_t n)
+int ft_memcmp(const void *str1, const void* str2, size_t n)//vérifie si les deux tableaux coincide 
 {
     int i = 0;
     unsigned char *ptr_str1 = (unsigned char*) str1;
