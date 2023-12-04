@@ -20,6 +20,7 @@ SRC = ./Libft/Libft/libft.c \
 		./builtins/env/env.c \
 		./builtins/setenv/setenv.c \
 		./builtins/unsetenv/unsetenv.c \
+		./builtins/cent_getenv.c\
 		./minishell.c
 
 HEADS = ./Libft/Libft/libft.h \

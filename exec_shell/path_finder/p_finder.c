@@ -47,6 +47,7 @@ char *builtins_to_path(char *PATH, char *built_path)
 char *finder_to_path(char *prog_name)
 {
     char *PATH = getenv("PATH");
+
     char **astr = NULL;
 
     char *r_path = NULL;

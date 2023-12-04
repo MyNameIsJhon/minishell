@@ -233,26 +233,26 @@ char *ft_strrchr(const char *str, char c)//recherche derniere occurence d'un car
     return last;
 }
 
-char *ft_strstr(const char *str, const char *str2)
+char *ft_strstr(const char *str, const char *str2) //retourne l'addresse du premier caractere de la seconde chaine dans la premiere
 {
-    int i = 0;
-    size_t str2_len = (size_t) ft_strlen((char*) str2);
+    size_t str2_len = ft_strlen(str2);
 
-    while(*str != '\0')
+    if (*str2 == '\0')
+        return (char*) str;
+
+    for (; *str != '\0'; str++)
     {
-        if(*str == str2[i])
-            i++;
-        else
-            i = 0;
-        if(i == str2_len)
-            return (char*) str - str2_len;
-        str++;
+        if (*str == *str2)
+        {
+            if (ft_strncmp(str, str2, str2_len) == 0)
+                return (char*) str;
+        }
     }
 
     return NULL;
 }
 
-char *ft_strnstr(const char *str, const char *str2, size_t n)
+char *ft_strnstr(const char *str, const char *str2, size_t n)//pareil mais avec une limite n
 {
     int i = 0;
     size_t str2_len = (size_t) ft_strlen((char*) str2);
@@ -273,7 +273,7 @@ char *ft_strnstr(const char *str, const char *str2, size_t n)
     return NULL;
 }
 
-int ft_strcmp(const char *str, const char *str2)
+int ft_strcmp(const char *str, const char *str2)//compare deux chaine et renvois 0 si sont semblable
 {
     while (*str && *str2) 
     {
@@ -286,7 +286,7 @@ int ft_strcmp(const char *str, const char *str2)
     return *str - *str2;
 }
 
-int ft_strncmp(const char *str, const char *str2, size_t n)
+int ft_strncmp(const char *str, const char *str2, size_t n)//pareil mais avec limite n
 {
     n = n-1;
 
@@ -299,7 +299,6 @@ int ft_strncmp(const char *str, const char *str2, size_t n)
 
     return str2[n] - str[n];
 }
-
 
 int ft_isalpha(const char c)
 {
@@ -367,7 +366,7 @@ void ft_str_tolower(char *str)
     }
 }
 
-void *ft_memalloc(size_t size)
+void *ft_memalloc(size_t size)//alloue un tableau void
 {
     void *ptr;
 
@@ -376,18 +375,18 @@ void *ft_memalloc(size_t size)
     ft_memset(ptr, 0, size);
 }
 
-void ft_memdel(void **ptr)
+void ft_memdel(void **ptr)//supprime un pointeur
 {
     free(*ptr);
     *ptr = NULL;
 }
 
-void ft_strclr(char *str)
+void ft_strclr(char *str)//nettoie une chaine de caractère
 {
     ft_bzero((void*) str, ft_strlen(str));
 }
 
-char *ft_strnew(size_t n)
+char *ft_strnew(size_t n)//nouvelle chaine de crcts
 {
     char *str = NULL;
 
@@ -404,7 +403,7 @@ void ft_strdel(char *str)
     str = NULL;
 }
 
-void ft_striter(char *str, void (*f)(char*))
+void ft_striter(char *str, void (*f)(char*))//opère une fonction sur tout les crcts d'une chaine
 {
     while(*str) {
         (*f)(str);
@@ -412,7 +411,7 @@ void ft_striter(char *str, void (*f)(char*))
     }
 }
 
-char *strmap(char *str, void (*f)(char*))
+char *strmap(char *str, void (*f)(char*))//pareil et en meme temp retourne la chaine
 {
     while(*str) {
         (*f)(str);
@@ -438,7 +437,7 @@ char *ft_strmapi(char const *str, char (*f)(unsigned int, char))
     return alloc;
 }
 
-int ft_strequ(char const *s1, char const *s2)
+int ft_strequ(char const *s1, char const *s2)//lis deux chaine jusqu'a voir une similitude
 {
     if (!s1 || !s2) 
         return 0;
@@ -453,7 +452,7 @@ int ft_strequ(char const *s1, char const *s2)
     return 1;
 }
 
-int ft_strnequ(char const *s1, char const *s2, size_t n)
+int ft_strnequ(char const *s1, char const *s2, size_t n)//pareil avec limite m
 {
     size_t i = 0;
 
@@ -471,7 +470,7 @@ int ft_strnequ(char const *s1, char const *s2, size_t n)
     return 1; 
 }
 
-char *ft_strsub(char const *s, unsigned int start, size_t len)
+char *ft_strsub(char const *s, unsigned int start, size_t len)//crée et alloue une nouvelle chaine de caractère en fonction d'une autre à partir de start
 {
     char *sub = (char *)malloc((len + 1) * sizeof(char)); 
 
@@ -484,7 +483,7 @@ char *ft_strsub(char const *s, unsigned int start, size_t len)
     return sub;
 }
 
-char *ft_strjoin(char const *s1, char const *s2)
+char *ft_strjoin(char const *s1, char const *s2)// alloue et crée une chaine de caractere résultat de s1 et s2
 {
     size_t len1 = ft_strlen((char*) s1);
     size_t len2 = ft_strlen((char*) s2);
@@ -516,9 +515,9 @@ char *ft_strtrim(char const *s)
 
 	while (ft_iswhitespace(s[start]))
 		start++;
-	if (start == end)
+	if(start == end)
 		return (ft_strdup(""));
-	while (ft_iswhitespace(s[end - 1]))
+	while(ft_iswhitespace(s[end - 1]))
 		end--;
 	return (ft_strsub(s, start, end - start));
 }
@@ -567,7 +566,7 @@ static char	*extract_word(char const **s, char c)
 	return (word);
 }
 
-char	**ft_strsplit(char const *s, char c)
+char	**ft_strsplit(char const *s, char c)//me crée un tableau multidimensionnel avec s 
 {
 	char	**split;
 	int		nb_words;
