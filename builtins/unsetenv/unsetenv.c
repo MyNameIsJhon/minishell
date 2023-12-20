@@ -5,13 +5,12 @@
 #include <fcntl.h>
 #include "file.h"
 
-size_t env_len(const char **tab)
+size_t env_len(const char **tab)// besoin de configurer nouveau env propre à mon programme
 {
     size_t i = 0;
 
     while(tab[i] != NULL)
         i++;
-
     return i;
 }
 
@@ -20,20 +19,22 @@ char **env_order(char *caser)
     size_t i = 0;
     size_t y = 0;
     extern char **environ;
-    char **tab;
+    char **tab = NULL;
 
-    if(!caser)
+    if(!caser || !environ)
         return environ;
     else
         tab = malloc(sizeof(char*) * env_len(environ));
-    while(environ[i])
+    while(environ[i+y])
     {
-        if(caser == environ[i])
+        if(ft_strcmp(caser, environ[i]) == 0)
            y++;
         tab[i] = environ[i+y];
         i++;
     }
     tab[i] = NULL;
+
+    return tab;
 }
 
 int shell_unsetenv(int argc, char **args)
@@ -41,7 +42,7 @@ int shell_unsetenv(int argc, char **args)
     char *caser = NULL;
     extern char **environ;
 
-    if(!(*args) || !(args[1]))
+    if(!(*args) || !(args[1]) || !environ)
     {
         ft_putstr("désoler mais vous devez rentrer une valeur\n");
         return 0;

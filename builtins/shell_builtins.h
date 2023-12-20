@@ -3,6 +3,8 @@
 
 #define  MEM_PATH "/usr/share/minishell/env"
 
+extern char **env_minishell;
+
 int shell_env();
 int shell_cd(int argc, char **argv);
 int shell_echo(int argc, char **argv);

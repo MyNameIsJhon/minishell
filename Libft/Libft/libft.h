@@ -15,7 +15,7 @@ void *ft_memccpy(void *dest, void *src, int c, size_t n);//pareil mais avec
 void *ft_memmove(void *dst, const void *src, size_t n);//pareil mais en plus sur car evite le chevauchement de memoire
 const void *ft_memchr (const void *ptr, int c, size_t n);//recherche bit dans une chaine et renvois l'addresse du bit correspondant ou NULL si rien n'est trouvé
 int ft_memcmp(const void *str1, const void* str2, size_t n);
-size_t ft_strlen(char *str);//compte caractere dans une chaine
+size_t ft_strlen(const char *str);//compte caractere dans une chaine
 char *ft_strdup(const char *s);
 char *ft_strcpy(char *dest, const char *src);
 char *ft_strncpy(char *dest, const char *src, size_t n);
@@ -59,6 +59,8 @@ static size_t  number_size(int n);
 char    *ft_itoa(int n);
 int ft_octal(int nb);
 char    *ft_unsigned_itoa(unsigned int n);
+
+
 
 void ft_printf(char *str, ...);
 char *ft_strsjoin(int count, ...);

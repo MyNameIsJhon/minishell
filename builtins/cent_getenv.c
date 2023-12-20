@@ -11,12 +11,11 @@ char *ft_getenv(char *s)//renvoie dire
     size_t s_len = 0;
 
     s_len = ft_strlen(s);
-    extern char **environ;
 
-    while(environ[i] != NULL)
+    while(env_minishell[i] != NULL)
     {
-        if(ft_strncmp(environ[i], s, s_len) == 0)
-            return ft_strsub(environ[i], s_len + 1, ft_strlen(environ[i]) - (s_len + 1));
+        if(ft_strncmp(env_minishell[i], s, s_len) == 0)
+            return ft_strsub(env_minishell[i], s_len + 1, ft_strlen(env_minishell[i]) - (s_len + 1));
         i++;
     }
 
@@ -33,12 +32,11 @@ char *ft_getenv_case(char *s)//retourne ligne case tableau env correspondant
     size_t s_len = 0;
 
     s_len = ft_strlen(s);
-    extern char **environ;
 
-    while(environ[i] != NULL)
+    while(env_minishell[i] != NULL)
     {
-        if(ft_strncmp(environ[i], s, s_len) == 0)
-            return environ[i];
+        if(ft_strncmp(env_minishell[i], s, s_len) == 0)
+            return env_minishell[i];
         i++;
     }
 
@@ -48,5 +46,6 @@ char *ft_getenv_case(char *s)//retourne ligne case tableau env correspondant
 
     return NULL;
 }
+
 
 

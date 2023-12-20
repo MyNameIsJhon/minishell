@@ -117,7 +117,7 @@ int ft_memcmp(const void *str1, const void* str2, size_t n)//vérifie si les deu
     return 0;
 }
 
-size_t ft_strlen(char *str)
+size_t ft_strlen(const char *str)
 {
     int i = 0;
 
@@ -235,7 +235,7 @@ char *ft_strrchr(const char *str, char c)//recherche derniere occurence d'un car
 
 char *ft_strstr(const char *str, const char *str2) //retourne l'addresse du premier caractere de la seconde chaine dans la premiere
 {
-    size_t str2_len = ft_strlen(str2);
+    size_t str2_len = ft_strlen((const char*) str2);
 
     if (*str2 == '\0')
         return (char*) str;
@@ -478,7 +478,7 @@ char *ft_strsub(char const *s, unsigned int start, size_t len)//crée et alloue 
         return NULL;
     for (size_t i = 0; i < len; i++) 
         sub[i] = s[start + i];
-    sub[len] = '\0'; 
+    sub[len] = '\0';
 
     return sub;
 }
@@ -803,4 +803,70 @@ void ft_putnbr_fd(int n, int fd)
     if (n > 9)
         ft_putnbr_fd(n / 10, fd);
     ft_putchar_fd(n % 10 + '0', fd);
+}
+
+size_t ft_astr_len(const char **astr)
+{
+    size_t i = 0;
+
+    while(astr[i])
+        i++;
+    return i;
+}
+
+char **ft_astr_cp(char **astr)
+{
+    char **astr_cp = NULL;
+    size_t astr_len = 0;
+    size_t i = 0;
+
+    if(!astr)
+        return NULL;
+
+    astr_len = ft_astr_len(astr);
+
+    if(!(astr_cp = (char**) malloc(sizeof(char*) * astr_len + 1)))
+        return NULL;
+    
+    while(astr[i])
+    {
+        astr_cp[i] = ft_strdup(astr[i]);
+        i++;
+    }
+
+    astr_cp[i] = NULL;
+
+    return astr_cp;
+}
+
+void *ft_realloc(void *ptr,size_t old_size,  size_t new_size) 
+{
+    void *new_ptr = NULL;
+    size_t min_size;
+
+    if(!ptr) 
+        return malloc(new_size);
+
+    if(new_size == 0)
+    {
+        free(ptr);
+        return NULL;
+    }
+
+    if(!(new_ptr = malloc(new_size))) 
+        return NULL;
+
+    
+    min_size = (old_size < new_size) ? old_size : new_size;
+    memcpy(new_ptr, ptr, min_size);
+
+    
+    free(ptr);
+
+    return new_ptr; 
+}
+
+void **ft_array_realloc(void **ptr, size_t size)
+{
+
 }
