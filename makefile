@@ -15,12 +15,12 @@ SRC = ./Libft/Libft/libft.c \
 		./exec_shell/path_finder/p_finder.c \
 		./exec_shell/exec_shell.c \
 		./errnoft/ft_errno.c \
+		./builtins/cent_getenv.c\
 		./builtins/cd/cd.c \
 		./builtins/echo/echo.c \
 		./builtins/env/env.c \
 		./builtins/setenv/setenv.c \
 		./builtins/unsetenv/unsetenv.c \
-		./builtins/cent_getenv.c\
 		./minishell.c
 
 HEADS = ./Libft/Libft/libft.h \

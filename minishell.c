@@ -7,6 +7,7 @@
 #include "exec_shell.h"
 #include <stdio.h>
 #include <fcntl.h>
+#include "shell_builtins.h"
 
 
 void lst_printall(t_list **alst)

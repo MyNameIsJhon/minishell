@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include "file.h"
+#include "shell_builtins.h"
 
 void cd_error(char *path)
 {

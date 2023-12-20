@@ -7,6 +7,7 @@
 #include "ft_errno.h"
 #include "p_finder.h"
 #include "file.h"
+#include "shell_builtins.h"
 
 int program_finder(char *path, int flag)
 {

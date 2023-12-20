@@ -858,7 +858,7 @@ void *ft_realloc(void *ptr,size_t old_size,  size_t new_size)
 
     
     min_size = (old_size < new_size) ? old_size : new_size;
-    memcpy(new_ptr, ptr, min_size);
+    ft_memcpy(new_ptr, ptr, min_size);
 
     
     free(ptr);
