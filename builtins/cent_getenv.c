@@ -4,6 +4,8 @@
 #include "shell_builtins.h"
 #include "file.h"
 
+char **env_minishell;
+
 char *ft_getenv(char *s)//renvoie dire
 {
     int i = 0;
