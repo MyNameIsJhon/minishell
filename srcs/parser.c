@@ -64,9 +64,9 @@ int	exec_prog(t_command *command)
 	struct dirent	*s_dir;
 
 	i = 0;
+	command->paths = get_executable_paths(NULL);
 	command->exec_maxlen = find_max_len(command->paths) + EXEC_MAXLEN;
 	command->exec_path = malloc(command->exec_maxlen * sizeof(char));
-	command->paths = get_executable_paths(NULL);
 	while (command->paths[i])
 	{
 		if (access(command->paths[i], X_OK))
