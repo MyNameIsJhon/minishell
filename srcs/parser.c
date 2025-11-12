@@ -76,7 +76,10 @@ int	exec_prog(t_command *command)
 		while (s_dir)
 		{
 			if (ft_strcmp(s_dir->d_name, command->program))
+			{
+				s_dir = readdir(dir);
 				continue ;
+			}
 			ft_strlcpy(command->exec_path, s_dir->d_name, command->exec_maxlen);
 			ft_strlcat(command->exec_path, s_dir->d_name, command->exec_maxlen);
 			execve(command->exec_path, command->args, NULL);
