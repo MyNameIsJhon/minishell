@@ -81,6 +81,7 @@ int	exec_prog(t_command *command)
 			ft_strlcat(command->exec_path, s_dir->d_name, command->exec_maxlen);
 			execve(command->exec_path, command->args, NULL);
 			ft_bzero((void *)command->exec_path, command->exec_maxlen);
+			s_dir = readdir(dir);
 			return 0;
 		}
 		closedir(dir);
