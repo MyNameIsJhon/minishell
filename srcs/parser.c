@@ -87,6 +87,7 @@ int	exec_prog(t_command *command)
 			s_dir = readdir(dir);
 			return 0;
 		}
+		i++;
 		closedir(dir);
 	}
 	return 1;
