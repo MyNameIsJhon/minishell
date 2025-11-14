@@ -44,6 +44,8 @@ char	*mini_prompt(char *pwd, char *user, char *dom)
 	ft_strlcat(prompt, pwd, tot + 1);
 	ft_strlcat(prompt, "]\n└─$ ", tot + 1);
 	line = readline(prompt);
+	if (*line)
+		add_history(line);
 	free(prompt);
 	return (line);
 }
@@ -62,7 +64,7 @@ int	main(int ac, char **av, char **envp)
 	t_command	*command;
 	/* t_context	*context; */
 	char		*path;
-	char		*result;
+	/* char		*result; */
 
 	(void)ac;
 	(void)av;
@@ -71,8 +73,8 @@ int	main(int ac, char **av, char **envp)
 		path = getcwd(NULL, 0);
 		hello = mini_prompt(path, "mynameisjhon", "minishell");
 		command = mini_parser(hello);
-		result = find_prog(command);
-		printf("path: %s\n", result);
+		find_prog(command);
+		/* printf("path: %s\n", result); */
 		/* command_print(command); */
 		run_cmd(command, envp);
 		command_free(&command);

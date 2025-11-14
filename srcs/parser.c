@@ -126,7 +126,7 @@ int	run_cmd(t_command *command, char **envp)
 			exit(1);
 		}
 		close(fd[1]);
-		execve(command->exec_path, command->args, envp);
+		execve(command->exec_path, command->com_splited, envp);
 		exit(1);
 	}
 	close(fd[1]);
