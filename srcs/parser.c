@@ -11,13 +11,14 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include <dirent.h>
-#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
+#include <sys/_types/_ssize_t.h>
 #include <sys/dir.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 t_command	*mini_parser(char *user_input)
 {
@@ -42,12 +43,12 @@ void	command_free(t_command **command)
 	ft_strsfree((*command)->com_splited);
 	free(*command);
 }
-char **get_executable_paths(char *env_path) {
-	char **paths;
-	char *path;
+char	**get_executable_paths(char *env_path)
+{
+	char	**paths;
+	char	*path;
+
 	(void)env_path;
-
-
 	/* if (!env_path) */
 	/* 	return (NULL); */
 	path = getenv("PATH");
@@ -55,11 +56,12 @@ char **get_executable_paths(char *env_path) {
 	return (paths);
 }
 
-int	exec_prog(t_command *command)
+char	*find_prog(t_command *command)
 {
 	int				i;
 	DIR				*dir;
 	struct dirent	*s_dir;
+	int				n;
 
 	i = 0;
 	command->paths = get_executable_paths(NULL);
@@ -81,25 +83,71 @@ int	exec_prog(t_command *command)
 				s_dir = readdir(dir);
 				continue ;
 			}
-			ft_strlcpy(command->exec_path, s_dir->d_name, command->exec_maxlen);
+			n = ft_strlcpy(command->exec_path, command->paths[i],
+					command->exec_maxlen);
+			command->exec_path[n] = '/';
+			command->exec_path[n + 1] = '\0';
 			ft_strlcat(command->exec_path, s_dir->d_name, command->exec_maxlen);
-			execve(command->exec_path, command->args, NULL);
-			ft_bzero((void *)command->exec_path, command->exec_maxlen);
-			s_dir = readdir(dir);
-			return 0;
+			closedir(dir);
+			return (command->exec_path);
+			/* ft_bzero((void *)command->exec_path, command->exec_maxlen); */
+			/* s_dir = readdir(dir); */
+			/* return (0); */
 		}
 		i++;
 		closedir(dir);
 	}
-	return 1;
+	return (NULL);
 }
 
-void command_print(t_command *command)
+int	run_cmd(t_command *command)
 {
-	int i;
+	int		fd[2];
+	pid_t	pid;
+	char	buffer[1024];
+	ssize_t	n;
+
+	/* int status; */
+	if (pipe(fd) == -1)
+		return (-1);
+	pid = fork();
+	if (pid < 0)
+	{
+		close(fd[0]);
+		close(fd[1]);
+		return (-1);
+	}
+	if (!pid)
+	{
+		close(fd[0]);
+		if (dup2(fd[1], STDOUT_FILENO) == (-1))
+		{
+			close(fd[1]);
+			exit(1);
+		}
+		close(fd[1]);
+		execve(command->exec_path, command->args, NULL);
+		exit(1);
+	}
+	close(fd[1]);
+	while ((n = read(fd[0], buffer, sizeof(buffer))) > 0)
+	{
+		if (write(STDOUT_FILENO, buffer, n) == (-1))
+		{
+			close(fd[0]);
+			break ;
+		}
+	}
+	close(fd[0]);
+	return (0);
+}
+
+void	command_print(t_command *command)
+{
+	int	i;
 
 	if (!command)
-		return;
+		return ;
 	printf("Program: %s\n", command->program);
 	printf("Arguments:\n");
 	for (i = 0; command->args[i]; i++)

@@ -10,18 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arena_allocator.h"
+#include "fileft.h"
 #include "libft.h"
 #include "minishell.h"
-#include "fileft.h"
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <readline/readline.h>
 #include <readline/history.h>
-#include "arena_allocator.h"
-/* char	*mini_prompt() */
+#include <readline/readline.h>
+#include <stdio.h>
+#include <unistd.h>
+
+/* char	*mini_prompt(void) */
 /* { */
-/* 	 */
+/* 		*/
 /* } */
 
 char	*mini_prompt(char *pwd, char *user, char *dom)
@@ -47,21 +48,24 @@ char	*mini_prompt(char *pwd, char *user, char *dom)
 	return (line);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
+	char		*hello;
+	t_command	*command;
+	char		*path;
+	char		*result;
+
 	(void)ac;
 	(void)av;
-	char *hello;
-	t_command *command;
-	char	*path;
-	
 	while (1)
 	{
 		path = getcwd(NULL, 0);
 		hello = mini_prompt(path, "mynameisjhon", "minishell");
 		command = mini_parser(hello);
-		exec_prog(command);
+		result = find_prog(command);
+		printf("path: %s\n", result);
 		command_print(command);
+		run_cmd(command);
 		command_free(&command);
 		free(hello);
 	}

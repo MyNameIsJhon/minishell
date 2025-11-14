@@ -48,5 +48,7 @@ typedef struct s_command
 t_command	*mini_parser(char *user_input);
 void		command_free(t_command **command);
 void		command_print(t_command *command);
-int			exec_prog(t_command *command);
+char		*find_prog(t_command *command);
+int	run_cmd(t_command *command);
+
 #endif
