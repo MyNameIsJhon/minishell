@@ -42,9 +42,7 @@ void	command_free(t_command **command)
 	ft_strsfree((*command)->com_splited);
 	free(*command);
 }
-
-char **get_executable_paths(char *env_path)
-{
+char **get_executable_paths(char *env_path) {
 	char **paths;
 	char *path;
 	(void)env_path;
@@ -70,7 +68,10 @@ int	exec_prog(t_command *command)
 	while (command->paths[i])
 	{
 		if (access(command->paths[i], X_OK))
+		{
+			i++;
 			continue ;
+		}
 		dir = opendir(command->paths[i]);
 		s_dir = readdir(dir);
 		while (s_dir)
