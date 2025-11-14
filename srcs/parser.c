@@ -47,6 +47,7 @@ char	**get_executable_paths(char *env_path)
 	/* 	return (NULL); */
 	path = getenv("PATH");
 	paths = ft_split(path, ':');
+	free(path);
 	return (paths);
 }
 
