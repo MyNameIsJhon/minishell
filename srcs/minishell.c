@@ -44,7 +44,7 @@ char	*mini_prompt(char *pwd, char *user, char *dom)
 	ft_strlcat(prompt, pwd, tot + 1);
 	ft_strlcat(prompt, "]\n└─$ ", tot + 1);
 	line = readline(prompt);
-	if (*line)
+	if (line && *line)
 		add_history(line);
 	free(prompt);
 	return (line);
@@ -73,8 +73,15 @@ int	main(int ac, char **av, char **envp)
 		path = getcwd(NULL, 0);
 		hello = mini_prompt(path, "mynameisjhon", "minishell");
 		free(path);
+		if (!hello)
+			exit(0);
 		command = mini_parser(hello);
 		free(hello);
+		if (!command || !command->program)
+		{
+			command_free(&command);
+			continue ;
+		}
 		if (!ft_strcmp(command->program, "exit"))
 		{
 			command_free(&command);

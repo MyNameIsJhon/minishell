@@ -17,6 +17,7 @@
 #include <string.h>
 #include <sys/dir.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 t_command	*mini_parser(char *user_input)
@@ -46,8 +47,9 @@ char	**get_executable_paths(char *env_path)
 	/* if (!env_path) */
 	/* 	return (NULL); */
 	path = getenv("PATH");
+	if (!path)
+		return (NULL);
 	paths = ft_split(path, ':');
-	free(path);
 	return (paths);
 }
 
@@ -97,10 +99,34 @@ char	*find_prog(t_command *command)
 
 void	command_free(t_command **command)
 {
-	ft_strsfree((*command)->com_splited);
-	free((*command)->exec_path);
-	ft_strsfree((*command)->paths);
+	int	i;
+
+	if (!command || !*command)
+		return ;
+	if ((*command)->com_splited)
+	{
+		i = 0;
+		while ((*command)->com_splited[i])
+		{
+			free((*command)->com_splited[i]);
+			i++;
+		}
+		free((*command)->com_splited);
+	}
+	if ((*command)->paths)
+	{
+		i = 0;
+		while ((*command)->paths[i])
+		{
+			free((*command)->paths[i]);
+			i++;
+		}
+		free((*command)->paths);
+	}
+	if ((*command)->exec_path)
+		free((*command)->exec_path);
 	free(*command);
+	*command = NULL;
 }
 
 int	run_cmd(t_command *command, char **envp)
@@ -109,8 +135,8 @@ int	run_cmd(t_command *command, char **envp)
 	pid_t	pid;
 	char	buffer[1024];
 	ssize_t	n;
+	int		status;
 
-	/* int status; */
 	if (pipe(fd) == -1)
 		return (-1);
 	pid = fork();
@@ -142,6 +168,7 @@ int	run_cmd(t_command *command, char **envp)
 		}
 	}
 	close(fd[0]);
+	waitpid(pid, &status, 0);
 	return (0);
 }
 
