@@ -72,12 +72,12 @@ int	main(int ac, char **av, char **envp)
 	{
 		path = getcwd(NULL, 0);
 		hello = mini_prompt(path, "mynameisjhon", "minishell");
+		free(path);
 		command = mini_parser(hello);
 		if (!ft_strcmp(command->program, "exit"))
 		{
 			command_free(&command);
 			free(hello);
-			free(path);
 			exit(0);
 		}
 		find_prog(command);
@@ -86,6 +86,5 @@ int	main(int ac, char **av, char **envp)
 		run_cmd(command, envp);
 		command_free(&command);
 		free(hello);
-		free(path);
 	}
 }
