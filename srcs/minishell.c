@@ -78,7 +78,6 @@ int	main(int ac, char **av, char **envp)
 		if (!ft_strcmp(command->program, "exit"))
 		{
 			command_free(&command);
-			free(hello);
 			exit(0);
 		}
 		find_prog(command);
