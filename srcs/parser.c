@@ -98,7 +98,6 @@ char	*find_prog(t_command *command)
 void	command_free(t_command **command)
 {
 	ft_strsfree((*command)->com_splited);
-	free((*command)->program);
 	free((*command)->exec_path);
 	ft_strsfree((*command)->paths);
 	free(*command);
