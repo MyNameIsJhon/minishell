@@ -86,7 +86,14 @@ char	*find_prog(t_command *command)
 	command->exec_maxlen = find_max_len(command->paths) + EXEC_MAXLEN;
 	command->exec_path = malloc(command->exec_maxlen * sizeof(char));
 	if (!command->exec_path)
+	{
+		i = 0;
+		while (command->paths[i])
+			free(command->paths[i++]);
+		free(command->paths);
+		command->paths = NULL;
 		return (NULL);
+	}
 	while (command->paths[i])
 	{
 		if (access(command->paths[i], X_OK))
