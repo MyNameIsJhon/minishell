@@ -48,10 +48,19 @@ char	*mini_prompt(char *pwd, char *user, char *dom)
 	return (line);
 }
 
-int	main(int ac, char **av)
+/* t_context *init_minishell() */
+/* { */
+/* 	t_context *context; */
+/**/
+/* 	content = malloc(sizeof(t_context)); */
+/* 	 */
+/* } */
+
+int	main(int ac, char **av, char **envp)
 {
 	char		*hello;
 	t_command	*command;
+	/* t_context	*context; */
 	char		*path;
 	char		*result;
 
@@ -65,7 +74,7 @@ int	main(int ac, char **av)
 		result = find_prog(command);
 		printf("path: %s\n", result);
 		command_print(command);
-		run_cmd(command);
+		run_cmd(command, envp);
 		command_free(&command);
 		free(hello);
 	}

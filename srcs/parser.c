@@ -100,7 +100,7 @@ char	*find_prog(t_command *command)
 	return (NULL);
 }
 
-int	run_cmd(t_command *command)
+int	run_cmd(t_command *command, char **envp)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -126,7 +126,7 @@ int	run_cmd(t_command *command)
 			exit(1);
 		}
 		close(fd[1]);
-		execve(command->exec_path, command->args, NULL);
+		execve(command->exec_path, command->args, envp);
 		exit(1);
 	}
 	close(fd[1]);
