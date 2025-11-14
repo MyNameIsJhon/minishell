@@ -25,15 +25,34 @@ t_command	*mini_parser(char *user_input)
 	char		**com_splited;
 	int			l_com;
 	t_command	*command;
+	int			i;
 
 	com_splited = ft_split(user_input, ' ');
+	if (!com_splited)
+		return (NULL);
 	l_com = ft_strslen(com_splited);
 	command = (t_command *)malloc(sizeof(t_command));
+	if (!command)
+	{
+		i = 0;
+		while (com_splited[i])
+			free(com_splited[i++]);
+		free(com_splited);
+		return (NULL);
+	}
+	command->com_splited = com_splited;
+	command->paths = NULL;
+	command->exec_path = NULL;
+	command->exec_maxlen = 0;
 	if (l_com >= 1)
 	{
 		command->program = com_splited[0];
 		command->args = com_splited + 1;
-		command->com_splited = com_splited;
+	}
+	else
+	{
+		command->program = NULL;
+		command->args = NULL;
 	}
 	return (command);
 }
@@ -62,8 +81,12 @@ char	*find_prog(t_command *command)
 
 	i = 0;
 	command->paths = get_executable_paths(NULL);
+	if (!command->paths)
+		return (NULL);
 	command->exec_maxlen = find_max_len(command->paths) + EXEC_MAXLEN;
 	command->exec_path = malloc(command->exec_maxlen * sizeof(char));
+	if (!command->exec_path)
+		return (NULL);
 	while (command->paths[i])
 	{
 		if (access(command->paths[i], X_OK))
@@ -72,6 +95,11 @@ char	*find_prog(t_command *command)
 			continue ;
 		}
 		dir = opendir(command->paths[i]);
+		if (!dir)
+		{
+			i++;
+			continue ;
+		}
 		s_dir = readdir(dir);
 		while (s_dir)
 		{

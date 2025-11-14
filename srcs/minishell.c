@@ -87,7 +87,14 @@ int	main(int ac, char **av, char **envp)
 			command_free(&command);
 			exit(0);
 		}
-		find_prog(command);
+		if (!find_prog(command))
+		{
+			ft_putstr_fd("minishell: command not found: ", 2);
+			ft_putstr_fd(command->program, 2);
+			ft_putstr_fd("\n", 2);
+			command_free(&command);
+			continue ;
+		}
 		/* printf("path: %s\n", result); */
 		/* command_print(command); */
 		run_cmd(command, envp);
