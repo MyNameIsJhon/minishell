@@ -73,7 +73,7 @@ int	main(int ac, char **av, char **envp)
 		command = mini_parser(hello);
 		result = find_prog(command);
 		printf("path: %s\n", result);
-		command_print(command);
+		/* command_print(command); */
 		run_cmd(command, envp);
 		command_free(&command);
 		free(hello);
