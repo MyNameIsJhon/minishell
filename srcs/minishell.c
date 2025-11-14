@@ -74,7 +74,11 @@ int	main(int ac, char **av, char **envp)
 		hello = mini_prompt(path, "mynameisjhon", "minishell");
 		command = mini_parser(hello);
 		if (!ft_strcmp(command->program, "exit"))
+		{
+			command_free(&command);
+			free(hello);
 			exit(0);
+		}
 		find_prog(command);
 		/* printf("path: %s\n", result); */
 		/* command_print(command); */
