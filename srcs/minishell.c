@@ -77,6 +77,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			command_free(&command);
 			free(hello);
+			free(path);
 			exit(0);
 		}
 		find_prog(command);
@@ -85,5 +86,6 @@ int	main(int ac, char **av, char **envp)
 		run_cmd(command, envp);
 		command_free(&command);
 		free(hello);
+		free(path);
 	}
 }
