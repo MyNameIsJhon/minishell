@@ -74,7 +74,10 @@ int	main(int ac, char **av, char **envp)
 		hello = mini_prompt(path, "mynameisjhon", "minishell");
 		free(path);
 		if (!hello)
+		{
+			clear_history();
 			exit(0);
+		}
 		command = mini_parser(hello);
 		free(hello);
 		if (!command || !command->program)
@@ -85,6 +88,7 @@ int	main(int ac, char **av, char **envp)
 		if (!ft_strcmp(command->program, "exit"))
 		{
 			command_free(&command);
+			clear_history();
 			exit(0);
 		}
 		if (!find_prog(command))
