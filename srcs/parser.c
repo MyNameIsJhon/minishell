@@ -37,11 +37,6 @@ t_command	*mini_parser(char *user_input)
 	return (command);
 }
 
-void	command_free(t_command **command)
-{
-	ft_strsfree((*command)->com_splited);
-	free(*command);
-}
 char	**get_executable_paths(char *env_path)
 {
 	char	**paths;
@@ -97,6 +92,15 @@ char	*find_prog(t_command *command)
 		closedir(dir);
 	}
 	return (NULL);
+}
+
+void	command_free(t_command **command)
+{
+	ft_strsfree((*command)->com_splited);
+	free((*command)->program);
+	free((*command)->exec_path);
+	ft_strsfree((*command)->paths);
+	free(*command);
 }
 
 int	run_cmd(t_command *command, char **envp)
