@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/15 01:27:06 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/15 01:37:47 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,15 @@ static int	handle_exit_command(t_command *command)
 	return (0);
 }
 
+static int	handle_cd_command(t_command *command)
+{
+	if (!ft_strcmp(command->program, "cd"))
+	{
+		chdir(command->args[0]);
+	}
+	return (0);
+}
+
 static void	print_cmd_not_found(t_command *command)
 {
 	ft_putstr_fd("minishell: command not found: ", 2);
@@ -120,6 +129,7 @@ int	main(int ac, char **av, char **envp)
 			command_free(&command);
 			continue ;
 		}
+		handle_cd_command(command);
 		handle_exit_command(command);
 		execute_user_command(command, envp);
 		command_free(&command);

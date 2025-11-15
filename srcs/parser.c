@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:26:33 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/15 01:25:45 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/15 01:40:57 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,3 @@ char	**get_executable_paths(char *env_path)
 	paths = ft_split(path, ':');
 	return (paths);
 }
-
