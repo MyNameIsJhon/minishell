@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/12 15:34:10 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/15 01:27:53 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ void		command_free(t_command **command);
 void		command_print(t_command *command);
 char		*find_prog(t_command *command);
 int			run_cmd(t_command *command, char **envp);
+void		free_splited_array(char **array);
+char		**get_executable_paths(char *env_path);
 
 #endif

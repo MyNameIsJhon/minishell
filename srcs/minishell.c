@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/12 11:55:56 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/15 01:27:06 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,26 +58,61 @@ char	*mini_prompt(char *pwd, char *user, char *dom)
 /* 	 */
 /* } */
 
+static char	*get_user_input(void)
+{
+	char	*path;
+	char	*input;
+
+	path = getcwd(NULL, 0);
+	input = mini_prompt(path, "mynameisjhon", "minishell");
+	free(path);
+	if (!input)
+	{
+		clear_history();
+		exit(0);
+	}
+	return (input);
+}
+
+static int	handle_exit_command(t_command *command)
+{
+	if (!ft_strcmp(command->program, "exit"))
+	{
+		command_free(&command);
+		clear_history();
+		exit(0);
+	}
+	return (0);
+}
+
+static void	print_cmd_not_found(t_command *command)
+{
+	ft_putstr_fd("minishell: command not found: ", 2);
+	ft_putstr_fd(command->program, 2);
+	ft_putstr_fd("\n", 2);
+}
+
+static int	execute_user_command(t_command *command, char **envp)
+{
+	if (!find_prog(command))
+	{
+		print_cmd_not_found(command);
+		return (0);
+	}
+	run_cmd(command, envp);
+	return (1);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*hello;
 	t_command	*command;
-	/* t_context	*context; */
-	char		*path;
-	/* char		*result; */
 
 	(void)ac;
 	(void)av;
 	while (1)
 	{
-		path = getcwd(NULL, 0);
-		hello = mini_prompt(path, "mynameisjhon", "minishell");
-		free(path);
-		if (!hello)
-		{
-			clear_history();
-			exit(0);
-		}
+		hello = get_user_input();
 		command = mini_parser(hello);
 		free(hello);
 		if (!command || !command->program)
@@ -85,23 +120,8 @@ int	main(int ac, char **av, char **envp)
 			command_free(&command);
 			continue ;
 		}
-		if (!ft_strcmp(command->program, "exit"))
-		{
-			command_free(&command);
-			clear_history();
-			exit(0);
-		}
-		if (!find_prog(command))
-		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putstr_fd(command->program, 2);
-			ft_putstr_fd("\n", 2);
-			command_free(&command);
-			continue ;
-		}
-		/* printf("path: %s\n", result); */
-		/* command_print(command); */
-		run_cmd(command, envp);
+		handle_exit_command(command);
+		execute_user_command(command, envp);
 		command_free(&command);
 	}
 }
