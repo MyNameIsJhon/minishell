@@ -1,0 +1,1001 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  MINISHELL PERFORMANCE REPORT                            ║
+║                  Date: Mon Nov 17 17:43:33 CET 2025                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Test 1: Startup Performance
+
+  Iterations: 30
+  Minishell - Avg: 11ms, Min: 10ms, Max: 18ms
+  Bash      - Avg: 10ms, Min: 10ms, Max: 14ms
+
+Test 2: Echo Command Hardcore
+  ✓ echo #1: echo hello
+  ✓ echo #2: echo hello world
+  ✗ echo #3: echo 'hello world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello world'
+  ✗ echo #4: echo "hello world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello world"
+  ✗ echo #5: echo 'hello' "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' "world"
+  ✗ echo #6: echo -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      test
+  ✗ echo #7: echo -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n test
+  ✓ echo #8: echo -n
+  ✗ echo #9: echo - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #10: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      ''
+  ✗ echo #11: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      ""
+  ✓ echo #12: echo test1 test2 test3 test4 test5
+  ✗ echo #13: echo -n hello world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello world
+  ✗ echo #14: echo 'test with    spaces' - OUTPUT MISMATCH
+    Expected: test with    spaces
+    Got:      'test with spaces'
+  ✗ echo #15: echo "test with    spaces" - OUTPUT MISMATCH
+    Expected: test with    spaces
+    Got:      "test with spaces"
+  ✗ echo #16: echo $HOME - OUTPUT MISMATCH
+    Expected: /Users/jordanriga
+    Got:      $HOME
+  ✗ echo #17: echo '$HOME' - OUTPUT MISMATCH
+    Expected: $HOME
+    Got:      '$HOME'
+  ✗ echo #18: echo "$HOME" - OUTPUT MISMATCH
+    Expected: /Users/jordanriga
+    Got:      "$HOME"
+  ✗ echo #19: echo $PATH - OUTPUT MISMATCH
+    Expected: /Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools/:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/anaconda3/bin:/Users/jordanriga/anaconda3/condabin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/opt/homebrew/opt/fzf/bin
+    Got:      $PATH
+  ✗ echo #20: echo $USER - OUTPUT MISMATCH
+    Expected: jordanriga
+    Got:      $USER
+  ✗ echo #21: echo $? - OUTPUT MISMATCH
+    Expected: 0
+    Got:      $?
+  ✗ echo #22: echo test$HOME - OUTPUT MISMATCH
+    Expected: test/Users/jordanriga
+    Got:      test$HOME
+  ✗ echo #23: echo test\$HOME - OUTPUT MISMATCH
+    Expected: test$HOME
+    Got:      test\$HOME
+  ✗ echo #24: echo 'multiple' 'quoted' 'strings' - OUTPUT MISMATCH
+    Expected: multiple quoted strings
+    Got:      'multiple' 'quoted' 'strings'
+  ✗ echo #25: echo "multiple" "quoted" "strings" - OUTPUT MISMATCH
+    Expected: multiple quoted strings
+    Got:      "multiple" "quoted" "strings"
+  ✓ echo #26: echo a b c d e f g h i j k l m n o 
+  ✓ echo #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✗ echo #28: echo !@#%^&*() - OUTPUT MISMATCH
+    Expected: bash: line 2: syntax error: unexpected end of file
+    Got:      !@#%^&*()
+  ✗ echo #29: echo '!@#%^&*()' - OUTPUT MISMATCH
+    Expected: !@#%^&*()
+    Got:      '!@#%^&*()'
+  ✗ echo #30: echo test	with	tabs - OUTPUT MISMATCH
+    Expected: test with tabs
+    Got:      test	with	tabs
+  ✗ echo #31: echo -n -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n -n test
+  ✓ echo #32: echo --help
+  ✗ echo #33: echo -e test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -e test
+  ✗ echo #34: echo -E test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -E test
+
+Test 3: Echo Extreme Cases
+  ✓ echo with 1000 chars
+  ✓ echo with 100 words
+  ✓ echo with 100 arguments
+  ✓ echo with 500 arguments
+  ✗ echo with unicode - OUTPUT MISMATCH
+    Expected: 日本語 français español
+    Got:      '日本語 français español'
+  ✗ echo with extended ASCII - OUTPUT MISMATCH
+    Expected: ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿
+    Got:      '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿'
+  ✗ echo with nested quotes 1 - OUTPUT MISMATCH
+    Expected: 'test'
+    Got:      "'test'"
+  ✗ echo with nested quotes 2 - OUTPUT MISMATCH
+    Expected: "test"
+    Got:      '"test"'
+  ✗ echo with complex nested quotes - OUTPUT MISMATCH
+    Expected: 'test'
+    Got:      "'"test"'"
+  ✗ echo with multiple empty strings - OUTPUT MISMATCH
+    Expected:   
+    Got:      '' '' ''
+  ✗ echo with multiple empty strings 2 - OUTPUT MISMATCH
+    Expected:   
+    Got:      "" "" ""
+  ✓ echo with backslashes
+  ✗ echo with escaped newline - OUTPUT MISMATCH
+    Expected: test\ntest
+    Got:      'test
+
+Test 4: Syntax Errors
+  ✓ Syntax: echo 'unclosed quote
+  ✓ Syntax: echo "unclosed double quote
+  ✓ Syntax: echo 'multiple 'quotes' test'
+  ✓ Syntax: | echo test
+  ✓ Syntax: echo test |
+  ✓ Syntax: echo test | | cat
+  ✓ Syntax: > output.txt
+  ✓ Syntax: < input.txt
+  ✓ Syntax: echo test > > output.txt
+  ✓ Syntax: echo test < < input.txt
+  ✓ Syntax: echo test >>
+  ✓ Syntax: echo test <<
+  ✓ Syntax: echo test &&
+  ✓ Syntax: echo test ||
+  ✓ Syntax: echo test ;
+  ✓ Syntax: ; echo test
+  ✓ Syntax: echo test &
+  ✓ Syntax: & echo test
+
+Test 5: Pipes Comprehensive
+echo hello | cat
+  Minishell: 16ms | Bash: 12ms
+echo hello | cat | cat
+  Minishell: 15ms | Bash: 13ms
+echo hello | cat | cat | cat
+  Minishell: 15ms | Bash: 12ms
+echo hello | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 13ms
+echo hello | cat | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 14ms
+cat /tmp/minishell_bench_23945/numbers.txt | head -10
+  Minishell: 16ms | Bash: 12ms
+cat /tmp/minishell_bench_23945/numbers.txt | tail -10
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5
+  Minishell: 16ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5 | wc -l
+  Minishell: 15ms | Bash: 12ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5 | head -5
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5 | tail -5
+  Minishell: 15ms | Bash: 13ms
+echo test | grep test
+  Minishell: 14ms | Bash: 12ms
+echo test | grep test | cat
+  Minishell: 15ms | Bash: 12ms
+echo abc def ghi | cat | cat | cat
+  Minishell: 14ms | Bash: 12ms
+cat /tmp/minishell_bench_23945/text.txt | cat | cat
+  Minishell: 15ms | Bash: 12ms
+ls | grep bench
+  Minishell: 16ms | Bash: 12ms
+ls -la | head -5
+  Minishell: 15ms | Bash: 13ms
+echo 1 2 3 | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 12ms
+cat /tmp/minishell_bench_23945/numbers.txt | head -50 | tail -10 | grep 4
+  Minishell: 15ms | Bash: 12ms
+echo test | cat | grep test | cat | cat
+  Minishell: 15ms | Bash: 14ms
+
+Test 6: Redirections Hardcore
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ multiple redirections
+  ✗ pipe with redirection
+  ✗ overwrite test
+  ✓ invalid path handling
+
+Test 7: Environment Variables Extensive
+  ✓ echo $PATH
+  ✓ echo $HOME
+  ✓ echo $USER
+  ✓ echo $PWD
+  ✓ echo $SHELL
+  ✓ echo $?
+  ✓ echo $0
+  ✓ echo test$HOME
+  ✓ echo $HOME/test
+  ✓ echo $HOME$PATH
+  ✓ echo '$HOME'
+  ✓ echo "$HOME"
+  ✓ echo $NONEXISTENT
+  ✓ echo $NONEXISTENT_VAR_123
+  ✓ echo test$NONEXISTENT
+  ✓ echo $PATH$HOME$USER
+  ? exit status test
+
+Test 8: Quote Handling Comprehensive
+  ✗ quote #1: echo 'hello' - OUTPUT MISMATCH
+    Expected: hello
+    Got:      'hello'
+  ✗ quote #2: echo "hello" - OUTPUT MISMATCH
+    Expected: hello
+    Got:      "hello"
+  ✗ quote #3: echo 'hello world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello world'
+  ✗ quote #4: echo "hello world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello world"
+  ✗ quote #5: echo 'hello' world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' world
+  ✗ quote #6: echo "hello" world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello" world
+  ✗ quote #7: echo hello 'world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello 'world'
+  ✗ quote #8: echo hello "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello "world"
+  ✗ quote #9: echo 'hello' 'world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' 'world'
+  ✗ quote #10: echo "hello" "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello" "world"
+  ✗ quote #11: echo 'hello' "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' "world"
+  ✗ quote #12: echo "hello" 'world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello" 'world'
+  ✗ quote #13: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      ''
+  ✗ quote #14: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      ""
+  ✗ quote #15: echo '' '' - OUTPUT MISMATCH
+    Expected:  
+    Got:      '' ''
+  ✗ quote #16: echo "" "" - OUTPUT MISMATCH
+    Expected:  
+    Got:      "" ""
+  ✗ quote #17: echo 'test $HOME' - OUTPUT MISMATCH
+    Expected: test $HOME
+    Got:      'test $HOME'
+  ✗ quote #18: echo "test $HOME" - OUTPUT MISMATCH
+    Expected: test /Users/jordanriga
+    Got:      "test $HOME"
+  ✗ quote #19: echo '$USER' - OUTPUT MISMATCH
+    Expected: $USER
+    Got:      '$USER'
+  ✗ quote #20: echo "$USER" - OUTPUT MISMATCH
+    Expected: jordanriga
+    Got:      "$USER"
+  ✗ quote #21: echo 'test"quote' - OUTPUT MISMATCH
+    Expected: test"quote
+    Got:      'test"quote'
+  ✗ quote #22: echo "test'quote" - OUTPUT MISMATCH
+    Expected: test'quote
+    Got:      "test'quote"
+  ✗ quote #23: echo '''' - OUTPUT MISMATCH
+    Expected: 
+    Got:      ''''
+  ✗ quote #24: echo """" - OUTPUT MISMATCH
+    Expected: 
+    Got:      """"
+  ✗ quote #25: echo 'a''b' - OUTPUT MISMATCH
+    Expected: ab
+    Got:      'a''b'
+  ✗ quote #26: echo "a""b" - OUTPUT MISMATCH
+    Expected: ab
+    Got:      "a""b"
+  ✗ quote #27: echo 'test with "double" insid - OUTPUT MISMATCH
+    Expected: test with "double" inside
+    Got:      'test with "double" inside'
+  ✗ quote #28: echo "test with 'single' insid - OUTPUT MISMATCH
+    Expected: test with 'single' inside
+    Got:      "test with 'single' inside"
+  ✗ quote #29: echo 'test\nwith\nbackslash' - OUTPUT MISMATCH
+    Expected: test\nwith\nbackslash
+    Got:      'test
+  ✗ quote #30: echo "test\nwith\nbackslash" - OUTPUT MISMATCH
+    Expected: test\nwith\nbackslash
+    Got:      "test
+
+Test 9: Edge Cases Extreme
+  ✓ empty line
+  ✓ multiple empty lines
+  ✓ only spaces
+  ✓ only tabs
+  ✓ Very long command (500 chars)
+  ✓ Extremely long command (2000 chars)
+  ✓ Many spaces between args
+  ✓ Spaces before arg
+  ✓ Spaces after arg
+  ✓ nonexistent command
+  ✗ Special characters - OUTPUT MISMATCH
+    Expected: !@#$%^&*()
+    Got:      '!@#$%^&*()'
+  ✗ More special characters - OUTPUT MISMATCH
+    Expected: {}[]<>?/\|
+    Got:      '{}[]<>?/\|'
+  ✗ All special chars - OUTPUT MISMATCH
+    Expected: ~`!@#$%^&*()_+-=
+    Got:      '~`!@#$%^&*()_+-='
+  ✓ Normal after special tests
+
+Test 10: Built-in Commands Comprehensive
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ unset
+  ✓ exit
+  ? exit with code
+
+Test 11: Stress & Load Testing
+  100 commands: minishell=378ms, bash=11ms
+  500 commands: minishell=1824ms, bash=13ms
+  Large file: minishell=15ms, bash=13ms
+
+Test 12: Memory Usage
+  Memory: 1.93 MB (1984 KB)
+
+Test 13: Complex Scenarios
+cat /tmp/minishell_bench_23945/fruits.txt | grep a | wc -l: minishell=24ms, bash=15ms
+echo test | cat | cat | cat | wc -l: minishell=16ms, bash=13ms
+ls | grep bench | cat: minishell=15ms, bash=13ms
+echo $HOME | cat: minishell=15ms, bash=12ms
+cat /tmp/minishell_bench_23945/fruits.txt | grep -v banana | wc -l: minishell=14ms, bash=12ms
+ls -la | head -10 | tail -5: minishell=15ms, bash=15ms
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  152
+Passed:       77
+Failed:       72
+Warnings:     2
+Pass rate:    50%
+Status:       CRITICAL
+
+✗ Critical issues detected
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        FAILED TESTS DETAILS                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. echo #3: echo 'hello world'
+   Expected: 'hello world' | Got: ''hello world''
+
+2. echo #4: echo "hello world"
+   Expected: 'hello world' | Got: '"hello world"'
+
+3. echo #5: echo 'hello' "world"
+   Expected: 'hello world' | Got: ''hello' "world"'
+
+4. echo #6: echo -n test
+   Expected: 'test' | Got: 'test'
+
+5. echo #7: echo -n -n test
+   Expected: 'test' | Got: '-n test'
+
+6. echo #9: echo
+   Expected: '' | Got: ''
+
+7. echo #10: echo ''
+   Expected: '' | Got: ''''
+
+8. echo #11: echo ""
+   Expected: '' | Got: '""'
+
+9. echo #13: echo -n hello world
+   Expected: 'hello world' | Got: 'hello world'
+
+10. echo #14: echo 'test with    spaces'
+   Expected: 'test with    spaces' | Got: ''test with spaces''
+
+11. echo #15: echo "test with    spaces"
+   Expected: 'test with    spaces' | Got: '"test with spaces"'
+
+12. echo #16: echo $HOME
+   Expected: '/Users/jordanriga' | Got: '$HOME'
+
+13. echo #17: echo '$HOME'
+   Expected: '$HOME' | Got: ''$HOME''
+
+14. echo #18: echo "$HOME"
+   Expected: '/Users/jordanriga' | Got: '"$HOME"'
+
+15. echo #19: echo $PATH
+   Expected: '/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools/:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/anaconda3/bin:/Users/jordanriga/anaconda3/condabin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/opt/homebrew/opt/fzf/bin' | Got: '$PATH'
+
+16. echo #20: echo $USER
+   Expected: 'jordanriga' | Got: '$USER'
+
+17. echo #21: echo $?
+   Expected: '0' | Got: '$?'
+
+18. echo #22: echo test$HOME
+   Expected: 'test/Users/jordanriga' | Got: 'test$HOME'
+
+19. echo #23: echo test\$HOME
+   Expected: 'test$HOME' | Got: 'test\$HOME'
+
+20. echo #24: echo 'multiple' 'quoted' 'strings'
+   Expected: 'multiple quoted strings' | Got: ''multiple' 'quoted' 'strings''
+
+21. echo #25: echo "multiple" "quoted" "strings"
+   Expected: 'multiple quoted strings' | Got: '"multiple" "quoted" "strings"'
+
+22. echo #28: echo !@#%^&*()
+   Expected: 'bash: line 2: syntax error: unexpected end of file' | Got: '!@#%^&*()'
+
+23. echo #29: echo '!@#%^&*()'
+   Expected: '!@#%^&*()' | Got: ''!@#%^&*()''
+
+24. echo #30: echo test	with	tabs
+   Expected: 'test with tabs' | Got: 'test	with	tabs'
+
+25. echo #31: echo -n -n -n test
+   Expected: 'test' | Got: '-n -n test'
+
+26. echo #33: echo -e test
+   Expected: 'test' | Got: '-e test'
+
+27. echo #34: echo -E test
+   Expected: 'test' | Got: '-E test'
+
+28. echo with unicode
+   Expected: '日本語 français español' | Got: ''日本語 français español''
+
+29. echo with extended ASCII
+   Expected: '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿' | Got: ''¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿''
+
+30. echo with nested quotes 1
+   Expected: ''test'' | Got: '"'test'"'
+
+31. echo with nested quotes 2
+   Expected: '"test"' | Got: ''"test"''
+
+32. echo with complex nested quotes
+   Expected: ''test'' | Got: '"'"test"'"'
+
+33. echo with multiple empty strings
+   Expected: '  ' | Got: ''' '' '''
+
+34. echo with multiple empty strings 2
+   Expected: '  ' | Got: '"" "" ""'
+
+35. echo with escaped newline
+   Expected: 'test\ntest' | Got: ''test'
+
+36. Output redirection >
+   File not created or wrong content
+
+37. Multiple redirections
+   Combined redirections failed
+
+38. Pipe with redirection
+   Pipe + redirection combination failed
+
+39. Overwrite file
+   File not properly overwritten
+
+40. quote #1: echo 'hello'
+   Expected: 'hello' | Got: ''hello''
+
+41. quote #2: echo "hello"
+   Expected: 'hello' | Got: '"hello"'
+
+42. quote #3: echo 'hello world'
+   Expected: 'hello world' | Got: ''hello world''
+
+43. quote #4: echo "hello world"
+   Expected: 'hello world' | Got: '"hello world"'
+
+44. quote #5: echo 'hello' world
+   Expected: 'hello world' | Got: ''hello' world'
+
+45. quote #6: echo "hello" world
+   Expected: 'hello world' | Got: '"hello" world'
+
+46. quote #7: echo hello 'world'
+   Expected: 'hello world' | Got: 'hello 'world''
+
+47. quote #8: echo hello "world"
+   Expected: 'hello world' | Got: 'hello "world"'
+
+48. quote #9: echo 'hello' 'world'
+   Expected: 'hello world' | Got: ''hello' 'world''
+
+49. quote #10: echo "hello" "world"
+   Expected: 'hello world' | Got: '"hello" "world"'
+
+50. quote #11: echo 'hello' "world"
+   Expected: 'hello world' | Got: ''hello' "world"'
+
+51. quote #12: echo "hello" 'world'
+   Expected: 'hello world' | Got: '"hello" 'world''
+
+52. quote #13: echo ''
+   Expected: '' | Got: ''''
+
+53. quote #14: echo ""
+   Expected: '' | Got: '""'
+
+54. quote #15: echo '' ''
+   Expected: ' ' | Got: ''' '''
+
+55. quote #16: echo "" ""
+   Expected: ' ' | Got: '"" ""'
+
+56. quote #17: echo 'test $HOME'
+   Expected: 'test $HOME' | Got: ''test $HOME''
+
+57. quote #18: echo "test $HOME"
+   Expected: 'test /Users/jordanriga' | Got: '"test $HOME"'
+
+58. quote #19: echo '$USER'
+   Expected: '$USER' | Got: ''$USER''
+
+59. quote #20: echo "$USER"
+   Expected: 'jordanriga' | Got: '"$USER"'
+
+60. quote #21: echo 'test"quote'
+   Expected: 'test"quote' | Got: ''test"quote''
+
+61. quote #22: echo "test'quote"
+   Expected: 'test'quote' | Got: '"test'quote"'
+
+62. quote #23: echo ''''
+   Expected: '' | Got: ''''''
+
+63. quote #24: echo """"
+   Expected: '' | Got: '""""'
+
+64. quote #25: echo 'a''b'
+   Expected: 'ab' | Got: ''a''b''
+
+65. quote #26: echo "a""b"
+   Expected: 'ab' | Got: '"a""b"'
+
+66. quote #27: echo 'test with "double" insid
+   Expected: 'test with "double" inside' | Got: ''test with "double" inside''
+
+67. quote #28: echo "test with 'single' insid
+   Expected: 'test with 'single' inside' | Got: '"test with 'single' inside"'
+
+68. quote #29: echo 'test\nwith\nbackslash'
+   Expected: 'test\nwith\nbackslash' | Got: ''test'
+
+69. quote #30: echo "test\nwith\nbackslash"
+   Expected: 'test\nwith\nbackslash' | Got: '"test'
+
+70. Special characters
+   Expected: '!@#$%^&*()' | Got: ''!@#$%^&*()''
+
+71. More special characters
+   Expected: '{}[]<>?/\|' | Got: ''{}[]<>?/\|''
+
+72. All special chars
+   Expected: '~`!@#$%^&*()_+-=' | Got: ''~`!@#$%^&*()_+-=''
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  152
+Passed:       77
+Failed:       72
+Warnings:     2
+Pass rate:    50%
+Status:       CRITICAL
+
+✗ Critical issues detected
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        FAILED TESTS DETAILS                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. echo #3: echo 'hello world'
+   Expected: 'hello world' | Got: ''hello world''
+
+2. echo #4: echo "hello world"
+   Expected: 'hello world' | Got: '"hello world"'
+
+3. echo #5: echo 'hello' "world"
+   Expected: 'hello world' | Got: ''hello' "world"'
+
+4. echo #6: echo -n test
+   Expected: 'test' | Got: 'test'
+
+5. echo #7: echo -n -n test
+   Expected: 'test' | Got: '-n test'
+
+6. echo #9: echo
+   Expected: '' | Got: ''
+
+7. echo #10: echo ''
+   Expected: '' | Got: ''''
+
+8. echo #11: echo ""
+   Expected: '' | Got: '""'
+
+9. echo #13: echo -n hello world
+   Expected: 'hello world' | Got: 'hello world'
+
+10. echo #14: echo 'test with    spaces'
+   Expected: 'test with    spaces' | Got: ''test with spaces''
+
+11. echo #15: echo "test with    spaces"
+   Expected: 'test with    spaces' | Got: '"test with spaces"'
+
+12. echo #16: echo $HOME
+   Expected: '/Users/jordanriga' | Got: '$HOME'
+
+13. echo #17: echo '$HOME'
+   Expected: '$HOME' | Got: ''$HOME''
+
+14. echo #18: echo "$HOME"
+   Expected: '/Users/jordanriga' | Got: '"$HOME"'
+
+15. echo #19: echo $PATH
+   Expected: '/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools/:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/anaconda3/bin:/Users/jordanriga/anaconda3/condabin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/opt/homebrew/opt/fzf/bin' | Got: '$PATH'
+
+16. echo #20: echo $USER
+   Expected: 'jordanriga' | Got: '$USER'
+
+17. echo #21: echo $?
+   Expected: '0' | Got: '$?'
+
+18. echo #22: echo test$HOME
+   Expected: 'test/Users/jordanriga' | Got: 'test$HOME'
+
+19. echo #23: echo test\$HOME
+   Expected: 'test$HOME' | Got: 'test\$HOME'
+
+20. echo #24: echo 'multiple' 'quoted' 'strings'
+   Expected: 'multiple quoted strings' | Got: ''multiple' 'quoted' 'strings''
+
+21. echo #25: echo "multiple" "quoted" "strings"
+   Expected: 'multiple quoted strings' | Got: '"multiple" "quoted" "strings"'
+
+22. echo #28: echo !@#%^&*()
+   Expected: 'bash: line 2: syntax error: unexpected end of file' | Got: '!@#%^&*()'
+
+23. echo #29: echo '!@#%^&*()'
+   Expected: '!@#%^&*()' | Got: ''!@#%^&*()''
+
+24. echo #30: echo test	with	tabs
+   Expected: 'test with tabs' | Got: 'test	with	tabs'
+
+25. echo #31: echo -n -n -n test
+   Expected: 'test' | Got: '-n -n test'
+
+26. echo #33: echo -e test
+   Expected: 'test' | Got: '-e test'
+
+27. echo #34: echo -E test
+   Expected: 'test' | Got: '-E test'
+
+28. echo with unicode
+   Expected: '日本語 français español' | Got: ''日本語 français español''
+
+29. echo with extended ASCII
+   Expected: '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿' | Got: ''¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿''
+
+30. echo with nested quotes 1
+   Expected: ''test'' | Got: '"'test'"'
+
+31. echo with nested quotes 2
+   Expected: '"test"' | Got: ''"test"''
+
+32. echo with complex nested quotes
+   Expected: ''test'' | Got: '"'"test"'"'
+
+33. echo with multiple empty strings
+   Expected: '  ' | Got: ''' '' '''
+
+34. echo with multiple empty strings 2
+   Expected: '  ' | Got: '"" "" ""'
+
+35. echo with escaped newline
+   Expected: 'test\ntest' | Got: ''test'
+
+36. Output redirection >
+   File not created or wrong content
+
+37. Multiple redirections
+   Combined redirections failed
+
+38. Pipe with redirection
+   Pipe + redirection combination failed
+
+39. Overwrite file
+   File not properly overwritten
+
+40. quote #1: echo 'hello'
+   Expected: 'hello' | Got: ''hello''
+
+41. quote #2: echo "hello"
+   Expected: 'hello' | Got: '"hello"'
+
+42. quote #3: echo 'hello world'
+   Expected: 'hello world' | Got: ''hello world''
+
+43. quote #4: echo "hello world"
+   Expected: 'hello world' | Got: '"hello world"'
+
+44. quote #5: echo 'hello' world
+   Expected: 'hello world' | Got: ''hello' world'
+
+45. quote #6: echo "hello" world
+   Expected: 'hello world' | Got: '"hello" world'
+
+46. quote #7: echo hello 'world'
+   Expected: 'hello world' | Got: 'hello 'world''
+
+47. quote #8: echo hello "world"
+   Expected: 'hello world' | Got: 'hello "world"'
+
+48. quote #9: echo 'hello' 'world'
+   Expected: 'hello world' | Got: ''hello' 'world''
+
+49. quote #10: echo "hello" "world"
+   Expected: 'hello world' | Got: '"hello" "world"'
+
+50. quote #11: echo 'hello' "world"
+   Expected: 'hello world' | Got: ''hello' "world"'
+
+51. quote #12: echo "hello" 'world'
+   Expected: 'hello world' | Got: '"hello" 'world''
+
+52. quote #13: echo ''
+   Expected: '' | Got: ''''
+
+53. quote #14: echo ""
+   Expected: '' | Got: '""'
+
+54. quote #15: echo '' ''
+   Expected: ' ' | Got: ''' '''
+
+55. quote #16: echo "" ""
+   Expected: ' ' | Got: '"" ""'
+
+56. quote #17: echo 'test $HOME'
+   Expected: 'test $HOME' | Got: ''test $HOME''
+
+57. quote #18: echo "test $HOME"
+   Expected: 'test /Users/jordanriga' | Got: '"test $HOME"'
+
+58. quote #19: echo '$USER'
+   Expected: '$USER' | Got: ''$USER''
+
+59. quote #20: echo "$USER"
+   Expected: 'jordanriga' | Got: '"$USER"'
+
+60. quote #21: echo 'test"quote'
+   Expected: 'test"quote' | Got: ''test"quote''
+
+61. quote #22: echo "test'quote"
+   Expected: 'test'quote' | Got: '"test'quote"'
+
+62. quote #23: echo ''''
+   Expected: '' | Got: ''''''
+
+63. quote #24: echo """"
+   Expected: '' | Got: '""""'
+
+64. quote #25: echo 'a''b'
+   Expected: 'ab' | Got: ''a''b''
+
+65. quote #26: echo "a""b"
+   Expected: 'ab' | Got: '"a""b"'
+
+66. quote #27: echo 'test with "double" insid
+   Expected: 'test with "double" inside' | Got: ''test with "double" inside''
+
+67. quote #28: echo "test with 'single' insid
+   Expected: 'test with 'single' inside' | Got: '"test with 'single' inside"'
+
+68. quote #29: echo 'test\nwith\nbackslash'
+   Expected: 'test\nwith\nbackslash' | Got: ''test'
+
+69. quote #30: echo "test\nwith\nbackslash"
+   Expected: 'test\nwith\nbackslash' | Got: '"test'
+
+70. Special characters
+   Expected: '!@#$%^&*()' | Got: ''!@#$%^&*()''
+
+71. More special characters
+   Expected: '{}[]<>?/\|' | Got: ''{}[]<>?/\|''
+
+72. All special chars
+   Expected: '~`!@#$%^&*()_+-=' | Got: ''~`!@#$%^&*()_+-=''
+
+Test 5: Pipes Comprehensive
+echo hello | cat
+  Minishell: 26ms | Bash: 16ms
+echo hello | cat | cat
+  Minishell: 17ms | Bash: 13ms
+echo hello | cat | cat | cat
+  Minishell: 16ms | Bash: 12ms
+echo hello | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 13ms
+echo hello | cat | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | head -10
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | tail -10
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5
+  Minishell: 15ms | Bash: 14ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5 | wc -l
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5 | head -5
+  Minishell: 14ms | Bash: 12ms
+cat /tmp/minishell_bench_23945/numbers.txt | grep 5 | tail -5
+  Minishell: 15ms | Bash: 13ms
+echo test | grep test
+  Minishell: 15ms | Bash: 13ms
+echo test | grep test | cat
+  Minishell: 15ms | Bash: 13ms
+echo abc def ghi | cat | cat | cat
+  Minishell: 14ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/text.txt | cat | cat
+  Minishell: 14ms | Bash: 12ms
+ls | grep bench
+  Minishell: 15ms | Bash: 12ms
+ls -la | head -5
+  Minishell: 15ms | Bash: 14ms
+echo 1 2 3 | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_23945/numbers.txt | head -50 | tail -10 | grep 4
+  Minishell: 17ms | Bash: 15ms
+echo test | cat | grep test | cat | cat
+  Minishell: 15ms | Bash: 15ms
+
+Test 8: Quote Handling Comprehensive
+  ✗ quote #1: echo 'hello' - OUTPUT MISMATCH
+    Expected: hello
+    Got:      'hello'
+  ✗ quote #2: echo "hello" - OUTPUT MISMATCH
+    Expected: hello
+    Got:      "hello"
+  ✗ quote #3: echo 'hello world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello world'
+  ✗ quote #4: echo "hello world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello world"
+  ✗ quote #5: echo 'hello' world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' world
+  ✗ quote #6: echo "hello" world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello" world
+  ✗ quote #7: echo hello 'world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello 'world'
+  ✗ quote #8: echo hello "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello "world"
+  ✗ quote #9: echo 'hello' 'world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' 'world'
+  ✗ quote #10: echo "hello" "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello" "world"
+  ✗ quote #11: echo 'hello' "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' "world"
+  ✗ quote #12: echo "hello" 'world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello" 'world'
+  ✗ quote #13: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      ''
+  ✗ quote #14: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      ""
+  ✗ quote #15: echo '' '' - OUTPUT MISMATCH
+    Expected:  
+    Got:      '' ''
+  ✗ quote #16: echo "" "" - OUTPUT MISMATCH
+    Expected:  
+    Got:      "" ""
+  ✗ quote #17: echo 'test $HOME' - OUTPUT MISMATCH
+    Expected: test $HOME
+    Got:      'test $HOME'
+  ✗ quote #18: echo "test $HOME" - OUTPUT MISMATCH
+    Expected: test /Users/jordanriga
+    Got:      "test $HOME"
+  ✗ quote #19: echo '$USER' - OUTPUT MISMATCH
+    Expected: $USER
+    Got:      '$USER'
+  ✗ quote #20: echo "$USER" - OUTPUT MISMATCH
+    Expected: jordanriga
+    Got:      "$USER"
+  ✗ quote #21: echo 'test"quote' - OUTPUT MISMATCH
+    Expected: test"quote
+    Got:      'test"quote'
+  ✗ quote #22: echo "test'quote" - OUTPUT MISMATCH
+    Expected: test'quote
+    Got:      "test'quote"
+  ✗ quote #23: echo '''' - OUTPUT MISMATCH
+    Expected: 
+    Got:      ''''
+  ✗ quote #24: echo """" - OUTPUT MISMATCH
+    Expected: 
+    Got:      """"
+  ✗ quote #25: echo 'a''b' - OUTPUT MISMATCH
+    Expected: ab
+    Got:      'a''b'
+  ✗ quote #26: echo "a""b" - OUTPUT MISMATCH
+    Expected: ab
+    Got:      "a""b"
+  ✗ quote #27: echo 'test with "double" insid - OUTPUT MISMATCH
+    Expected: test with "double" inside
+    Got:      'test with "double" inside'
+  ✗ quote #28: echo "test with 'single' insid - OUTPUT MISMATCH
+    Expected: test with 'single' inside
+    Got:      "test with 'single' inside"
+  ✗ quote #29: echo 'test\nwith\nbackslash' - OUTPUT MISMATCH
+    Expected: test\nwith\nbackslash
+    Got:      'test
+  ✗ quote #30: echo "test\nwith\nbackslash" - OUTPUT MISMATCH
+    Expected: test\nwith\nbackslash
+    Got:      "test
+
+Test 3: Echo Extreme Cases
+  ✓ echo with 1000 chars
+  ✓ echo with 100 words
+  ✓ echo with 100 arguments
+  ✓ echo with 500 arguments
+  ✗ echo with unicode - OUTPUT MISMATCH
+    Expected: 日本語 français español
+    Got:      '日本語 français español'
+  ✗ echo with extended ASCII - OUTPUT MISMATCH
+    Expected: ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿
+    Got:      '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿'
+  ✗ echo with nested quotes 1 - OUTPUT MISMATCH
+    Expected: 'test'
+    Got:      "'test'"
+  ✗ echo with nested quotes 2 - OUTPUT MISMATCH
+    Expected: "test"
+    Got:      '"test"'
+  ✗ echo with complex nested quotes - OUTPUT MISMATCH
+    Expected: 'test'
+    Got:      "'"test"'"
+  ✗ echo with multiple empty strings - OUTPUT MISMATCH
+    Expected:   
+    Got:      '' '' ''
+  ✗ echo with multiple empty strings 2 - OUTPUT MISMATCH
+    Expected:   
+    Got:      "" "" ""
+  ✓ echo with backslashes
+  ✗ echo with escaped newline - OUTPUT MISMATCH
+    Expected: test\ntest
+    Got:      'test
+

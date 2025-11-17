@@ -1,0 +1,16 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  MINISHELL PERFORMANCE REPORT                            ║
+║                  Date: Mon Nov 17 17:48:50 CET 2025                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Test 1: Startup Performance
+
+  Iterations: 30
+  Minishell - Avg: 11ms, Min: 10ms, Max: 16ms
+  Bash      - Avg: 10ms, Min: 10ms, Max: 12ms
+
+Test 11: Stress & Load Testing
+  100 commands: minishell=400ms, bash=11ms
+  500 commands: minishell=1861ms, bash=13ms
+  Large file: minishell=15ms, bash=14ms
+

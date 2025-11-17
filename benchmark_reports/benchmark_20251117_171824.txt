@@ -1,0 +1,20 @@
+=====================================
+  MINISHELL PERFORMANCE REPORT
+  Date: Mon Nov 17 17:18:24 CET 2025
+=====================================
+
+Test 2: Simple Commands
+  ✓ echo hello
+  ✓ pwd
+  ✗ echo $PATH (output differs)
+  ✓ echo test1 test2 test3
+
+Test 4: Redirections
+  cat < /tmp/test_input.txt: 0.01s
+  echo hello > /tmp/test_output.txt: 0.01s
+  cat /tmp/test_input.txt > /tmp/test_output.txt: 0.00s
+
+Test 7: Stress Test
+  cat /tmp/stress_test.txt | grep 1 | wc -l: 0.01s
+  cat /tmp/stress_test.txt | head -100 | tail -10: 0.01s
+

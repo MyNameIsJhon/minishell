@@ -1,0 +1,15 @@
+=====================================
+  MINISHELL PERFORMANCE REPORT
+  Date: Mon Nov 17 17:25:41 CET 2025
+=====================================
+
+Test 2: Simple Commands
+  ✓ echo hello
+  ✓ echo with quotes (output differs but valid)
+  ✓ echo with double quotes (output differs but valid)
+  ✓ echo -n flag (output differs but valid)
+  ✓ echo multiple args
+  ✗ echo empty - OUTPUT MISMATCH
+  ✓ pwd
+  ✓ env
+

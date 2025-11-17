@@ -1,0 +1,228 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  MINISHELL PERFORMANCE REPORT                            ║
+║                  Date: Mon Nov 17 17:32:01 CET 2025                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Test 2: Echo Command Hardcore
+  ✓ echo test #1: echo hello
+  ✓ echo test #2: echo hello world
+  ✓ echo test #3: echo 'hello world' (output differs)
+  ✓ echo test #4: echo "hello world" (output differs)
+  ✓ echo test #5: echo 'hello' "world" (output differs)
+  ✓ echo test #6: echo -n test (output differs)
+  ✓ echo test #7: echo -n -n test (output differs)
+  ✓ echo test #8: echo -n
+  ✗ echo test #9: echo - OUTPUT MISMATCH
+  ✓ echo test #10: echo '' (output differs)
+  ✓ echo test #11: echo "" (output differs)
+  ✓ echo test #12: echo test1 test2 test3 test4 test5
+  ✓ echo test #13: echo -n hello world (output differs)
+  ✓ echo test #14: echo 'test with    spaces' (output differs)
+  ✓ echo test #15: echo "test with    spaces" (output differs)
+  ✓ echo test #16: echo $HOME (output differs)
+  ✓ echo test #17: echo '$HOME' (output differs)
+  ✓ echo test #18: echo "$HOME" (output differs)
+  ✓ echo test #19: echo $PATH (output differs)
+  ✓ echo test #20: echo $USER (output differs)
+  ✓ echo test #21: echo $? (output differs)
+  ✓ echo test #22: echo test$HOME (output differs)
+  ✓ echo test #23: echo test\$HOME (output differs)
+  ✓ echo test #24: echo 'multiple' 'quoted' 'strings' (output differs)
+  ✓ echo test #25: echo "multiple" "quoted" "strings" (output differs)
+  ✓ echo test #26: echo a b c d e f g h i j k l m n o p q r
+  ✓ echo test #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✓ echo test #28: echo !@#%^&*() (output differs)
+  ✓ echo test #29: echo '!@#%^&*()' (output differs)
+  ✓ echo test #30: echo test	with	tabs (output differs)
+
+Test 12: Complex Scenarios
+cat /tmp/minishell_bench_13764/fruits.txt | grep a | wc -l: minishell=22ms, bash=16ms
+echo test | cat | cat | cat | wc -l: minishell=16ms, bash=13ms
+ls | grep bench | cat: minishell=16ms, bash=13ms
+echo $HOME | cat: minishell=14ms, bash=12ms
+
+Test 1: Startup Performance
+
+  Iterations: 30
+  Minishell - Avg: 11ms, Min: 10ms, Max: 18ms
+  Bash      - Avg: 11ms, Min: 10ms, Max: 17ms
+
+Test 2: Echo Command Hardcore
+  ✓ echo test #1: echo hello
+  ✓ echo test #2: echo hello world
+  ✓ echo test #3: echo 'hello world' (output differs)
+  ✓ echo test #4: echo "hello world" (output differs)
+  ✓ echo test #5: echo 'hello' "world" (output differs)
+  ✓ echo test #6: echo -n test (output differs)
+  ✓ echo test #7: echo -n -n test (output differs)
+  ✓ echo test #8: echo -n
+  ✗ echo test #9: echo - OUTPUT MISMATCH
+  ✓ echo test #10: echo '' (output differs)
+  ✓ echo test #11: echo "" (output differs)
+  ✓ echo test #12: echo test1 test2 test3 test4 test5
+  ✓ echo test #13: echo -n hello world (output differs)
+  ✓ echo test #14: echo 'test with    spaces' (output differs)
+  ✓ echo test #15: echo "test with    spaces" (output differs)
+  ✓ echo test #16: echo $HOME (output differs)
+  ✓ echo test #17: echo '$HOME' (output differs)
+  ✓ echo test #18: echo "$HOME" (output differs)
+  ✓ echo test #19: echo $PATH (output differs)
+  ✓ echo test #20: echo $USER (output differs)
+  ✓ echo test #21: echo $? (output differs)
+  ✓ echo test #22: echo test$HOME (output differs)
+  ✓ echo test #23: echo test\$HOME (output differs)
+  ✓ echo test #24: echo 'multiple' 'quoted' 'strings' (output differs)
+  ✓ echo test #25: echo "multiple" "quoted" "strings" (output differs)
+  ✓ echo test #26: echo a b c d e f g h i j k l m n o p q r
+  ✓ echo test #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✓ echo test #28: echo !@#%^&*() (output differs)
+  ✓ echo test #29: echo '!@#%^&*()' (output differs)
+  ✓ echo test #30: echo test	with	tabs (output differs)
+
+Test 3: Echo Extreme Cases
+  ✓ echo with 1000 chars
+  ✓ echo with 100 words
+  ✓ echo with 100 arguments
+  ✓ echo with unicode (output differs)
+  ✓ echo with extended ASCII (output differs)
+  ✓ echo with nested quotes 1 (output differs)
+  ✓ echo with nested quotes 2 (output differs)
+  ✓ echo with multiple empty strings (output differs)
+  ✓ echo with multiple empty strings 2 (output differs)
+
+Test 4: Pipes Comprehensive
+echo hello | cat
+  Minishell: 15ms | Bash: 13ms
+echo hello | cat | cat
+  Minishell: 16ms | Bash: 12ms
+echo hello | cat | cat | cat
+  Minishell: 16ms | Bash: 12ms
+cat /tmp/minishell_bench_13764/numbers.txt | head -10
+  Minishell: 15ms | Bash: 12ms
+cat /tmp/minishell_bench_13764/numbers.txt | tail -10
+  Minishell: 16ms | Bash: 13ms
+cat /tmp/minishell_bench_13764/numbers.txt | grep 5
+  Minishell: 16ms | Bash: 13ms
+cat /tmp/minishell_bench_13764/numbers.txt | grep 5 | wc -l
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_13764/numbers.txt | grep 5 | head -5
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_13764/numbers.txt | grep 5 | tail -5
+  Minishell: 15ms | Bash: 13ms
+echo test | grep test
+  Minishell: 15ms | Bash: 12ms
+echo test | grep test | cat
+  Minishell: 15ms | Bash: 14ms
+echo abc def ghi | cat | cat | cat
+  Minishell: 15ms | Bash: 12ms
+cat /tmp/minishell_bench_13764/text.txt | cat | cat
+  Minishell: 15ms | Bash: 12ms
+ls | grep bench
+  Minishell: 17ms | Bash: 12ms
+ls -la | head -5
+  Minishell: 15ms | Bash: 15ms
+echo 1 2 3 | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 13ms
+
+Test 5: Redirections Hardcore
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ multiple redirections
+  ✗ pipe with redirection
+  ✗ overwrite test
+
+Test 6: Environment Variables Extensive
+  ✓ echo $PATH
+  ✓ echo $HOME
+  ✓ echo $USER
+  ✓ echo $PWD
+  ✓ echo $SHELL
+  ✓ echo $?
+  ✓ echo $0
+  ✓ echo test$HOME
+  ✓ echo $HOME/test
+  ✓ echo $HOME$PATH
+  ✓ echo '$HOME'
+  ✓ echo "$HOME"
+  ? exit status test
+
+Test 7: Quote Handling Comprehensive
+  ✓ quote test #1 (output differs)
+  ✓ quote test #2 (output differs)
+  ✓ quote test #3 (output differs)
+  ✓ quote test #4 (output differs)
+  ✓ quote test #5 (output differs)
+  ✓ quote test #6 (output differs)
+  ✓ quote test #7 (output differs)
+  ✓ quote test #8 (output differs)
+  ✓ quote test #9 (output differs)
+  ✓ quote test #10 (output differs)
+  ✓ quote test #11 (output differs)
+  ✓ quote test #12 (output differs)
+  ✓ quote test #13 (output differs)
+  ✓ quote test #14 (output differs)
+  ✓ quote test #15 (output differs)
+  ✓ quote test #16 (output differs)
+  ✓ quote test #17 (output differs)
+  ✓ quote test #18 (output differs)
+  ✓ quote test #19 (output differs)
+  ✓ quote test #20 (output differs)
+  ✓ quote test #21 (output differs)
+  ✓ quote test #22 (output differs)
+  ✓ quote test #23 (output differs)
+  ✓ quote test #24 (output differs)
+  ✓ quote test #25 (output differs)
+  ✓ quote test #26 (output differs)
+
+Test 8: Edge Cases Extreme
+  ✓ empty line
+  ✓ multiple empty lines
+  ✓ only spaces
+  ✓ only tabs
+  ✓ Very long command (500 chars)
+  ✓ Many spaces between args
+  ✓ Spaces before arg
+  ✓ nonexistent command
+  ✓ Special characters (output differs)
+  ✓ More special characters (output differs)
+
+Test 9: Built-in Commands Comprehensive
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ unset
+  ✓ exit
+
+Test 10: Stress & Load Testing
+  100 commands: minishell=378ms, bash=11ms
+  500 commands: minishell=1853ms, bash=13ms
+  Large file: minishell=16ms, bash=13ms
+
+Test 11: Memory Usage
+  Memory: 1.84 MB (1888 KB)
+
+Test 12: Complex Scenarios
+cat /tmp/minishell_bench_13764/fruits.txt | grep a | wc -l: minishell=26ms, bash=17ms
+echo test | cat | cat | cat | wc -l: minishell=18ms, bash=16ms
+ls | grep bench | cat: minishell=18ms, bash=14ms
+echo $HOME | cat: minishell=16ms, bash=12ms
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  109
+Passed:       102
+Failed:       5
+Warnings:     1
+Pass rate:    93%
+Status:       GOOD
+
+⚠ Some tests failed - check details above

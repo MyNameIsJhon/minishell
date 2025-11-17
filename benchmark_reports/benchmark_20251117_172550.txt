@@ -1,0 +1,48 @@
+=====================================
+  MINISHELL PERFORMANCE REPORT
+  Date: Mon Nov 17 17:25:50 CET 2025
+=====================================
+
+Test 10: Memory Usage
+  Memory: 2.10 MB
+
+Test 9: Load Test
+  Minishell: 211ms
+  Bash:      12ms
+  Ratio:     1758%
+
+Test 6: Quote Handling
+  ✓ single quotes basic (output differs but valid)
+  ✓ single quotes with variable (output differs but valid)
+  ✓ double quotes basic (output differs but valid)
+  ✓ multiple double quotes (output differs but valid)
+  ✓ mixed quotes (output differs but valid)
+  ✓ empty single quotes (output differs but valid)
+  ✓ empty double quotes (output differs but valid)
+
+Test 4: Redirections
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ append redirection >> - no file
+
+Test 3: Pipes Performance
+  cat | grep: minishell=24ms, bash=16ms
+  cat | grep | wc: minishell=17ms, bash=16ms
+  ✓ echo | cat (output differs but valid)
+  ✓ triple pipe (output differs but valid)
+
+Test 2: Simple Commands
+  ✓ echo hello
+  ✓ echo with quotes (output differs but valid)
+  ✓ echo with double quotes (output differs but valid)
+  ✓ echo -n flag (output differs but valid)
+  ✓ echo multiple args
+  ✗ echo empty - OUTPUT MISMATCH
+  ✓ pwd
+  ✓ env
+
+Test 1: Startup Time
+  Iterations: 20
+  Minishell: 10ms
+  Bash:      10ms
+

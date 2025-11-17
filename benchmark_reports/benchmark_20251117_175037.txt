@@ -1,0 +1,124 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  MINISHELL PERFORMANCE REPORT                            ║
+║                  Date: Mon Nov 17 17:50:37 CET 2025                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  0
+Passed:       0
+Failed:       0
+Warnings:     0
+Pass rate:    0%
+Status:       CRITICAL
+
+🎉 ALL TESTS PASSED!
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  0
+Passed:       0
+Failed:       0
+Warnings:     0
+Pass rate:    0%
+Status:       CRITICAL
+
+🎉 ALL TESTS PASSED!
+Test 12: Memory Usage
+  Memory: 2.15 MB (2208 KB)
+
+Test 2: Echo Command Hardcore
+  ✓ echo #1: echo hello
+  ✓ echo #2: echo hello world
+  ✗ echo #3: echo 'hello world' - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello world'
+  ✗ echo #4: echo "hello world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      "hello world"
+  ✗ echo #5: echo 'hello' "world" - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      'hello' "world"
+  ✗ echo #6: echo -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      test
+  ✗ echo #7: echo -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n test
+  ✓ echo #8: echo -n
+  ✗ echo #9: echo - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #10: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      ''
+  ✗ echo #11: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      ""
+  ✓ echo #12: echo test1 test2 test3 test4 test5
+  ✗ echo #13: echo -n hello world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello world
+  ✗ echo #14: echo 'test with    spaces' - OUTPUT MISMATCH
+    Expected: test with    spaces
+    Got:      'test with spaces'
+  ✗ echo #15: echo "test with    spaces" - OUTPUT MISMATCH
+    Expected: test with    spaces
+    Got:      "test with spaces"
+  ✗ echo #16: echo $HOME - OUTPUT MISMATCH
+    Expected: /Users/jordanriga
+    Got:      $HOME
+  ✗ echo #17: echo '$HOME' - OUTPUT MISMATCH
+    Expected: $HOME
+    Got:      '$HOME'
+  ✗ echo #18: echo "$HOME" - OUTPUT MISMATCH
+    Expected: /Users/jordanriga
+    Got:      "$HOME"
+  ✗ echo #19: echo $PATH - OUTPUT MISMATCH
+    Expected: /Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools/:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/anaconda3/bin:/Users/jordanriga/anaconda3/condabin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/opt/homebrew/opt/fzf/bin
+    Got:      $PATH
+  ✗ echo #20: echo $USER - OUTPUT MISMATCH
+    Expected: jordanriga
+    Got:      $USER
+  ✗ echo #21: echo $? - OUTPUT MISMATCH
+    Expected: 0
+    Got:      $?
+  ✗ echo #22: echo test$HOME - OUTPUT MISMATCH
+    Expected: test/Users/jordanriga
+    Got:      test$HOME
+  ✗ echo #23: echo test\$HOME - OUTPUT MISMATCH
+    Expected: test$HOME
+    Got:      test\$HOME
+  ✗ echo #24: echo 'multiple' 'quoted' 'strings' - OUTPUT MISMATCH
+    Expected: multiple quoted strings
+    Got:      'multiple' 'quoted' 'strings'
+  ✗ echo #25: echo "multiple" "quoted" "strings" - OUTPUT MISMATCH
+    Expected: multiple quoted strings
+    Got:      "multiple" "quoted" "strings"
+  ✓ echo #26: echo a b c d e f g h i j k l m n o 
+  ✓ echo #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✗ echo #28: echo !@#%^&*() - OUTPUT MISMATCH
+    Expected: bash: line 2: syntax error: unexpected end of file
+    Got:      !@#%^&*()
+  ✗ echo #29: echo '!@#%^&*()' - OUTPUT MISMATCH
+    Expected: !@#%^&*()
+    Got:      '!@#%^&*()'
+  ✗ echo #30: echo test	with	tabs - OUTPUT MISMATCH
+    Expected: test with tabs
+    Got:      test	with	tabs
+  ✗ echo #31: echo -n -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n -n test
+  ✓ echo #32: echo --help
+  ✗ echo #33: echo -e test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -e test
+  ✗ echo #34: echo -E test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -E test
+

@@ -1,0 +1,10 @@
+=====================================
+  MINISHELL PERFORMANCE REPORT
+  Date: Mon Nov 17 17:17:36 CET 2025
+=====================================
+
+Test 1: Startup Time
+Iterations: 10
+  Minishell: .0140s
+  Bash:      0s
+

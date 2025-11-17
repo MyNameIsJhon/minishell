@@ -1,0 +1,95 @@
+=====================================
+  MINISHELL PERFORMANCE REPORT
+  Date: Mon Nov 17 17:28:05 CET 2025
+=====================================
+
+
+=====================================
+SUMMARY
+=====================================
+Total tests:  0
+Passed:       0
+Failed:       0
+Pass rate:    0%
+
+🎉 All tests passed!
+Test 1: Startup Time
+  Iterations: 20
+  Minishell: 10ms
+  Bash:      10ms
+
+Test 2: Simple Commands
+  ✓ echo hello
+  ✓ echo with quotes (output differs but valid)
+  ✓ echo with double quotes (output differs but valid)
+  ✓ echo -n flag (output differs but valid)
+  ✓ echo multiple args
+  ✗ echo empty - OUTPUT MISMATCH
+  ✓ pwd
+  ✓ env
+
+Test 3: Pipes Performance
+  cat | grep: minishell=15ms, bash=14ms
+  cat | grep | wc: minishell=15ms, bash=12ms
+  ✓ echo | cat (output differs but valid)
+  ✓ triple pipe (output differs but valid)
+
+Test 4: Redirections
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ append redirection >> - no file
+
+Test 5: Environment Variables
+  ✓ $PATH expansion
+  ✓ $HOME expansion
+  ? $? expansion - uncertain
+
+Test 6: Quote Handling
+  ✓ single quotes basic (output differs but valid)
+  ✓ single quotes with variable (output differs but valid)
+  ✓ double quotes basic (output differs but valid)
+  ✓ multiple double quotes (output differs but valid)
+  ✓ mixed quotes (output differs but valid)
+  ✓ empty single quotes (output differs but valid)
+  ✓ empty double quotes (output differs but valid)
+
+Test 7: Edge Cases
+  ✓ multiple spaces
+  ✓ empty line
+  ✓ nonexistent command
+  ✓ very long argument
+
+Test 8: Built-in Commands
+  ✓ cd
+  ? export
+  ✓ unset
+  ✓ exit
+
+Test 9: Load Test
+  Minishell: 199ms
+  Bash:      12ms
+  Ratio:     1658%
+
+Test 10: Memory Usage
+  Memory: 1.92 MB
+
+
+=====================================
+SUMMARY
+=====================================
+Total tests:  35
+Passed:       32
+Failed:       3
+Pass rate:    91%
+
+⚠ Some tests failed.
+
+=====================================
+SUMMARY
+=====================================
+Total tests:  35
+Passed:       32
+Failed:       3
+Pass rate:    91%
+
+⚠ Some tests failed.
