@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 static void	child_process(t_command *cmd, char **envp, int *fd)
 {
