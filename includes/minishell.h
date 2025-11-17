@@ -40,20 +40,21 @@ typedef struct s_command
 
 typedef struct s_context
 {
-	t_env	**env;
-	t_arena	*memory;
-	t_arena	*line_memory;
-	t_command *command;
-	int		paths_maxlen;
+	t_env		**env;
+	t_arena		*global_memory;
+	t_arena		*line_memory;
+	char		*user;
+	char		*domain;
+	int			paths_maxlen;
 }			t_context;
 
-
-t_command	*mini_parser(char *user_input);
-void		command_free(t_command **command);
+t_context	*context_init(void);
+void		context_free(t_context **ctx);
+void		context_reset_line(t_context *ctx);
+t_command	*mini_parser(char *user_input, t_context *ctx);
 void		command_print(t_command *command);
 char		*find_prog(t_command *command);
 int			run_cmd(t_command *command, char **envp);
-void		free_splited_array(char **array);
 char		**get_executable_paths(t_command *cmd);
 
 #endif

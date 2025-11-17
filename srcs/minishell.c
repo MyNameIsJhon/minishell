@@ -25,28 +25,27 @@
 /* 		*/
 /* } */
 
-char	*mini_prompt(char *pwd, char *user, char *dom)
+char	*mini_prompt(char *pwd, t_context *ctx)
 {
 	char	*prompt;
 	char	*line;
 	size_t	tot;
 
-	tot = LEN_PROMPT + ft_strlen(pwd) + ft_strlen(user) + ft_strlen(dom);
-	prompt = malloc(tot + 1);
+	tot = LEN_PROMPT + ft_strlen(pwd) + ft_strlen(ctx->user) + ft_strlen(ctx->domain);
+	prompt = arena_alloc(ctx->line_memory, tot + 1, 1);
 	if (!prompt)
 		return (NULL);
 	prompt[0] = '\0';
 	ft_strlcat(prompt, "┌──(", tot + 1);
-	ft_strlcat(prompt, user, tot + 1);
+	ft_strlcat(prompt, ctx->user, tot + 1);
 	ft_strlcat(prompt, "㉿", tot + 1);
-	ft_strlcat(prompt, dom, tot + 1);
+	ft_strlcat(prompt, ctx->domain, tot + 1);
 	ft_strlcat(prompt, ")-[", tot + 1);
 	ft_strlcat(prompt, pwd, tot + 1);
 	ft_strlcat(prompt, "]\n└─$ ", tot + 1);
 	line = readline(prompt);
 	if (line && *line)
 		add_history(line);
-	free(prompt);
 	return (line);
 }
 
@@ -58,14 +57,18 @@ char	*mini_prompt(char *pwd, char *user, char *dom)
 /* 	 */
 /* } */
 
-static char	*get_user_input(void)
+static char	*get_user_input(t_context *ctx)
 {
 	char	*path;
 	char	*input;
 
-	path = getcwd(NULL, 0);
-	input = mini_prompt(path, "mynameisjhon", "minishell");
-	free(path);
+	path = arena_alloc(ctx->line_memory, 1024, 1);
+	if (!path || !getcwd(path, 1024))
+	{
+		clear_history();
+		exit(1);
+	}
+	input = mini_prompt(path, ctx);
 	if (!input)
 	{
 		clear_history();
@@ -74,11 +77,11 @@ static char	*get_user_input(void)
 	return (input);
 }
 
-static int	handle_exit_command(t_command *command)
+static int	handle_exit_command(t_command *command, t_context *ctx)
 {
 	if (!ft_strcmp(command->program, "exit"))
 	{
-		command_free(&command);
+		context_free(&ctx);
 		clear_history();
 		exit(0);
 	}
@@ -116,22 +119,25 @@ int	main(int ac, char **av, char **envp)
 {
 	char		*hello;
 	t_command	*command;
+	t_context	*ctx;
 
 	(void)ac;
 	(void)av;
+	ctx = context_init();
+	if (!ctx)
+		return (1);
 	while (1)
 	{
-		hello = get_user_input();
-		command = mini_parser(hello);
+		context_reset_line(ctx);
+		hello = get_user_input(ctx);
+		command = mini_parser(hello, ctx);
 		free(hello);
 		if (!command || !command->program)
-		{
-			command_free(&command);
 			continue ;
-		}
 		handle_cd_command(command);
-		handle_exit_command(command);
+		handle_exit_command(command, ctx);
 		execute_user_command(command, envp);
-		command_free(&command);
 	}
+	context_free(&ctx);
+	return (0);
 }

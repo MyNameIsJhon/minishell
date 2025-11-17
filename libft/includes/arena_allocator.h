@@ -33,6 +33,7 @@ typedef struct s_arena
 t_arena	*arena_init(size_t size);
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
 void	arena_free(t_arena *a);
+void	arena_reset(t_arena *a);
 char	**ar_split(const char *s, char c, t_arena *memory);
 
 #endif

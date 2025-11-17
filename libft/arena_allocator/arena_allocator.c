@@ -108,3 +108,18 @@ void	arena_free(t_arena *a)
 	}
 	free(a);
 }
+
+void	arena_reset(t_arena *a)
+{
+	t_arena_block	*block;
+
+	if (!a)
+		return ;
+	block = a->head;
+	while (block)
+	{
+		block->offset = 0;
+		block = block->next;
+	}
+	a->current = a->head;
+}

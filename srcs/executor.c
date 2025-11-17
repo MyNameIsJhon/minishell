@@ -17,16 +17,6 @@
 #include <dirent.h>
 #include <unistd.h>
 
-void	command_free(t_command **command)
-{
-	if (!command || !*command)
-		return ;
-	if ((*command)->memory)
-		arena_free((*command)->memory);
-	free(*command);
-	*command = NULL;
-}
-
 static void	child_process(t_command *cmd, char **envp, int *fd)
 {
 	close(fd[0]);
