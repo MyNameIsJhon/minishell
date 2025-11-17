@@ -21,12 +21,8 @@ void	command_free(t_command **command)
 {
 	if (!command || !*command)
 		return ;
-	if ((*command)->com_splited)
-		free_splited_array((*command)->com_splited);
-	if ((*command)->paths)
-		free_splited_array((*command)->paths);
-	if ((*command)->exec_path)
-		free((*command)->exec_path);
+	if ((*command)->memory)
+		arena_free((*command)->memory);
 	free(*command);
 	*command = NULL;
 }

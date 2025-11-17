@@ -50,35 +50,36 @@ static void	init_command_struct(t_command *cmd, char **split, int len)
 
 t_command	*mini_parser(char *user_input)
 {
-	char		**com_splited;
-	int			l_com;
 	t_command	*command;
+	int			l_com;
 
-	com_splited = ft_split(user_input, ' ');
-	if (!com_splited)
-		return (NULL);
-	l_com = ft_strslen(com_splited);
 	command = (t_command *)malloc(sizeof(t_command));
 	if (!command)
+		return (NULL);
+	command->memory = arena_init(1024);
+	if (!command->memory)
 	{
-		free_splited_array(com_splited);
+		free(command);
 		return (NULL);
 	}
-	init_command_struct(command, com_splited, l_com);
+	command->com_splited = ar_split(user_input, ' ', command->memory);
+	if (!command->com_splited)
+	{
+		arena_free(command->memory);
+		free(command);
+		return (NULL);
+	}
+	l_com = ft_strslen(command->com_splited);
+	init_command_struct(command, command->com_splited, l_com);
 	return (command);
 }
 
-char	**get_executable_paths(char *env_path)
+char	**get_executable_paths(t_command *cmd)
 {
-	char	**paths;
 	char	*path;
 
-	(void)env_path;
-	/* if (!env_path) */
-	/* 	return (NULL); */
 	path = getenv("PATH");
 	if (!path)
 		return (NULL);
-	paths = ft_split(path, ':');
-	return (paths);
+	return (ar_split(path, ':', cmd->memory));
 }

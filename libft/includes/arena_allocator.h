@@ -15,11 +15,19 @@
 
 # include <stddef.h>
 
+typedef struct s_arena_block
+{
+	char				*data;
+	size_t				offset;
+	size_t				size;
+	struct s_arena_block	*next;
+}				t_arena_block;
+
 typedef struct s_arena
 {
-	char	*data;
-	size_t	offset;
-	size_t	size;
+	t_arena_block	*current;
+	t_arena_block	*head;
+	size_t			default_block_size;
 }				t_arena;
 
 t_arena	*arena_init(size_t size);

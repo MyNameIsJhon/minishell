@@ -46,22 +46,14 @@ static char	*search_in_dir(t_command *cmd, DIR *dir, int path_idx)
 
 static int	init_prog_search(t_command *command)
 {
-	int	i;
-
-	command->paths = get_executable_paths(NULL);
+	command->paths = get_executable_paths(command);
 	if (!command->paths)
 		return (0);
 	command->exec_maxlen = find_max_len(command->paths) + EXEC_MAXLEN;
-	command->exec_path = malloc(command->exec_maxlen * sizeof(char));
+	command->exec_path = arena_alloc(command->memory,
+			command->exec_maxlen * sizeof(char), 1);
 	if (!command->exec_path)
-	{
-		i = 0;
-		while (command->paths[i])
-			free(command->paths[i++]);
-		free(command->paths);
-		command->paths = NULL;
 		return (0);
-	}
 	return (1);
 }
 

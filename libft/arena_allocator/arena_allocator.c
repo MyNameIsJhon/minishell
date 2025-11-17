@@ -6,71 +6,105 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:34:20 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/12 11:55:57 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/17 00:00:00 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena_allocator.h"
 #include <stdlib.h>
-#include "libft.h"
-
-t_arena	*arena_init(size_t size)
-{
-	t_arena *a;
-
-	a = malloc(sizeof(t_arena));
-	a->data = malloc(size);
-	if (!a->data)
-		return (NULL);
-	a->size = size;
-	a->offset = 0;
-	return (a);
-}
 
 static size_t	align_up(size_t offset, size_t alignment)
 {
 	return ((offset + alignment - 1) & ~(alignment - 1));
 }
 
-void	arena_addmemory(t_arena *a, size_t new_size)
+static t_arena_block	*create_block(size_t size)
 {
-	char	*new_data;
+	t_arena_block	*block;
 
-	if (new_size <= a->size)
-		return ;
-	new_data = malloc(new_size);
-	if (!new_data)
-		return ;
-	ft_memcpy(new_data, a->data, a->size);
-	free(a->data);
-	a->data = new_data;
-	a->size = new_size;
+	block = malloc(sizeof(t_arena_block));
+	if (!block)
+		return (NULL);
+	block->data = malloc(size);
+	if (!block->data)
+	{
+		free(block);
+		return (NULL);
+	}
+	block->size = size;
+	block->offset = 0;
+	block->next = NULL;
+	return (block);
+}
+
+t_arena	*arena_init(size_t size)
+{
+	t_arena	*a;
+
+	a = malloc(sizeof(t_arena));
+	if (!a)
+		return (NULL);
+	a->head = create_block(size);
+	if (!a->head)
+	{
+		free(a);
+		return (NULL);
+	}
+	a->current = a->head;
+	a->default_block_size = size;
+	return (a);
+}
+
+static int	add_new_block(t_arena *a, size_t needed_size)
+{
+	t_arena_block	*new_block;
+	size_t			block_size;
+
+	if (needed_size > a->default_block_size)
+		block_size = needed_size;
+	else
+		block_size = a->default_block_size;
+	new_block = create_block(block_size);
+	if (!new_block)
+		return (0);
+	a->current->next = new_block;
+	a->current = new_block;
+	return (1);
 }
 
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 {
 	size_t	aligned;
-	void	*new;
+	void	*ptr;
 
-	aligned = align_up(a->offset, alignment);
-	if (aligned + size > a->size)
+	if (!a || !a->current)
+		return (NULL);
+	aligned = align_up(a->current->offset, alignment);
+	if (aligned + size > a->current->size)
 	{
-		size_t	new_size;
-
-		new_size = a->size * 2;
-		if (new_size < aligned + size)
-			new_size = aligned + size;
-		arena_addmemory(a, new_size);
-		if (aligned + size > a->size)
+		if (!add_new_block(a, aligned + size))
 			return (NULL);
+		aligned = 0;
 	}
-	new = a->data + aligned;
-	a->offset = aligned + size;
-	return (new);
+	ptr = a->current->data + aligned;
+	a->current->offset = aligned + size;
+	return (ptr);
 }
 
 void	arena_free(t_arena *a)
 {
-	free(a->data);
+	t_arena_block	*current;
+	t_arena_block	*next;
+
+	if (!a)
+		return ;
+	current = a->head;
+	while (current)
+	{
+		next = current->next;
+		free(current->data);
+		free(current);
+		current = next;
+	}
 	free(a);
 }

@@ -26,15 +26,6 @@ typedef struct s_env
 	char	*value;
 }			t_env;
 
-typedef struct s_context
-{
-	t_env	**env;
-	t_arena	*memory;
-	t_arena	*line_memory;
-	char	**paths;
-	int		paths_maxlen;
-}			t_context;
-
 typedef struct s_command
 {
 	char	*program;
@@ -43,7 +34,19 @@ typedef struct s_command
 	char	**paths;
 	int		exec_maxlen;
 	char	*exec_path;
+	t_arena	*memory;
+	int		size;
 }			t_command;
+
+typedef struct s_context
+{
+	t_env	**env;
+	t_arena	*memory;
+	t_arena	*line_memory;
+	t_command *command;
+	int		paths_maxlen;
+}			t_context;
+
 
 t_command	*mini_parser(char *user_input);
 void		command_free(t_command **command);
@@ -51,6 +54,6 @@ void		command_print(t_command *command);
 char		*find_prog(t_command *command);
 int			run_cmd(t_command *command, char **envp);
 void		free_splited_array(char **array);
-char		**get_executable_paths(char *env_path);
+char		**get_executable_paths(t_command *cmd);
 
 #endif
