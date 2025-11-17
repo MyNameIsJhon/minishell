@@ -20,6 +20,44 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+static int	count_tokens(t_token *tokens)
+{
+	int	count;
+
+	count = 0;
+	while (tokens)
+	{
+		if (tokens->type == TOKEN_WORD)
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
+}
+
+static char	**tokens_to_array(t_token *tokens, t_arena *memory)
+{
+	int		count;
+	char	**array;
+	int		i;
+
+	count = count_tokens(tokens);
+	array = arena_alloc(memory, sizeof(char *) * (count + 1), 8);
+	if (!array)
+		return (NULL);
+	i = 0;
+	while (tokens)
+	{
+		if (tokens->type == TOKEN_WORD)
+		{
+			array[i] = tokens->value;
+			i++;
+		}
+		tokens = tokens->next;
+	}
+	array[i] = NULL;
+	return (array);
+}
+
 static void	init_command_struct(t_command *cmd, char **split, int len)
 {
 	cmd->com_splited = split;
@@ -41,6 +79,7 @@ static void	init_command_struct(t_command *cmd, char **split, int len)
 t_command	*mini_parser(char *user_input, t_context *ctx)
 {
 	t_command	*command;
+	t_token		*tokens;
 	int			l_com;
 
 	if (!ctx || !ctx->line_memory)
@@ -49,7 +88,9 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 	if (!command)
 		return (NULL);
 	command->memory = ctx->line_memory;
-	command->com_splited = ar_split(user_input, ' ', command->memory);
+	tokens = tokenize(user_input, command->memory);
+	command->tokens = tokens;
+	command->com_splited = tokens_to_array(tokens, command->memory);
 	if (!command->com_splited)
 		return (NULL);
 	l_com = ft_strslen(command->com_splited);
