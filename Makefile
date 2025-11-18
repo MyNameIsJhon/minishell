@@ -6,7 +6,7 @@
 #    By: minishell <minishell@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/12 00:00:00 by minishell         #+#    #+#              #
-#    Updated: 2025/01/12 00:00:00 by minishell        ###   ########.fr        #
+#    Updated: 2025/11/18 00:23:36 by jriga            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ MKDIR_P     := mkdir -p
 # ============================================================================ #
 
 SRC_DIR     := srcs
+BUILTINS_DIR := builtins
 OBJ_DIR     := obj
 INC_DIR     := includes
 LIBFT_DIR   := libft
@@ -37,9 +38,10 @@ LIBFT       := $(LIBFT_DIR)/libft.a
 # ============================================================================ #
 
 SRCS        := $(wildcard $(SRC_DIR)/*.c)
+BUILTINS    := $(wildcard $(BUILTINS_DIR)/*.c)
 OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-DEPS        := $(OBJS:.o=.d)
-
+BUILTINS_OBJS := $(BUILTINS:$(BUILTINS_DIR)/%.c=$(OBJ_DIR)/builtins/%.o)
+DEPS        := $(OBJS:.o=.d) $(BUILTINS_OBJS:.o=.d)
 INCLUDES    := -I$(INC_DIR) -I$(LIBFT_DIR)/includes
 
 # ============================================================================ #
@@ -61,9 +63,9 @@ RESET       := \033[0m
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
+$(NAME): $(LIBFT) $(OBJS) $(BUILTINS_OBJS)
 	@echo "$(CYAN)$(BOLD)[🔗] Linking executable $(NAME)...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft $(LDLIBS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) $(BUILTINS_OBJS) -L$(LIBFT_DIR) -lft $(LDLIBS) -o $@
 	@echo "$(GREEN)$(BOLD)[✅] Build complete: $(NAME)$(RESET)"
 	@echo ""
 
@@ -76,6 +78,11 @@ $(LIBFT):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(MKDIR_P) $(dir $@)
 	@echo "$(YELLOW)[⚙️ ] Compiling: $<$(RESET)"
+	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+
+$(OBJ_DIR)/builtins/%.o: $(BUILTINS_DIR)/%.c
+	@$(MKDIR_P) $(dir $@)
+	@echo "$(YELLOW)[⚙️ ] Compiling builtin: $<$(RESET)"
 	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
 # ============================================================================ #

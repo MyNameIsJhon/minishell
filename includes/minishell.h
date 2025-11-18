@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/17 20:34:39 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/18 02:40:07 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_env
 {
 	char			*name;
 	char			*value;
+	struct s_env	*next;
 }					t_env;
 
 typedef struct s_command
@@ -58,7 +59,7 @@ typedef struct s_command
 
 typedef struct s_context
 {
-	t_env			**env;
+	t_env			*env;
 	t_arena			*global_memory;
 	t_arena			*line_memory;
 	char			*user;
@@ -86,5 +87,8 @@ int					extract_word(char *input, int i, t_token **head,
 						t_token **tail, t_arena *memory);
 int					handle_operator(char *input, int i, t_token **head,
 						t_token **tail, t_arena *memory);
+int					handle_exit_command(t_command *command, t_context *ctx);
+t_env				*env_init(char **envp, t_arena *memory);
+void print_env(t_env *envs);
 
 #endif

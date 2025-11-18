@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/17 20:35:36 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/18 02:40:52 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,6 @@ static char	*get_user_input(t_context *ctx)
 	return (input);
 }
 
-static int	handle_exit_command(t_command *command, t_context *ctx)
-{
-	if (!ft_strcmp(command->program, "exit"))
-	{
-		context_free(&ctx);
-		clear_history();
-		exit(0);
-	}
-	return (0);
-}
-
 static int	handle_cd_command(t_command *command)
 {
 	if (!ft_strcmp(command->program, "cd"))
@@ -104,9 +93,15 @@ static void	print_cmd_not_found(t_command *command)
 	ft_putstr_fd("\n", 2);
 }
 
-static int	execute_user_command(t_command *command, char **envp)
+static int	execute_user_command(t_command *command, char **envp, t_context *ctx)
 {
-	if (!find_prog(command))
+	if (!ft_strcmp(command->program, "cd"))
+		handle_cd_command(command);
+	else if (!ft_strcmp(command->program, "exit"))
+		handle_exit_command(command, ctx);
+	else if (!ft_strcmp(command->program, "env"))
+		print_env(ctx->env);
+	else if (!find_prog(command))
 	{
 		print_cmd_not_found(command);
 		return (0);
@@ -124,6 +119,7 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	ctx = context_init();
+	ctx->env = env_init(envp, ctx->global_memory);
 	if (!ctx)
 		return (1);
 	while (1)
@@ -134,9 +130,7 @@ int	main(int ac, char **av, char **envp)
 		free(hello);
 		if (!command || !command->program)
 			continue ;
-		handle_cd_command(command);
-		handle_exit_command(command, ctx);
-		execute_user_command(command, envp);
+		execute_user_command(command, envp, ctx);
 	}
 	context_free(&ctx);
 	return (0);
