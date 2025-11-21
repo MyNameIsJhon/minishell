@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/21 03:01:57 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/21 04:09:51 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ t_env				*env_init(char **envp, t_arena *memory);
 t_env				*new_env(char *name, char *value, t_arena *memory);
 void				env_add_back(t_env *env, t_env **envs);
 void				env_delete(char *name, t_env **envs);
+t_env				*find_env(char *name, t_env *envs);
 void				print_env(t_env *envs);
 int					handle_unset_command(t_command *cmd, t_context *ctx);
+int	handle_export_command(t_command *cmd, t_context *ctx);
 
 #endif

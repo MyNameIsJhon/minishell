@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/21 03:06:05 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/21 04:09:39 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ static int	execute_user_command(t_command *command, char **envp, t_context *ctx)
 		print_env(ctx->env);
 	else if (!ft_strcmp(command->program, "unset"))
 		handle_unset_command(command, ctx);
+	else if (!ft_strcmp(command->program, "export"))
+		handle_export_command(command, ctx);
 	else if (!find_prog(command))
 	{
 		print_cmd_not_found(command);

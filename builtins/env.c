@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 01:53:28 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/18 02:38:08 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/21 04:10:21 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ void	env_add_back(t_env *env, t_env **envs)
 	curs->next = env;
 }
 
+t_env *find_env(char *name, t_env *envs)
+{
+	if (!name)
+		return (NULL);
+	while (envs)
+	{
+		if (!ft_strcmp(name, envs->name))
+			return (envs);
+		envs = envs->next;
+	}
+	return (NULL);
+}
+
 void	env_delete(char *name, t_env **envs)
 {
 	t_env *curs;
@@ -45,14 +58,14 @@ void	env_delete(char *name, t_env **envs)
 	curs = *envs;
 	if (!ft_strcmp(name, curs->name))
 	{
-		*envs = NULL;
+		*envs = curs->next;
 		return ;
 	}
 	while (curs && curs->next)
 	{
 		if (!ft_strcmp(curs->next->name, name))
 		{
-			curs = curs->next->next;
+			curs->next = curs->next->next;
 			break ;
 		}
 		curs = curs->next;
