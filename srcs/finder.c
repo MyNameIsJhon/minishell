@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 #include "libft.h"
+#include <stdio.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -77,6 +78,16 @@ char	*find_prog(t_command *command)
 	int		i;
 	char	*result;
 
+	if (ft_strchr(command->program, '/'))
+	{
+		if (!access(command->program, X_OK))
+		{
+			command->exec_path = ar_strdup(command->program, command->memory);
+			return (command->exec_path);
+		}
+		else
+			return (NULL);
+	}
 	if (!init_prog_search(command))
 		return (NULL);
 	i = 0;

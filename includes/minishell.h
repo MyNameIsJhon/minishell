@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/18 02:40:07 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/18 02:51:51 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ int					handle_operator(char *input, int i, t_token **head,
 						t_token **tail, t_arena *memory);
 int					handle_exit_command(t_command *command, t_context *ctx);
 t_env				*env_init(char **envp, t_arena *memory);
-void print_env(t_env *envs);
+t_env				*new_env(char *name, char *value, t_arena *memory);
+void				env_add_back(t_env *env, t_env **envs);
+void				env_delete(char *name, t_env **envs);
+void				print_env(t_env *envs);
 
 #endif
