@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/18 02:52:54 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/21 03:06:05 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,15 @@ static int	execute_user_command(t_command *command, char **envp, t_context *ctx)
 		handle_exit_command(command, ctx);
 	else if (!ft_strcmp(command->program, "env"))
 		print_env(ctx->env);
+	else if (!ft_strcmp(command->program, "unset"))
+		handle_unset_command(command, ctx);
 	else if (!find_prog(command))
 	{
 		print_cmd_not_found(command);
 		return (0);
 	}
-	run_cmd(command, envp);
+	else
+		run_cmd(command, envp);
 	return (1);
 }
 
