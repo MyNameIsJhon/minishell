@@ -39,7 +39,7 @@ int	is_separator(char c)
 
 int	is_operator(char c)
 {
-	return (ft_strchr(OPERATORS, c)!= NULL);
+	return (ft_strchr(OPERATORS, c) != NULL);
 }
 
 int	is_quote(char c)

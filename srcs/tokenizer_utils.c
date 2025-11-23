@@ -14,8 +14,8 @@
 #include "minishell.h"
 #include <unistd.h>
 
-static void	add_token_internal(t_tokenizer *tok, t_token_type type,
-		char *value, char quote_type)
+static void	add_token_internal(t_tokenizer *tok, t_token_type type, char *value,
+		char quote_type)
 {
 	t_token	*new;
 
