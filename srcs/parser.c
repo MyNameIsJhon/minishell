@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:26:33 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/15 01:40:57 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 02:36:19 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 
 	if (!ctx || !ctx->line_memory)
 		return (NULL);
-	command = arena_alloc(ctx->line_memory, sizeof(t_command), 8);
+	command = arena_alloc(ctx->line_memory, sizeof(t_command), 64);
 	if (!command)
 		return (NULL);
 	command->memory = ctx->line_memory;

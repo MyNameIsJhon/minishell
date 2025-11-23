@@ -13,7 +13,6 @@
 #include "minishell.h"
 #include <unistd.h>
 
-
 t_token	*tokenize(char *input, t_arena *memory)
 {
 	t_token	*head;

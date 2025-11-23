@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/21 04:09:39 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 02:30:25 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,6 @@ static char	*get_user_input(t_context *ctx)
 	return (input);
 }
 
-static int	handle_cd_command(t_command *command)
-{
-	if (!ft_strcmp(command->program, "cd"))
-	{
-		chdir(command->args[0]);
-	}
-	return (0);
-}
-
 static void	print_cmd_not_found(t_command *command)
 {
 	ft_putstr_fd("minishell: command not found: ", 2);
@@ -95,8 +86,11 @@ static void	print_cmd_not_found(t_command *command)
 
 static int	execute_user_command(t_command *command, char **envp, t_context *ctx)
 {
+	char **env;
+
+	(void)envp;
 	if (!ft_strcmp(command->program, "cd"))
-		handle_cd_command(command);
+		handle_cd_command(command, ctx);
 	else if (!ft_strcmp(command->program, "exit"))
 		handle_exit_command(command, ctx);
 	else if (!ft_strcmp(command->program, "env"))
@@ -111,7 +105,10 @@ static int	execute_user_command(t_command *command, char **envp, t_context *ctx)
 		return (0);
 	}
 	else
-		run_cmd(command, envp);
+	{
+		env = convert_env(ctx->env, ctx->line_memory);
+		run_cmd(command, env);
+	}
 	return (1);
 }
 

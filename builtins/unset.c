@@ -19,7 +19,6 @@ int	handle_unset_command(t_command *cmd, t_context *ctx)
 {
 	if (!cmd || !ctx)
 		return (1);
-	printf("unset: %s\n", cmd->args[0]);
 	env_delete(cmd->args[0], &ctx->env);
 	return (0);
 }
