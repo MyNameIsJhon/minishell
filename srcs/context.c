@@ -37,6 +37,7 @@ t_context	*context_init(void)
 	ctx->user = "mynameisjhon";
 	ctx->domain = "minishell";
 	ctx->paths_maxlen = 0;
+	ctx->last_exit_status = 0;
 	return (ctx);
 }
 

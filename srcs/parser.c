@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:26:33 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/23 03:00:31 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 03:43:49 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,16 @@ static void	init_command_struct(t_command *cmd, char **split, int len)
 	}
 }
 
+void print_token_list(t_token *tokens)
+{
+	t_token *current = tokens;
+	while (current)
+	{
+		printf("Token Type: %d, Value: %s\n", current->type, current->value);
+		current = current->next;
+	}
+}
+
 t_command	*mini_parser(char *user_input, t_context *ctx)
 {
 	t_command	*command;
@@ -89,6 +99,8 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 		return (NULL);
 	command->memory = ctx->line_memory;
 	tokens = tokenize(user_input, command->memory);
+	expand_tokens(tokens, ctx);
+	print_token_list(tokens);
 	command->tokens = tokens;
 	command->com_splited = tokens_to_array(tokens, command->memory);
 	if (!command->com_splited)
@@ -101,9 +113,11 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 char	**get_executable_paths(t_command *cmd, t_context *ctx)
 {
 	char	*path;
+	t_env	*env;
 
-	path = find_env("PATH", ctx->env)->value;
-	if (!path)
+	env = find_env("PATH", ctx->env);
+	if (!env || !env->value)
 		return (NULL);
+	path = env->value;
 	return (ar_split(path, ':', cmd->memory));
 }

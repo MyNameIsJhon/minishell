@@ -34,6 +34,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	char			quote_type;
 	struct s_token	*next;
 }					t_token;
 
@@ -65,6 +66,7 @@ typedef struct s_context
 	char			*user;
 	char			*domain;
 	int				paths_maxlen;
+	int				last_exit_status;
 }					t_context;
 
 t_context			*context_init(void);
@@ -98,5 +100,8 @@ int					handle_unset_command(t_command *cmd, t_context *ctx);
 int	handle_export_command(t_command *cmd, t_context *ctx);
 char **convert_env(t_env *env, t_arena *memory);
 int	handle_cd_command(t_command *command, t_context *ctx);
+
+void				expand_tokens(t_token *tokens, t_context *ctx);
+char				*expand_variables(char *str, t_context *ctx);
 
 #endif

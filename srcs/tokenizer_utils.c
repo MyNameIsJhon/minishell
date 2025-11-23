@@ -19,8 +19,8 @@ int	is_separator(char c)
 		|| c == '\'' || c == '"');
 }
 
-void	add_token(t_token **head, t_token **tail, t_token_type type,
-		char *value, t_arena *memory)
+static void	add_token_internal(t_token **head, t_token **tail, t_token_type type,
+		char *value, char quote_type, t_arena *memory)
 {
 	t_token	*new;
 
@@ -29,6 +29,7 @@ void	add_token(t_token **head, t_token **tail, t_token_type type,
 		return ;
 	new->type = type;
 	new->value = value;
+	new->quote_type = quote_type;
 	new->next = NULL;
 	if (!*head)
 	{
@@ -40,6 +41,12 @@ void	add_token(t_token **head, t_token **tail, t_token_type type,
 		(*tail)->next = new;
 		*tail = new;
 	}
+}
+
+void	add_token(t_token **head, t_token **tail, t_token_type type,
+		char *value, t_arena *memory)
+{
+	add_token_internal(head, tail, type, value, 0, memory);
 }
 
 int	extract_quoted(char *input, int i, t_token **head, t_token **tail,
@@ -71,7 +78,7 @@ int	extract_quoted(char *input, int i, t_token **head, t_token **tail,
 		k++;
 	}
 	value[k] = '\0';
-	add_token(head, tail, TOKEN_WORD, value, memory);
+	add_token_internal(head, tail, TOKEN_WORD, value, quote, memory);
 	return (j + 1);
 }
 
