@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:33:58 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/18 00:52:26 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 02:46:23 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ void	arena_free(t_arena *a);
 void	arena_reset(t_arena *a);
 char	**ar_split(const char *s, char c, t_arena *memory);
 char	*ar_strdup(char *str, t_arena *memory);
+char	*ar_strjoin(t_arena *arena, const char *s1, const char *s2);
 
 #endif
