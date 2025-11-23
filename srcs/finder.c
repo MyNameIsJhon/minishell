@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 01:21:35 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/18 00:20:20 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 03:03:10 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static char	*search_in_dir(t_command *cmd, DIR *dir, int path_idx)
 	return (NULL);
 }
 
-static int	init_prog_search(t_command *command)
+static int	init_prog_search(t_command *command, t_context *ctx)
 {
-	command->paths = get_executable_paths(command);
+	command->paths = get_executable_paths(command, ctx);
 	if (!command->paths)
 		return (0);
 	command->exec_maxlen = find_max_len(command->paths) + EXEC_MAXLEN;
@@ -73,7 +73,7 @@ static char	*check_path_dir(t_command *cmd, int i)
 	return (result);
 }
 
-char	*find_prog(t_command *command)
+char	*find_prog(t_command *command, t_context *ctx)
 {
 	int		i;
 	char	*result;
@@ -88,7 +88,7 @@ char	*find_prog(t_command *command)
 		else
 			return (NULL);
 	}
-	if (!init_prog_search(command))
+	if (!init_prog_search(command, ctx))
 		return (NULL);
 	i = 0;
 	while (command->paths[i])

@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/23 02:29:34 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 03:02:25 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void				context_free(t_context **ctx);
 void				context_reset_line(t_context *ctx);
 t_command			*mini_parser(char *user_input, t_context *ctx);
 void				command_print(t_command *command);
-char				*find_prog(t_command *command);
+char	*find_prog(t_command *command, t_context *ctx);
 int					run_cmd(t_command *command, char **envp);
-char				**get_executable_paths(t_command *cmd);
+char	**get_executable_paths(t_command *cmd, t_context *ctx);
 
 t_token				*tokenize(char *input, t_arena *memory);
 void				print_tokens(t_token *tokens);

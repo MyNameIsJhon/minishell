@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:26:33 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/23 02:36:19 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 03:00:31 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 
 	if (!ctx || !ctx->line_memory)
 		return (NULL);
-	command = arena_alloc(ctx->line_memory, sizeof(t_command), 64);
+	command = arena_alloc(ctx->line_memory, sizeof(t_command), 8);
 	if (!command)
 		return (NULL);
 	command->memory = ctx->line_memory;
@@ -98,11 +98,11 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 	return (command);
 }
 
-char	**get_executable_paths(t_command *cmd)
+char	**get_executable_paths(t_command *cmd, t_context *ctx)
 {
 	char	*path;
 
-	path = getenv("PATH");
+	path = find_env("PATH", ctx->env)->value;
 	if (!path)
 		return (NULL);
 	return (ar_split(path, ':', cmd->memory));
