@@ -1,0 +1,603 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  MINISHELL PERFORMANCE REPORT                            ║
+║                  Date: Sun Nov 23 04:30:54 CET 2025                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Test 2: Echo Command Hardcore
+  ✓ echo #1: echo hello
+  ✓ echo #2: echo hello world
+  ✓ echo #3: echo 'hello world'
+  ✓ echo #4: echo "hello world"
+  ✓ echo #5: echo 'hello' "world"
+  ✗ echo #6: echo -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      test
+  ✗ echo #7: echo -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n test
+  ✓ echo #8: echo -n
+  ✗ echo #9: echo - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #10: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #11: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ echo #12: echo test1 test2 test3 test4 test5
+  ✗ echo #13: echo -n hello world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello world
+  ✓ echo #14: echo 'test with    spaces'
+  ✓ echo #15: echo "test with    spaces"
+  ✓ echo #16: echo $HOME
+  ✓ echo #17: echo '$HOME'
+  ✓ echo #18: echo "$HOME"
+  ✓ echo #19: echo $PATH
+  ✓ echo #20: echo $USER
+  ✓ echo #21: echo $?
+  ✓ echo #22: echo test$HOME
+  ✗ echo #23: echo test\$HOME - OUTPUT MISMATCH
+    Expected: test$HOME
+    Got:      test\/Users/jordanriga
+  ✓ echo #24: echo 'multiple' 'quoted' 'strings'
+  ✓ echo #25: echo "multiple" "quoted" "strings"
+  ✓ echo #26: echo a b c d e f g h i j k l m n o 
+  ✓ echo #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✗ echo #28: echo !@#%^&*() - OUTPUT MISMATCH
+    Expected: bash: line 2: syntax error: unexpected end of file
+    Got:      !@#%^&*()
+  ✓ echo #29: echo '!@#%^&*()'
+  ✓ echo #30: echo test	with	tabs
+  ✗ echo #31: echo -n -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n -n test
+  ✓ echo #32: echo --help
+  ✗ echo #33: echo -e test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -e test
+  ✗ echo #34: echo -E test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -E test
+
+Test 5: Pipes Comprehensive
+echo hello | cat
+  Minishell: 13ms | Bash: 14ms
+echo hello | cat | cat
+  Minishell: 14ms | Bash: 13ms
+echo hello | cat | cat | cat
+  Minishell: 15ms | Bash: 12ms
+echo hello | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 13ms
+echo hello | cat | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/numbers.txt | head -10
+  Minishell: 14ms | Bash: 12ms
+cat /tmp/minishell_bench_55451/numbers.txt | tail -10
+  Minishell: 14ms | Bash: 14ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5
+  Minishell: 13ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5 | wc -l
+  Minishell: 15ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5 | head -5
+  Minishell: 17ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5 | tail -5
+  Minishell: 15ms | Bash: 12ms
+echo test | grep test
+  Minishell: 14ms | Bash: 14ms
+echo test | grep test | cat
+  Minishell: 14ms | Bash: 13ms
+echo abc def ghi | cat | cat | cat
+  Minishell: 13ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/text.txt | cat | cat
+  Minishell: 16ms | Bash: 12ms
+ls | grep bench
+  Minishell: 15ms | Bash: 13ms
+ls -la | head -5
+  Minishell: 14ms | Bash: 15ms
+echo 1 2 3 | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 14ms
+cat /tmp/minishell_bench_55451/numbers.txt | head -50 | tail -10 | grep 4
+  Minishell: 14ms | Bash: 13ms
+echo test | cat | grep test | cat | cat
+  Minishell: 14ms | Bash: 13ms
+
+Test 6: Redirections Hardcore
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ multiple redirections
+  ✗ pipe with redirection
+  ✗ overwrite test
+  ✓ invalid path handling
+
+Test 10: Built-in Commands Comprehensive
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ unset
+  ✓ exit
+  ? exit with code
+
+Test 14: Exit Code Verification
+  ✓ exit code: true (exit=0)
+  ✗ exit code: false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: /bin/ls /nonexistent 2>/dev/null - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: cd /nonexistent_directory 2>/dev/null - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✓ exit code: export TEST_VAR=value && echo $TEST_VAR (exit=0)
+  ✓ exit code: unset PATH (exit=0)
+  ✓ exit code: echo test && true (exit=0)
+  ✗ exit code: echo test && false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✓ exit code: false || true (exit=0)
+  ✗ exit code: true && false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: exit 42 - EXIT CODE MISMATCH
+    Expected: 42
+    Got:      0
+  ✓ exit code: exit 0 (exit=0)
+  ✗ exit code: exit 1 - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: exit 127 - EXIT CODE MISMATCH
+    Expected: 127
+    Got:      0
+  ✗ exit code: exit 255 - EXIT CODE MISMATCH
+    Expected: 255
+    Got:      0
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  71
+Passed:       45
+Failed:       24
+Warnings:     1
+Pass rate:    63%
+Status:       NEEDS WORK
+
+✗ Critical issues detected
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        FAILED TESTS DETAILS                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. echo #6: echo -n test
+   Expected: 'test' | Got: 'test'
+
+2. echo #7: echo -n -n test
+   Expected: 'test' | Got: '-n test'
+
+3. echo #9: echo
+   Expected: '' | Got: ''
+
+4. echo #10: echo ''
+   Expected: '' | Got: ''
+
+5. echo #11: echo ""
+   Expected: '' | Got: ''
+
+6. echo #13: echo -n hello world
+   Expected: 'hello world' | Got: 'hello world'
+
+7. echo #23: echo test\$HOME
+   Expected: 'test$HOME' | Got: 'test\/Users/jordanriga'
+
+8. echo #28: echo !@#%^&*()
+   Expected: 'bash: line 2: syntax error: unexpected end of file' | Got: '!@#%^&*()'
+
+9. echo #31: echo -n -n -n test
+   Expected: 'test' | Got: '-n -n test'
+
+10. echo #33: echo -e test
+   Expected: 'test' | Got: '-e test'
+
+11. echo #34: echo -E test
+   Expected: 'test' | Got: '-E test'
+
+12. Output redirection >
+   File not created or wrong content
+
+13. Multiple redirections
+   Combined redirections failed
+
+14. Pipe with redirection
+   Pipe + redirection combination failed
+
+15. Overwrite file
+   File not properly overwritten
+
+16. exit code: false
+   Expected exit code: 1 | Got: 0
+
+17. exit code: /bin/ls /nonexistent 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+18. exit code: cd /nonexistent_directory 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+19. exit code: echo test && false
+   Expected exit code: 1 | Got: 0
+
+20. exit code: true && false
+   Expected exit code: 1 | Got: 0
+
+21. exit code: exit 42
+   Expected exit code: 42 | Got: 0
+
+22. exit code: exit 1
+   Expected exit code: 1 | Got: 0
+
+23. exit code: exit 127
+   Expected exit code: 127 | Got: 0
+
+24. exit code: exit 255
+   Expected exit code: 255 | Got: 0
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  71
+Passed:       45
+Failed:       24
+Warnings:     1
+Pass rate:    63%
+Status:       NEEDS WORK
+
+✗ Critical issues detected
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        FAILED TESTS DETAILS                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. echo #6: echo -n test
+   Expected: 'test' | Got: 'test'
+
+2. echo #7: echo -n -n test
+   Expected: 'test' | Got: '-n test'
+
+3. echo #9: echo
+   Expected: '' | Got: ''
+
+4. echo #10: echo ''
+   Expected: '' | Got: ''
+
+5. echo #11: echo ""
+   Expected: '' | Got: ''
+
+6. echo #13: echo -n hello world
+   Expected: 'hello world' | Got: 'hello world'
+
+7. echo #23: echo test\$HOME
+   Expected: 'test$HOME' | Got: 'test\/Users/jordanriga'
+
+8. echo #28: echo !@#%^&*()
+   Expected: 'bash: line 2: syntax error: unexpected end of file' | Got: '!@#%^&*()'
+
+9. echo #31: echo -n -n -n test
+   Expected: 'test' | Got: '-n -n test'
+
+10. echo #33: echo -e test
+   Expected: 'test' | Got: '-e test'
+
+11. echo #34: echo -E test
+   Expected: 'test' | Got: '-E test'
+
+12. Output redirection >
+   File not created or wrong content
+
+13. Multiple redirections
+   Combined redirections failed
+
+14. Pipe with redirection
+   Pipe + redirection combination failed
+
+15. Overwrite file
+   File not properly overwritten
+
+16. exit code: false
+   Expected exit code: 1 | Got: 0
+
+17. exit code: /bin/ls /nonexistent 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+18. exit code: cd /nonexistent_directory 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+19. exit code: echo test && false
+   Expected exit code: 1 | Got: 0
+
+20. exit code: true && false
+   Expected exit code: 1 | Got: 0
+
+21. exit code: exit 42
+   Expected exit code: 42 | Got: 0
+
+22. exit code: exit 1
+   Expected exit code: 1 | Got: 0
+
+23. exit code: exit 127
+   Expected exit code: 127 | Got: 0
+
+24. exit code: exit 255
+   Expected exit code: 255 | Got: 0
+
+Test 13: Complex Scenarios
+cat /tmp/minishell_bench_55451/fruits.txt | grep a | wc -l: minishell=23ms, bash=15ms
+echo test | cat | cat | cat | wc -l: minishell=16ms, bash=14ms
+ls | grep bench | cat: minishell=15ms, bash=13ms
+echo $HOME | cat: minishell=14ms, bash=13ms
+cat /tmp/minishell_bench_55451/fruits.txt | grep -v banana | wc -l: minishell=15ms, bash=13ms
+ls -la | head -10 | tail -5: minishell=14ms, bash=14ms
+
+Test 2: Echo Command Hardcore
+  ✓ echo #1: echo hello
+  ✓ echo #2: echo hello world
+  ✓ echo #3: echo 'hello world'
+  ✓ echo #4: echo "hello world"
+  ✓ echo #5: echo 'hello' "world"
+  ✗ echo #6: echo -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      test
+  ✗ echo #7: echo -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n test
+  ✓ echo #8: echo -n
+  ✗ echo #9: echo - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #10: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #11: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ echo #12: echo test1 test2 test3 test4 test5
+  ✗ echo #13: echo -n hello world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello world
+  ✓ echo #14: echo 'test with    spaces'
+  ✓ echo #15: echo "test with    spaces"
+  ✓ echo #16: echo $HOME
+  ✓ echo #17: echo '$HOME'
+  ✓ echo #18: echo "$HOME"
+  ✓ echo #19: echo $PATH
+  ✓ echo #20: echo $USER
+  ✓ echo #21: echo $?
+  ✓ echo #22: echo test$HOME
+  ✗ echo #23: echo test\$HOME - OUTPUT MISMATCH
+    Expected: test$HOME
+    Got:      test\/Users/jordanriga
+  ✓ echo #24: echo 'multiple' 'quoted' 'strings'
+  ✓ echo #25: echo "multiple" "quoted" "strings"
+  ✓ echo #26: echo a b c d e f g h i j k l m n o 
+  ✓ echo #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✗ echo #28: echo !@#%^&*() - OUTPUT MISMATCH
+    Expected: bash: line 2: syntax error: unexpected end of file
+    Got:      !@#%^&*()
+  ✓ echo #29: echo '!@#%^&*()'
+  ✓ echo #30: echo test	with	tabs
+  ✗ echo #31: echo -n -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n -n test
+  ✓ echo #32: echo --help
+  ✗ echo #33: echo -e test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -e test
+  ✗ echo #34: echo -E test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -E test
+
+Test 5: Pipes Comprehensive
+echo hello | cat
+  Minishell: 16ms | Bash: 13ms
+echo hello | cat | cat
+  Minishell: 15ms | Bash: 13ms
+echo hello | cat | cat | cat
+  Minishell: 17ms | Bash: 13ms
+echo hello | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 15ms
+echo hello | cat | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 15ms
+cat /tmp/minishell_bench_55451/numbers.txt | head -10
+  Minishell: 15ms | Bash: 12ms
+cat /tmp/minishell_bench_55451/numbers.txt | tail -10
+  Minishell: 16ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5
+  Minishell: 15ms | Bash: 14ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5 | wc -l
+  Minishell: 16ms | Bash: 12ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5 | head -5
+  Minishell: 15ms | Bash: 14ms
+cat /tmp/minishell_bench_55451/numbers.txt | grep 5 | tail -5
+  Minishell: 14ms | Bash: 15ms
+echo test | grep test
+  Minishell: 14ms | Bash: 13ms
+echo test | grep test | cat
+  Minishell: 16ms | Bash: 12ms
+echo abc def ghi | cat | cat | cat
+  Minishell: 16ms | Bash: 13ms
+cat /tmp/minishell_bench_55451/text.txt | cat | cat
+  Minishell: 15ms | Bash: 14ms
+ls | grep bench
+  Minishell: 15ms | Bash: 13ms
+ls -la | head -5
+  Minishell: 14ms | Bash: 15ms
+echo 1 2 3 | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 15ms
+cat /tmp/minishell_bench_55451/numbers.txt | head -50 | tail -10 | grep 4
+  Minishell: 15ms | Bash: 13ms
+echo test | cat | grep test | cat | cat
+  Minishell: 16ms | Bash: 13ms
+
+Test 6: Redirections Hardcore
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ multiple redirections
+  ✗ pipe with redirection
+  ✗ overwrite test
+  ✓ invalid path handling
+
+Test 10: Built-in Commands Comprehensive
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ unset
+  ✓ exit
+  ? exit with code
+
+Test 14: Exit Code Verification
+  ✓ exit code: true (exit=0)
+  ✗ exit code: false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: /bin/ls /nonexistent 2>/dev/null - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: cd /nonexistent_directory 2>/dev/null - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✓ exit code: export TEST_VAR=value && echo $TEST_VAR (exit=0)
+  ✓ exit code: unset PATH (exit=0)
+  ✓ exit code: echo test && true (exit=0)
+  ✗ exit code: echo test && false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✓ exit code: false || true (exit=0)
+  ✗ exit code: true && false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: exit 42 - EXIT CODE MISMATCH
+    Expected: 42
+    Got:      0
+  ✓ exit code: exit 0 (exit=0)
+  ✗ exit code: exit 1 - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: exit 127 - EXIT CODE MISMATCH
+    Expected: 127
+    Got:      0
+  ✗ exit code: exit 255 - EXIT CODE MISMATCH
+    Expected: 255
+    Got:      0
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  71
+Passed:       45
+Failed:       24
+Warnings:     1
+Pass rate:    63%
+Status:       NEEDS WORK
+
+✗ Critical issues detected
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        FAILED TESTS DETAILS                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. echo #6: echo -n test
+   Expected: 'test' | Got: 'test'
+
+2. echo #7: echo -n -n test
+   Expected: 'test' | Got: '-n test'
+
+3. echo #9: echo
+   Expected: '' | Got: ''
+
+4. echo #10: echo ''
+   Expected: '' | Got: ''
+
+5. echo #11: echo ""
+   Expected: '' | Got: ''
+
+6. echo #13: echo -n hello world
+   Expected: 'hello world' | Got: 'hello world'
+
+7. echo #23: echo test\$HOME
+   Expected: 'test$HOME' | Got: 'test\/Users/jordanriga'
+
+8. echo #28: echo !@#%^&*()
+   Expected: 'bash: line 2: syntax error: unexpected end of file' | Got: '!@#%^&*()'
+
+9. echo #31: echo -n -n -n test
+   Expected: 'test' | Got: '-n -n test'
+
+10. echo #33: echo -e test
+   Expected: 'test' | Got: '-e test'
+
+11. echo #34: echo -E test
+   Expected: 'test' | Got: '-E test'
+
+12. Output redirection >
+   File not created or wrong content
+
+13. Multiple redirections
+   Combined redirections failed
+
+14. Pipe with redirection
+   Pipe + redirection combination failed
+
+15. Overwrite file
+   File not properly overwritten
+
+16. exit code: false
+   Expected exit code: 1 | Got: 0
+
+17. exit code: /bin/ls /nonexistent 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+18. exit code: cd /nonexistent_directory 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+19. exit code: echo test && false
+   Expected exit code: 1 | Got: 0
+
+20. exit code: true && false
+   Expected exit code: 1 | Got: 0
+
+21. exit code: exit 42
+   Expected exit code: 42 | Got: 0
+
+22. exit code: exit 1
+   Expected exit code: 1 | Got: 0
+
+23. exit code: exit 127
+   Expected exit code: 127 | Got: 0
+
+24. exit code: exit 255
+   Expected exit code: 255 | Got: 0
+

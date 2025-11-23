@@ -1,0 +1,1204 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                  MINISHELL PERFORMANCE REPORT                            ║
+║                  Date: Sun Nov 23 04:35:49 CET 2025                           ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Test 1: Startup Performance
+
+  Iterations: 30
+  Minishell - Avg: 11ms, Min: 10ms, Max: 15ms
+  Bash      - Avg: 11ms, Min: 10ms, Max: 13ms
+
+Test 2: Echo Command Hardcore
+  ✓ echo #1: echo hello
+  ✓ echo #2: echo hello world
+  ✓ echo #3: echo 'hello world'
+  ✓ echo #4: echo "hello world"
+  ✓ echo #5: echo 'hello' "world"
+  ✗ echo #6: echo -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      test
+  ✗ echo #7: echo -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n test
+  ✓ echo #8: echo -n
+  ✗ echo #9: echo - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #10: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ echo #11: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ echo #12: echo test1 test2 test3 test4 test5
+  ✗ echo #13: echo -n hello world - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello world
+  ✓ echo #14: echo 'test with    spaces'
+  ✓ echo #15: echo "test with    spaces"
+  ✓ echo #16: echo $HOME
+  ✓ echo #17: echo '$HOME'
+  ✓ echo #18: echo "$HOME"
+  ✓ echo #19: echo $PATH
+  ✓ echo #20: echo $USER
+  ✓ echo #21: echo $?
+  ✓ echo #22: echo test$HOME
+  ✗ echo #23: echo test\$HOME - OUTPUT MISMATCH
+    Expected: test$HOME
+    Got:      test\/Users/jordanriga
+  ✓ echo #24: echo 'multiple' 'quoted' 'strings'
+  ✓ echo #25: echo "multiple" "quoted" "strings"
+  ✓ echo #26: echo a b c d e f g h i j k l m n o 
+  ✓ echo #27: echo 1 2 3 4 5 6 7 8 9 10
+  ✗ echo #28: echo !@#%^&*() - OUTPUT MISMATCH
+    Expected: bash: line 2: syntax error: unexpected end of file
+    Got:      !@#%^&*()
+  ✓ echo #29: echo '!@#%^&*()'
+  ✓ echo #30: echo test	with	tabs
+  ✗ echo #31: echo -n -n -n test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -n -n test
+  ✓ echo #32: echo --help
+  ✗ echo #33: echo -e test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -e test
+  ✗ echo #34: echo -E test - OUTPUT MISMATCH
+    Expected: test
+    Got:      -E test
+
+Test 3: Echo Extreme Cases
+  ✓ echo with 1000 chars
+  ✓ echo with 100 words
+  ✓ echo with 100 arguments
+  ✓ echo with 500 arguments
+  ✓ echo with unicode
+  ✓ echo with extended ASCII
+  ✓ echo with nested quotes 1
+  ✓ echo with nested quotes 2
+  ✗ echo with complex nested quotes - OUTPUT MISMATCH
+    Expected: 'test'
+    Got:      ' test '
+  ✓ echo with multiple empty strings
+  ✓ echo with multiple empty strings 2
+  ✓ echo with backslashes
+  ✗ echo with escaped newline - OUTPUT MISMATCH
+    Expected: test\ntest
+    Got:      Error: unclosed quote
+Error: unclosed quote
+
+Test 4: Syntax Errors
+  ✓ Syntax: echo 'unclosed quote
+  ✓ Syntax: echo "unclosed double quote
+  ✓ Syntax: echo 'multiple 'quotes' test'
+  ✓ Syntax: | echo test
+  ✓ Syntax: echo test |
+  ✓ Syntax: echo test | | cat
+  ✓ Syntax: > output.txt
+  ✓ Syntax: < input.txt
+  ✓ Syntax: echo test > > output.txt
+  ✓ Syntax: echo test < < input.txt
+  ✓ Syntax: echo test >>
+  ✓ Syntax: echo test <<
+  ✓ Syntax: echo test &&
+  ✓ Syntax: echo test ||
+  ✓ Syntax: echo test ;
+  ✓ Syntax: ; echo test
+  ✓ Syntax: echo test &
+  ✓ Syntax: & echo test
+
+Test 5: Pipes Comprehensive
+echo hello | cat
+  Minishell: 16ms | Bash: 13ms
+echo hello | cat | cat
+  Minishell: 13ms | Bash: 13ms
+echo hello | cat | cat | cat
+  Minishell: 15ms | Bash: 13ms
+echo hello | cat | cat | cat | cat
+  Minishell: 16ms | Bash: 13ms
+echo hello | cat | cat | cat | cat | cat
+  Minishell: 14ms | Bash: 13ms
+cat /tmp/minishell_bench_59257/numbers.txt | head -10
+  Minishell: 15ms | Bash: 14ms
+cat /tmp/minishell_bench_59257/numbers.txt | tail -10
+  Minishell: 14ms | Bash: 15ms
+cat /tmp/minishell_bench_59257/numbers.txt | grep 5
+  Minishell: 14ms | Bash: 13ms
+cat /tmp/minishell_bench_59257/numbers.txt | grep 5 | wc -l
+  Minishell: 14ms | Bash: 13ms
+cat /tmp/minishell_bench_59257/numbers.txt | grep 5 | head -5
+  Minishell: 15ms | Bash: 12ms
+cat /tmp/minishell_bench_59257/numbers.txt | grep 5 | tail -5
+  Minishell: 14ms | Bash: 13ms
+echo test | grep test
+  Minishell: 14ms | Bash: 14ms
+echo test | grep test | cat
+  Minishell: 16ms | Bash: 14ms
+echo abc def ghi | cat | cat | cat
+  Minishell: 14ms | Bash: 14ms
+cat /tmp/minishell_bench_59257/text.txt | cat | cat
+  Minishell: 14ms | Bash: 14ms
+ls | grep bench
+  Minishell: 16ms | Bash: 12ms
+ls -la | head -5
+  Minishell: 16ms | Bash: 14ms
+echo 1 2 3 | cat | cat | cat | cat
+  Minishell: 15ms | Bash: 16ms
+cat /tmp/minishell_bench_59257/numbers.txt | head -50 | tail -10 | grep 4
+  Minishell: 15ms | Bash: 13ms
+echo test | cat | grep test | cat | cat
+  Minishell: 15ms | Bash: 14ms
+
+Test 6: Redirections Hardcore
+  ✗ output redirection >
+  ✓ input redirection <
+  ✗ multiple redirections
+  ✗ pipe with redirection
+  ✗ overwrite test
+  ✓ invalid path handling
+
+Test 7: Environment Variables Extensive
+  ✓ echo $PATH
+  ✓ echo $HOME
+  ✓ echo $USER
+  ✓ echo $PWD
+  ✓ echo $SHELL
+  ✓ echo $?
+  ✓ echo $0
+  ✓ echo test$HOME
+  ✓ echo $HOME/test
+  ✓ echo $HOME$PATH
+  ✓ echo '$HOME'
+  ✓ echo "$HOME"
+  ✓ echo $NONEXISTENT
+  ✓ echo $NONEXISTENT_VAR_123
+  ✓ echo test$NONEXISTENT
+  ✓ echo $PATH$HOME$USER
+  ✓ exit status test
+
+Test 8: Quote Handling Comprehensive
+  ✓ quote #1: echo 'hello'
+  ✓ quote #2: echo "hello"
+  ✓ quote #3: echo 'hello world'
+  ✓ quote #4: echo "hello world"
+  ✓ quote #5: echo 'hello' world
+  ✓ quote #6: echo "hello" world
+  ✓ quote #7: echo hello 'world'
+  ✓ quote #8: echo hello "world"
+  ✓ quote #9: echo 'hello' 'world'
+  ✓ quote #10: echo "hello" "world"
+  ✓ quote #11: echo 'hello' "world"
+  ✓ quote #12: echo "hello" 'world'
+  ✗ quote #13: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ quote #14: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ quote #15: echo '' ''
+  ✓ quote #16: echo "" ""
+  ✓ quote #17: echo 'test $HOME'
+  ✓ quote #18: echo "test $HOME"
+  ✓ quote #19: echo '$USER'
+  ✓ quote #20: echo "$USER"
+  ✓ quote #21: echo 'test"quote'
+  ✓ quote #22: echo "test'quote"
+  ✗ quote #23: echo '''' - OUTPUT MISMATCH
+    Expected: 
+    Got:       
+  ✗ quote #24: echo """" - OUTPUT MISMATCH
+    Expected: 
+    Got:       
+  ✗ quote #25: echo 'a''b' - OUTPUT MISMATCH
+    Expected: ab
+    Got:      a b
+  ✗ quote #26: echo "a""b" - OUTPUT MISMATCH
+    Expected: ab
+    Got:      a b
+  ✓ quote #27: echo 'test with "double" insid
+  ✓ quote #28: echo "test with 'single' insid
+  ✗ quote #29: echo 'test\nwith\nbackslash' - OUTPUT MISMATCH
+    Expected: test\nwith\nbackslash
+    Got:      Error: unclosed quote
+Error: unclosed quote
+  ✗ quote #30: echo "test\nwith\nbackslash" - OUTPUT MISMATCH
+    Expected: test\nwith\nbackslash
+    Got:      Error: unclosed quote
+Error: unclosed quote
+
+Test 9: Edge Cases Extreme
+  ✓ empty line
+  ✓ multiple empty lines
+  ✓ only spaces
+  ✓ only tabs
+  ✓ Very long command (500 chars)
+  ✓ Extremely long command (2000 chars)
+  ✓ Many spaces between args
+  ✓ Spaces before arg
+  ✓ Spaces after arg
+  ✓ nonexistent command
+  ✓ Special characters
+  ✓ More special characters
+  ✓ All special chars
+  ✓ Normal after special tests
+
+Test 10: Built-in Commands Comprehensive
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ cd test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ export test
+  ✓ unset
+  ✓ exit
+  ? exit with code
+
+Test 11: Stress & Load Testing
+  100 commands: minishell=291ms, bash=10ms
+  500 commands: minishell=1373ms, bash=12ms
+  Large file: minishell=14ms, bash=13ms
+
+Test 12: Memory Usage
+  Memory: 2.10 MB (2160 KB)
+
+Test 13: Complex Scenarios
+cat /tmp/minishell_bench_59257/fruits.txt | grep a | wc -l: minishell=19ms, bash=16ms
+echo test | cat | cat | cat | wc -l: minishell=16ms, bash=15ms
+ls | grep bench | cat: minishell=16ms, bash=13ms
+echo $HOME | cat: minishell=14ms, bash=13ms
+cat /tmp/minishell_bench_59257/fruits.txt | grep -v banana | wc -l: minishell=14ms, bash=13ms
+ls -la | head -10 | tail -5: minishell=15ms, bash=15ms
+
+Test 14: Exit Code Verification
+  ✓ exit code: true (exit=0)
+  ✗ exit code: false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: /bin/ls /nonexistent 2>/dev/null - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: cd /nonexistent_directory 2>/dev/null - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✓ exit code: export TEST_VAR=value && echo $TEST_VAR (exit=0)
+  ✓ exit code: unset PATH (exit=0)
+  ✓ exit code: echo test && true (exit=0)
+  ✗ exit code: echo test && false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✓ exit code: false || true (exit=0)
+  ✗ exit code: true && false - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: exit 42 - EXIT CODE MISMATCH
+    Expected: 42
+    Got:      0
+  ✓ exit code: exit 0 (exit=0)
+  ✗ exit code: exit 1 - EXIT CODE MISMATCH
+    Expected: 1
+    Got:      0
+  ✗ exit code: exit 127 - EXIT CODE MISMATCH
+    Expected: 127
+    Got:      0
+  ✗ exit code: exit 255 - EXIT CODE MISMATCH
+    Expected: 255
+    Got:      0
+
+Test 15: Stdout vs Stderr Separation
+  ✗ stream: echo test 1>&2 - OUTPUT MISMATCH
+    Expected: test
+    Got:      test 1 &2
+  ✗ stream: echo stdout; echo stderr 1>&2 - OUTPUT MISMATCH
+    Expected: stdout
+stderr
+    Got:      stdout; echo stderr 1 &2
+  ✗ stream: ls /nonexistent 2>&1 - OUTPUT MISMATCH
+    Expected: ls: /nonexistent: No such file or directory
+    Got:      ls: /nonexistent: No such file or directory
+ls: &1: No such file or directory
+ls: 2: No such file or directory
+  ✗ stream: ls /nonexistent 2>/dev/null - OUTPUT MISMATCH
+    Expected: 
+    Got:      ls: /nonexistent: No such file or directory
+ls: 2: No such file or directory
+/dev/null
+  ✗ stream: echo out; ls /nonexistent 2>&1 - OUTPUT MISMATCH
+    Expected: out
+ls: /nonexistent: No such file or directory
+    Got:      out; ls /nonexistent 2 &1
+  ✗ stream: echo test > /dev/stdout - OUTPUT MISMATCH
+    Expected: test
+    Got:      test /dev/stdout
+  ✗ stream: echo error > /dev/stderr - OUTPUT MISMATCH
+    Expected: error
+    Got:      error /dev/stderr
+  ✗ stream: cat /nonexistent 2>&1 | cat - OUTPUT MISMATCH
+    Expected: cat: /nonexistent: No such file or directory
+    Got:      cat: /nonexistent: No such file or directory
+cat: 2: No such file or directory
+cat: &1: No such file or directory
+  ✗ stream: echo test | cat 2>&1 - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat 2 &1
+
+Test 16: Signal Handling
+  ✓ SIGINT during command execution
+  ✓ Multiple SIGINT handling (requires manual testing)
+  ✓ SIGINT with pipes
+
+Test 17: Wildcards and Special Characters
+  ✗ wildcard: echo /tmp/minishell_bench_59257/wildtest/*.txt - OUTPUT MISMATCH
+    Expected: /tmp/minishell_bench_59257/wildtest/file1.txt /tmp/minishell_bench_59257/wildtest/file2.txt
+    Got:      /tmp/minishell_bench_59257/wildtest/*.txt
+  ✗ wildcard: echo /tmp/minishell_bench_59257/wildtest/* - OUTPUT MISMATCH
+    Expected: /tmp/minishell_bench_59257/wildtest/file1.txt /tmp/minishell_bench_59257/wildtest/file2.txt /tmp/minishell_bench_59257/wildtest/file3.md /tmp/minishell_bench_59257/wildtest/test.sh
+    Got:      /tmp/minishell_bench_59257/wildtest/*
+  ✗ wildcard: echo /tmp/minishell_bench_59257/wildtest/*.md - OUTPUT MISMATCH
+    Expected: /tmp/minishell_bench_59257/wildtest/file3.md
+    Got:      /tmp/minishell_bench_59257/wildtest/*.md
+  ✗ wildcard: ls /tmp/minishell_bench_59257/wildtest/*.txt 2>&1 | wc -l - OUTPUT MISMATCH
+    Expected:        2
+    Got:      ls: -l: No such file or directory
+ls: /tmp/minishell_bench_59257/wildtest/*.txt: No such file or directory
+ls: &1: No such file or directory
+ls: 2: No such file or directory
+ls: wc: No such file or directory
+  ✗ wildcard: echo * - OUTPUT MISMATCH
+    Expected: benchmark_reports benchmark.sh builtins compile_commands.json includes libft Makefile minishell obj README.md srcs test_expansion.sh test_leaks.sh
+    Got:      *
+  ✗ wildcard: echo *.sh - OUTPUT MISMATCH
+    Expected: benchmark.sh test_expansion.sh test_leaks.sh
+    Got:      *.sh
+  ✗ wildcard: echo ??? - OUTPUT MISMATCH
+    Expected: obj
+    Got:      ???
+  ✓ wildcard: echo '*.txt'
+  ✓ wildcard: echo "*.txt"
+  ✗ wildcard: echo $HOME/*.txt 2>&1 - OUTPUT MISMATCH
+    Expected: /Users/jordanriga/*.txt
+    Got:      /Users/jordanriga/*.txt 2 &1
+
+Test 18: Heredoc Comprehensive
+  ✗ basic heredoc
+  ✗ heredoc with variables
+  ✗ heredoc quoted delimiter
+  ✗ multiple heredocs
+  ✗ heredoc special chars
+
+Test 19: Exit Codes Ultra Strict
+  ✓ exit code 0
+  ✗ exit code 1
+  ✗ exit code 127
+  ✓ cd exit code 0
+  ✗ cd exit code non-zero
+  ✗ exit 42
+  ✓ pipe exit code
+  ✓ export exit code
+  ✗ unset exit code
+  ✓ env exit code
+
+Test 20: Variable Expansion Advanced
+  ✓ var expand: echo $
+  ✗ var expand: echo $$ - OUTPUT MISMATCH
+    Expected: 64343
+    Got:      $$
+  ✗ var expand: echo $123 - OUTPUT MISMATCH
+    Expected: 23
+    Got:      $123
+  ✗ var expand: echo ${HOME} - OUTPUT MISMATCH
+    Expected: /Users/jordanriga
+    Got:      ${HOME}
+  ✓ var expand: echo $HOME$PATH
+  ✓ var expand: echo $HOME/$USER
+  ✓ var expand: echo prefix$HOMEsuffix
+  ✓ var expand: echo $NONEXISTENT$HOME
+  ✓ var expand: echo "$HOME"
+  ✓ var expand: echo '$HOME'
+  ✗ var expand: echo $HOME'$PATH' - OUTPUT MISMATCH
+    Expected: /Users/jordanriga$PATH
+    Got:      /Users/jordanriga $PATH
+  ✓ var expand: echo "$HOME'$PATH'"
+  ✓ var expand: echo $?
+  ✓ var expand: echo $? $? $?
+  ✗ var expand: /bin/false; echo $? - OUTPUT MISMATCH
+    Expected: bash: line 1: /bin/false: No such file or directory
+127
+    Got:      
+  ✗ var expand: /bin/true; echo $? - OUTPUT MISMATCH
+    Expected: bash: line 1: /bin/true: No such file or directory
+127
+    Got:      
+  ✗ var expand: echo test$$test - OUTPUT MISMATCH
+    Expected: test64606test
+    Got:      test$
+  ✗ var expand: echo \$HOME - OUTPUT MISMATCH
+    Expected: $HOME
+    Got:      \/Users/jordanriga
+  ✗ var expand: echo "\$HOME" - OUTPUT MISMATCH
+    Expected: $HOME
+    Got:      \/Users/jordanriga
+  ✗ var expand: echo test > /dev/null; echo $? - OUTPUT MISMATCH
+    Expected: 0
+    Got:      test /dev/null; echo 0
+
+Test 21: Quote Edge Cases
+  ✓ quote: echo "'hello'"
+  ✓ quote: echo '"hello"'
+  ✗ quote: echo "'"hello"'" - OUTPUT MISMATCH
+    Expected: 'hello'
+    Got:      ' hello '
+  ✗ quote: echo '"'hello'"' - OUTPUT MISMATCH
+    Expected: "hello"
+    Got:      " hello "
+  ✗ quote: echo "test\$HOME" - OUTPUT MISMATCH
+    Expected: test$HOME
+    Got:      test\/Users/jordanriga
+  ✓ quote: echo 'test\$HOME'
+  ✓ quote: echo "test'with'quotes"
+  ✓ quote: echo 'test"with"quotes'
+  ✓ quote: echo "multiple  spaces   prese
+  ✓ quote: echo 'multiple  spaces   prese
+  ✗ quote: echo "tab\t\there" - OUTPUT MISMATCH
+    Expected: tab\t\there
+    Got:      tab		here
+  ✗ quote: echo 'tab\t\there' - OUTPUT MISMATCH
+    Expected: tab\t\there
+    Got:      tab		here
+  ✗ quote: echo "" - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✗ quote: echo '' - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ quote: echo "" "" ""
+  ✓ quote: echo '' '' ''
+  ✗ quote: echo "\"escaped quotes\"" - OUTPUT MISMATCH
+    Expected: "escaped quotes"
+    Got:      \ escaped quotes\ 
+  ✗ quote: echo 'can\'t escape in single' - OUTPUT MISMATCH
+    Expected: bash: line 1: unexpected EOF while looking for matching `''
+bash: line 2: syntax error: unexpected end of file
+    Got:      Error: unclosed quote
+can\ t escape in single
+  ✓ quote: echo "mix 'single' in double"
+  ✓ quote: echo 'mix "double" in single'
+  ✗ quote: echo "test\ntest" - OUTPUT MISMATCH
+    Expected: test\ntest
+    Got:      Error: unclosed quote
+Error: unclosed quote
+  ✗ quote: echo 'test\ntest' - OUTPUT MISMATCH
+    Expected: test\ntest
+    Got:      Error: unclosed quote
+Error: unclosed quote
+  ✓ quote: echo "'$HOME'"
+  ✓ quote: echo '"$HOME"'
+  ✗ quote: echo "$HOME"$USER - OUTPUT MISMATCH
+    Expected: /Users/jordanrigajordanriga
+    Got:      /Users/jordanriga jordanriga
+  ✗ quote: echo '$HOME'$USER - OUTPUT MISMATCH
+    Expected: $HOMEjordanriga
+    Got:      $HOME jordanriga
+
+Test 22: Pipes Extreme
+  ✗ extreme pipe: echo test | cat | cat | c - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat cat cat cat cat
+  ✗ extreme pipe: echo test | cat | cat | c - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat cat cat cat cat cat
+  ✗ extreme pipe: echo test | cat | cat | c - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat cat cat cat cat cat cat
+  ✗ extreme pipe: echo hello world | cat |  - OUTPUT MISMATCH
+    Expected: hello world
+    Got:      hello world cat cat cat cat cat cat cat cat
+  ✗ extreme pipe: echo test | cat | cat | c - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat cat cat cat cat cat cat cat cat
+  ✗ extreme pipe: cat /tmp/minishell_bench_ - OUTPUT MISMATCH
+    Expected: 66
+67
+68
+69
+70
+    Got:      cat: 1
+2
+3
+4
+5
+  ✗ extreme pipe: cat /tmp/minishell_bench_ - OUTPUT MISMATCH
+    Expected:       36
+    Got:      cat: grep: 1
+2
+3
+4
+5
+  ✗ extreme pipe: echo a b c d e | cat | ca - OUTPUT MISMATCH
+    Expected: a b c d e
+    Got:      a b c d e cat cat cat grep b cat
+  ✗ extreme pipe: cat /tmp/minishell_bench_ - OUTPUT MISMATCH
+    Expected: 251
+252
+253
+254
+255
+    Got:      cat: head: No such file or directory
+1
+2
+3
+4
+  ✗ extreme pipe: echo test | cat | grep te - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat grep test cat cat cat
+
+Test 23: Redirections Advanced
+  ✗ redir advanced: cat < /tmp/minishell_benc - OUTPUT MISMATCH
+    Expected: 
+    Got:      test content
+cat: /tmp/minishell_bench_59257/output1.txt: No such file or directory
+  ✗ redir advanced: cat < /tmp/minishell_benc - OUTPUT MISMATCH
+    Expected: more content
+    Got:      test content
+more content
+  ✗ redir advanced: echo test > /tmp/minishel - OUTPUT MISMATCH
+    Expected: 
+    Got:      test /tmp/minishell_bench_59257/out.txt /tmp/minishell_bench_59257/out2.txt
+  ✗ redir advanced: echo line1 > /tmp/minishe - OUTPUT MISMATCH
+    Expected: 
+    Got:      line1 /tmp/minishell_bench_59257/multi.txt; echo line2 /tmp/minishell_bench_59257/multi.txt
+  ✗ redir advanced: cat < /tmp/minishell_benc - OUTPUT MISMATCH
+    Expected: 
+    Got:      test content
+cat: /tmp/minishell_bench_59257/append.txt: No such file or directory
+  ✗ redir advanced: echo test > /tmp/minishel - OUTPUT MISMATCH
+    Expected: test
+    Got:      test /tmp/minishell_bench_59257/a.txt; cat /tmp/minishell_bench_59257/a.txt
+  ✗ redir advanced: echo test > /tmp/minishel - OUTPUT MISMATCH
+    Expected: test
+test2
+    Got:      test /tmp/minishell_bench_59257/b.txt; echo test2 /tmp/minishell_bench_59257/b.txt; cat /tmp/minishell_bench_59257/b.txt
+
+Test 24: Pipes + Redirections Combined
+  ✗ pipe+redir: cat < /tmp/minishell_benc - OUTPUT MISMATCH
+    Expected: test data
+    Got:      test data
+cat: cat: No such file or directory
+  ✗ pipe+redir: echo test | cat > /tmp/mi - OUTPUT MISMATCH
+    Expected: 
+    Got:      test cat /tmp/minishell_bench_59257/pipe_out.txt
+  ✗ pipe+redir: cat /tmp/minishell_bench_ - OUTPUT MISMATCH
+    Expected: 
+    Got:      test data
+cat: cat: No such file or directory
+cat: cat: No such file or directory
+cat: /tmp/minishell_bench_59257/multi_pipe_out.txt: No such file or directory
+  ✗ pipe+redir: echo test | cat | cat | c - OUTPUT MISMATCH
+    Expected: 
+    Got:      test cat cat cat /tmp/minishell_bench_59257/final.txt
+  ✗ pipe+redir: cat < /tmp/minishell_benc - OUTPUT MISMATCH
+    Expected: 
+    Got:      test data
+cat: cat: No such file or directory
+cat: cat: No such file or directory
+0
+NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+  ✗ pipe+redir: echo line1 > /tmp/minishe - OUTPUT MISMATCH
+    Expected: line1
+    Got:      line1 /tmp/minishell_bench_59257/temp.txt; cat /tmp/minishell_bench_59257/temp.txt cat
+  ✗ pipe+redir: echo test | cat | cat > / - OUTPUT MISMATCH
+    Expected: test
+    Got:      test cat cat /tmp/minishell_bench_59257/out.txt; cat /tmp/minishell_bench_59257/out.txt
+
+Test 25: Builtins Edge Cases
+  ✓ pwd: basic
+  ✗ pwd: after cd - OUTPUT MISMATCH
+    Expected: /Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+/tmp
+    Got:      
+  ✗ pwd: multiple calls - OUTPUT MISMATCH
+    Expected: /Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+/Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+/Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+    Got:      
+  ✓ cd: no argument (HOME)
+  ✓ cd: to root
+  ✗ cd: verify with pwd - OUTPUT MISMATCH
+    Expected: /tmp
+    Got:      
+  ✗ cd: to nonexistent - OUTPUT MISMATCH
+    Expected: bash: line 1: cd: /nonexistent: No such file or directory
+    Got:      
+  ✓ cd: parent directory
+  ✗ cd: current directory - OUTPUT MISMATCH
+    Expected: /Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+    Got:      
+  ✗ cd: previous directory - OUTPUT MISMATCH
+    Expected: bash: line 1: cd: OLDPWD not set
+    Got:      
+  ✗ echo: no arguments - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ echo: -n only
+  ✗ echo: multiple -n - OUTPUT MISMATCH
+    Expected: 
+    Got:      -n -n
+  ✗ echo: -nnn variant - OUTPUT MISMATCH
+    Expected: test
+    Got:      -nnn test
+  ✗ env: basic - OUTPUT MISMATCH
+    Expected: NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+TERM_PROGRAM=iTerm.app
+_P9K_TTY=/dev/ttys007
+NVM_CD_FLAGS=-q
+SHELL=/bin/zsh
+    Got:      NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+TERM_PROGRAM=iTerm.app
+_P9K_TTY=/dev/ttys007
+NVM_CD_FLAGS=-q
+  ✗ env: with pipe - OUTPUT MISMATCH
+    Expected: PATH=/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools/:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/anaconda3/bin:/Users/jordanriga/anaconda3/condabin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/opt/homebrew/opt/fzf/bin
+SQLITE_EXEMPT_PATH_FROM_VNODE_GUARDS=/Users/jordanriga/Library/WebKit/Databases
+    Got:      NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+TERM_PROGRAM=iTerm.app
+_P9K_TTY=/dev/ttys007
+NVM_CD_FLAGS=-q
+  ✗ export: no arguments - OUTPUT MISMATCH
+    Expected: declare -x COLORFGBG="15;0"
+declare -x COLORTERM="truecolor"
+declare -x COMMAND_MODE="unix2003"
+declare -x CONDA_DEFAULT_ENV="base"
+declare -x CONDA_EXE="/Users/jordanriga/anaconda3/bin/conda"
+    Got:      declare -x NVM_INC="/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node"
+declare -x NVM_INC="/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node"
+declare -x TERM_PROGRAM="iTerm.app"
+declare -x _P9K_TTY="/dev/ttys007"
+declare -x NVM_CD_FLAGS="-q"
+  ✓ export: new variable
+  ✗ export: verify - OUTPUT MISMATCH
+    Expected: value
+    Got:      
+  ✓ export: empty value
+  ✓ export: space value
+  ✓ export: multiple words
+  ✓ unset: no arguments
+  ✓ unset: nonexistent var
+  ✗ unset: verify removal - OUTPUT MISMATCH
+    Expected: 
+    Got:      
+  ✓ exit: with 0
+  ✓ exit: with 1
+  ✓ exit: with 255
+  ✓ exit: overflow 256
+  ✓ exit: negative
+  ✗ exit: non-numeric - OUTPUT MISMATCH
+    Expected: bash: line 1: exit: abc: numeric argument required
+    Got:      
+
+Test 26: Command Not Found
+  ✓ not found: nonexistentcommand
+  ✓ not found: cmddoesnotexist123
+  ✓ not found: ./nonexistent_binary
+  ✓ not found: /nonexistent/path/command
+  ✓ not found: abc123xyz789
+  ✓ not found: test_fake_cmd
+
+Test 27: Paths with Spaces
+  ✓ path spaces: echo '/tmp/minishell_benc
+  ✓ path spaces: cat '/tmp/minishell_bench
+  ✓ path spaces: ls '/tmp/minishell_bench_
+  ✓ path spaces: echo "/tmp/minishell_benc
+  ✓ path spaces: cat /tmp/minishell_bench_
+  ✓ path spaces: cat /tmp/minishell_bench_
+  ✗ path spaces: echo test > '/tmp/minishe - OUTPUT MISMATCH
+    Expected: 
+    Got:      test /tmp/minishell_bench_59257/dir with spaces/output.txt
+  ✗ path spaces: ls '/tmp/minishell_bench_ - OUTPUT MISMATCH
+    Expected: file.txt
+output.txt
+    Got:      ls: cat: No such file or directory
+/tmp/minishell_bench_59257/dir with spaces:
+file.txt
+output.txt
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                           SUMMARY                                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+Total tests:  319
+Passed:       192
+Failed:       125
+Warnings:     1
+Pass rate:    60%
+Status:       NEEDS WORK
+
+✗ Critical issues detected
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        FAILED TESTS DETAILS                              ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+1. echo #6: echo -n test
+   Expected: 'test' | Got: 'test'
+
+2. echo #7: echo -n -n test
+   Expected: 'test' | Got: '-n test'
+
+3. echo #9: echo
+   Expected: '' | Got: ''
+
+4. echo #10: echo ''
+   Expected: '' | Got: ''
+
+5. echo #11: echo ""
+   Expected: '' | Got: ''
+
+6. echo #13: echo -n hello world
+   Expected: 'hello world' | Got: 'hello world'
+
+7. echo #23: echo test\$HOME
+   Expected: 'test$HOME' | Got: 'test\/Users/jordanriga'
+
+8. echo #28: echo !@#%^&*()
+   Expected: 'bash: line 2: syntax error: unexpected end of file' | Got: '!@#%^&*()'
+
+9. echo #31: echo -n -n -n test
+   Expected: 'test' | Got: '-n -n test'
+
+10. echo #33: echo -e test
+   Expected: 'test' | Got: '-e test'
+
+11. echo #34: echo -E test
+   Expected: 'test' | Got: '-E test'
+
+12. echo with complex nested quotes
+   Expected: ''test'' | Got: '' test ''
+
+13. echo with escaped newline
+   Expected: 'test\ntest' | Got: 'Error: unclosed quote
+Error: unclosed quote'
+
+14. Output redirection >
+   File not created or wrong content
+
+15. Multiple redirections
+   Combined redirections failed
+
+16. Pipe with redirection
+   Pipe + redirection combination failed
+
+17. Overwrite file
+   File not properly overwritten
+
+18. quote #13: echo ''
+   Expected: '' | Got: ''
+
+19. quote #14: echo ""
+   Expected: '' | Got: ''
+
+20. quote #23: echo ''''
+   Expected: '' | Got: ' '
+
+21. quote #24: echo """"
+   Expected: '' | Got: ' '
+
+22. quote #25: echo 'a''b'
+   Expected: 'ab' | Got: 'a b'
+
+23. quote #26: echo "a""b"
+   Expected: 'ab' | Got: 'a b'
+
+24. quote #29: echo 'test\nwith\nbackslash'
+   Expected: 'test\nwith\nbackslash' | Got: 'Error: unclosed quote
+Error: unclosed quote'
+
+25. quote #30: echo "test\nwith\nbackslash"
+   Expected: 'test\nwith\nbackslash' | Got: 'Error: unclosed quote
+Error: unclosed quote'
+
+26. exit code: false
+   Expected exit code: 1 | Got: 0
+
+27. exit code: /bin/ls /nonexistent 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+28. exit code: cd /nonexistent_directory 2>/dev/null
+   Expected exit code: 1 | Got: 0
+
+29. exit code: echo test && false
+   Expected exit code: 1 | Got: 0
+
+30. exit code: true && false
+   Expected exit code: 1 | Got: 0
+
+31. exit code: exit 42
+   Expected exit code: 42 | Got: 0
+
+32. exit code: exit 1
+   Expected exit code: 1 | Got: 0
+
+33. exit code: exit 127
+   Expected exit code: 127 | Got: 0
+
+34. exit code: exit 255
+   Expected exit code: 255 | Got: 0
+
+35. stream: echo test 1>&2
+   Expected: 'test' | Got: 'test 1 &2'
+
+36. stream: echo stdout; echo stderr 1>&2
+   Expected: 'stdout
+stderr' | Got: 'stdout; echo stderr 1 &2'
+
+37. stream: ls /nonexistent 2>&1
+   Expected: 'ls: /nonexistent: No such file or directory' | Got: 'ls: /nonexistent: No such file or directory
+ls: &1: No such file or directory
+ls: 2: No such file or directory'
+
+38. stream: ls /nonexistent 2>/dev/null
+   Expected: '' | Got: 'ls: /nonexistent: No such file or directory
+ls: 2: No such file or directory
+/dev/null'
+
+39. stream: echo out; ls /nonexistent 2>&1
+   Expected: 'out
+ls: /nonexistent: No such file or directory' | Got: 'out; ls /nonexistent 2 &1'
+
+40. stream: echo test > /dev/stdout
+   Expected: 'test' | Got: 'test /dev/stdout'
+
+41. stream: echo error > /dev/stderr
+   Expected: 'error' | Got: 'error /dev/stderr'
+
+42. stream: cat /nonexistent 2>&1 | cat
+   Expected: 'cat: /nonexistent: No such file or directory' | Got: 'cat: /nonexistent: No such file or directory
+cat: 2: No such file or directory
+cat: &1: No such file or directory'
+
+43. stream: echo test | cat 2>&1
+   Expected: 'test' | Got: 'test cat 2 &1'
+
+44. wildcard: echo /tmp/minishell_bench_59257/wildtest/*.txt
+   Expected: '/tmp/minishell_bench_59257/wildtest/file1.txt /tmp/minishell_bench_59257/wildtest/file2.txt' | Got: '/tmp/minishell_bench_59257/wildtest/*.txt'
+
+45. wildcard: echo /tmp/minishell_bench_59257/wildtest/*
+   Expected: '/tmp/minishell_bench_59257/wildtest/file1.txt /tmp/minishell_bench_59257/wildtest/file2.txt /tmp/minishell_bench_59257/wildtest/file3.md /tmp/minishell_bench_59257/wildtest/test.sh' | Got: '/tmp/minishell_bench_59257/wildtest/*'
+
+46. wildcard: echo /tmp/minishell_bench_59257/wildtest/*.md
+   Expected: '/tmp/minishell_bench_59257/wildtest/file3.md' | Got: '/tmp/minishell_bench_59257/wildtest/*.md'
+
+47. wildcard: ls /tmp/minishell_bench_59257/wildtest/*.txt 2>&1 | wc -l
+   Expected: '       2' | Got: 'ls: -l: No such file or directory
+ls: /tmp/minishell_bench_59257/wildtest/*.txt: No such file or directory
+ls: &1: No such file or directory
+ls: 2: No such file or directory
+ls: wc: No such file or directory'
+
+48. wildcard: echo *
+   Expected: 'benchmark_reports benchmark.sh builtins compile_commands.json includes libft Makefile minishell obj README.md srcs test_expansion.sh test_leaks.sh' | Got: '*'
+
+49. wildcard: echo *.sh
+   Expected: 'benchmark.sh test_expansion.sh test_leaks.sh' | Got: '*.sh'
+
+50. wildcard: echo ???
+   Expected: 'obj' | Got: '???'
+
+51. wildcard: echo $HOME/*.txt 2>&1
+   Expected: '/Users/jordanriga/*.txt' | Got: '/Users/jordanriga/*.txt 2 &1'
+
+52. Basic heredoc
+   Heredoc output doesn't match expected
+
+53. Heredoc with variables
+   Variable expansion in heredoc failed
+
+54. Heredoc quoted delimiter
+   Variables should not expand with quoted delimiter
+
+55. Multiple heredocs
+   One or more heredocs failed
+
+56. Heredoc special chars
+   Special characters not handled properly
+
+57. Exit code 1
+   Exit code should be 1 after /bin/false
+
+58. Exit code 127
+   Command not found should set exit code to 127
+
+59. cd failed exit code
+   cd to invalid directory should return non-zero
+
+60. Exit 42
+   exit 42 should exit with code 42
+
+61. unset exit code
+   unset should return 0
+
+62. var expand: echo $$
+   Expected: '64343' | Got: '$$'
+
+63. var expand: echo $123
+   Expected: '23' | Got: '$123'
+
+64. var expand: echo ${HOME}
+   Expected: '/Users/jordanriga' | Got: '${HOME}'
+
+65. var expand: echo $HOME'$PATH'
+   Expected: '/Users/jordanriga$PATH' | Got: '/Users/jordanriga $PATH'
+
+66. var expand: /bin/false; echo $?
+   Expected: 'bash: line 1: /bin/false: No such file or directory
+127' | Got: ''
+
+67. var expand: /bin/true; echo $?
+   Expected: 'bash: line 1: /bin/true: No such file or directory
+127' | Got: ''
+
+68. var expand: echo test$$test
+   Expected: 'test64606test' | Got: 'test$'
+
+69. var expand: echo \$HOME
+   Expected: '$HOME' | Got: '\/Users/jordanriga'
+
+70. var expand: echo "\$HOME"
+   Expected: '$HOME' | Got: '\/Users/jordanriga'
+
+71. var expand: echo test > /dev/null; echo $?
+   Expected: '0' | Got: 'test /dev/null; echo 0'
+
+72. quote: echo "'"hello"'"
+   Expected: ''hello'' | Got: '' hello ''
+
+73. quote: echo '"'hello'"'
+   Expected: '"hello"' | Got: '" hello "'
+
+74. quote: echo "test\$HOME"
+   Expected: 'test$HOME' | Got: 'test\/Users/jordanriga'
+
+75. quote: echo "tab\t\there"
+   Expected: 'tab\t\there' | Got: 'tab		here'
+
+76. quote: echo 'tab\t\there'
+   Expected: 'tab\t\there' | Got: 'tab		here'
+
+77. quote: echo ""
+   Expected: '' | Got: ''
+
+78. quote: echo ''
+   Expected: '' | Got: ''
+
+79. quote: echo "\"escaped quotes\""
+   Expected: '"escaped quotes"' | Got: '\ escaped quotes\ '
+
+80. quote: echo 'can\'t escape in single'
+   Expected: 'bash: line 1: unexpected EOF while looking for matching `''
+bash: line 2: syntax error: unexpected end of file' | Got: 'Error: unclosed quote
+can\ t escape in single'
+
+81. quote: echo "test\ntest"
+   Expected: 'test\ntest' | Got: 'Error: unclosed quote
+Error: unclosed quote'
+
+82. quote: echo 'test\ntest'
+   Expected: 'test\ntest' | Got: 'Error: unclosed quote
+Error: unclosed quote'
+
+83. quote: echo "$HOME"$USER
+   Expected: '/Users/jordanrigajordanriga' | Got: '/Users/jordanriga jordanriga'
+
+84. quote: echo '$HOME'$USER
+   Expected: '$HOMEjordanriga' | Got: '$HOME jordanriga'
+
+85. extreme pipe: echo test | cat | cat | c
+   Expected: 'test' | Got: 'test cat cat cat cat cat'
+
+86. extreme pipe: echo test | cat | cat | c
+   Expected: 'test' | Got: 'test cat cat cat cat cat cat'
+
+87. extreme pipe: echo test | cat | cat | c
+   Expected: 'test' | Got: 'test cat cat cat cat cat cat cat'
+
+88. extreme pipe: echo hello world | cat | 
+   Expected: 'hello world' | Got: 'hello world cat cat cat cat cat cat cat cat'
+
+89. extreme pipe: echo test | cat | cat | c
+   Expected: 'test' | Got: 'test cat cat cat cat cat cat cat cat cat'
+
+90. extreme pipe: cat /tmp/minishell_bench_
+   Expected: '66
+67
+68
+69
+70' | Got: 'cat: 1
+2
+3
+4
+5'
+
+91. extreme pipe: cat /tmp/minishell_bench_
+   Expected: '      36' | Got: 'cat: grep: 1
+2
+3
+4
+5'
+
+92. extreme pipe: echo a b c d e | cat | ca
+   Expected: 'a b c d e' | Got: 'a b c d e cat cat cat grep b cat'
+
+93. extreme pipe: cat /tmp/minishell_bench_
+   Expected: '251
+252
+253
+254
+255' | Got: 'cat: head: No such file or directory
+1
+2
+3
+4'
+
+94. extreme pipe: echo test | cat | grep te
+   Expected: 'test' | Got: 'test cat grep test cat cat cat'
+
+95. redir advanced: cat < /tmp/minishell_benc
+   Expected: '' | Got: 'test content
+cat: /tmp/minishell_bench_59257/output1.txt: No such file or directory'
+
+96. redir advanced: cat < /tmp/minishell_benc
+   Expected: 'more content' | Got: 'test content
+more content'
+
+97. redir advanced: echo test > /tmp/minishel
+   Expected: '' | Got: 'test /tmp/minishell_bench_59257/out.txt /tmp/minishell_bench_59257/out2.txt'
+
+98. redir advanced: echo line1 > /tmp/minishe
+   Expected: '' | Got: 'line1 /tmp/minishell_bench_59257/multi.txt; echo line2 /tmp/minishell_bench_59257/multi.txt'
+
+99. redir advanced: cat < /tmp/minishell_benc
+   Expected: '' | Got: 'test content
+cat: /tmp/minishell_bench_59257/append.txt: No such file or directory'
+
+100. redir advanced: echo test > /tmp/minishel
+   Expected: 'test' | Got: 'test /tmp/minishell_bench_59257/a.txt; cat /tmp/minishell_bench_59257/a.txt'
+
+101. redir advanced: echo test > /tmp/minishel
+   Expected: 'test
+test2' | Got: 'test /tmp/minishell_bench_59257/b.txt; echo test2 /tmp/minishell_bench_59257/b.txt; cat /tmp/minishell_bench_59257/b.txt'
+
+102. pipe+redir: cat < /tmp/minishell_benc
+   Expected: 'test data' | Got: 'test data
+cat: cat: No such file or directory'
+
+103. pipe+redir: echo test | cat > /tmp/mi
+   Expected: '' | Got: 'test cat /tmp/minishell_bench_59257/pipe_out.txt'
+
+104. pipe+redir: cat /tmp/minishell_bench_
+   Expected: '' | Got: 'test data
+cat: cat: No such file or directory
+cat: cat: No such file or directory
+cat: /tmp/minishell_bench_59257/multi_pipe_out.txt: No such file or directory'
+
+105. pipe+redir: echo test | cat | cat | c
+   Expected: '' | Got: 'test cat cat cat /tmp/minishell_bench_59257/final.txt'
+
+106. pipe+redir: cat < /tmp/minishell_benc
+   Expected: '' | Got: 'test data
+cat: cat: No such file or directory
+cat: cat: No such file or directory
+0
+NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node'
+
+107. pipe+redir: echo line1 > /tmp/minishe
+   Expected: 'line1' | Got: 'line1 /tmp/minishell_bench_59257/temp.txt; cat /tmp/minishell_bench_59257/temp.txt cat'
+
+108. pipe+redir: echo test | cat | cat > /
+   Expected: 'test' | Got: 'test cat cat /tmp/minishell_bench_59257/out.txt; cat /tmp/minishell_bench_59257/out.txt'
+
+109. pwd: after cd
+   Expected: '/Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+/tmp' | Got: ''
+
+110. pwd: multiple calls
+   Expected: '/Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+/Users/jordanriga/Desktop/prog_learning/42-school/neominishell
+/Users/jordanriga/Desktop/prog_learning/42-school/neominishell' | Got: ''
+
+111. cd: verify with pwd
+   Expected: '/tmp' | Got: ''
+
+112. cd: to nonexistent
+   Expected: 'bash: line 1: cd: /nonexistent: No such file or directory' | Got: ''
+
+113. cd: current directory
+   Expected: '/Users/jordanriga/Desktop/prog_learning/42-school/neominishell' | Got: ''
+
+114. cd: previous directory
+   Expected: 'bash: line 1: cd: OLDPWD not set' | Got: ''
+
+115. echo: no arguments
+   Expected: '' | Got: ''
+
+116. echo: multiple -n
+   Expected: '' | Got: '-n -n'
+
+117. echo: -nnn variant
+   Expected: 'test' | Got: '-nnn test'
+
+118. env: basic
+   Expected: 'NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+TERM_PROGRAM=iTerm.app
+_P9K_TTY=/dev/ttys007
+NVM_CD_FLAGS=-q
+SHELL=/bin/zsh' | Got: 'NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+TERM_PROGRAM=iTerm.app
+_P9K_TTY=/dev/ttys007
+NVM_CD_FLAGS=-q'
+
+119. env: with pipe
+   Expected: 'PATH=/Users/jordanriga/Library/Android/sdk/platform-tools:~/platform-tools/:/usr/local/bin/python3.9:/usr/local/bin:/opt/homebrew/bin:/Users/jordanriga/.nvm/versions/node/v20.14.0/bin:/opt/homebrew/bin:/opt/homebrew/bin:/usr/local/opt/python@3.9/bin:/Users/jordanriga/anaconda3/bin:/Users/jordanriga/anaconda3/condabin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jordanriga/.local/bin:/Users/jordanriga/.cargo/bin:/Applications/iTerm.app/Contents/Resources/utilities:/opt/homebrew/opt/fzf/bin
+SQLITE_EXEMPT_PATH_FROM_VNODE_GUARDS=/Users/jordanriga/Library/WebKit/Databases' | Got: 'NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+NVM_INC=/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node
+TERM_PROGRAM=iTerm.app
+_P9K_TTY=/dev/ttys007
+NVM_CD_FLAGS=-q'
+
+120. export: no arguments
+   Expected: 'declare -x COLORFGBG="15;0"
+declare -x COLORTERM="truecolor"
+declare -x COMMAND_MODE="unix2003"
+declare -x CONDA_DEFAULT_ENV="base"
+declare -x CONDA_EXE="/Users/jordanriga/anaconda3/bin/conda"' | Got: 'declare -x NVM_INC="/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node"
+declare -x NVM_INC="/Users/jordanriga/.nvm/versions/node/v20.14.0/include/node"
+declare -x TERM_PROGRAM="iTerm.app"
+declare -x _P9K_TTY="/dev/ttys007"
+declare -x NVM_CD_FLAGS="-q"'
+
+121. export: verify
+   Expected: 'value' | Got: ''
+
+122. unset: verify removal
+   Expected: '' | Got: ''
+
+123. exit: non-numeric
+   Expected: 'bash: line 1: exit: abc: numeric argument required' | Got: ''
+
+124. path spaces: echo test > '/tmp/minishe
+   Expected: '' | Got: 'test /tmp/minishell_bench_59257/dir with spaces/output.txt'
+
+125. path spaces: ls '/tmp/minishell_bench_
+   Expected: 'file.txt
+output.txt' | Got: 'ls: cat: No such file or directory
+/tmp/minishell_bench_59257/dir with spaces:
+file.txt
+output.txt'
+

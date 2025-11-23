@@ -22,7 +22,10 @@ void print_export_env(t_context *ctx)
 	env = ctx->env;
 	while (env)
 	{
-		printf("declare -x %s=\"%s\"\n", env->name, env->value);
+		if (env->value)
+			printf("declare -x %s=\"%s\"\n", env->name, env->value);
+		else 
+			printf("declare -x %s=\"\"\n", env->name);
 		env = env->next;
 	}
 }

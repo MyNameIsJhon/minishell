@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:26:33 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/23 03:43:49 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/23 04:06:40 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 		return (NULL);
 	command->memory = ctx->line_memory;
 	tokens = tokenize(user_input, command->memory);
-	expand_tokens(tokens, ctx);
-	print_token_list(tokens);
+	/* expand_tokens(tokens, ctx); */
+	/* print_token_list(tokens); */
 	command->tokens = tokens;
 	command->com_splited = tokens_to_array(tokens, command->memory);
 	if (!command->com_splited)
