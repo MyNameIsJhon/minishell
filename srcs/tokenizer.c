@@ -13,27 +13,59 @@
 #include "minishell.h"
 #include <unistd.h>
 
+int	handle_operator(char *input, int i, t_tokenizer *tok)
+{
+	if (input[i] == '|')
+		return (add_token(tok, TOKEN_PIPE, "|"), i + 1);
+	if (input[i] == '<')
+	{
+		if (input[i + 1] == '<')
+			return (add_token(tok, TOKEN_HEREDOC, "<<"), i + 2);
+		return (add_token(tok, TOKEN_REDIR_IN, "<"), i + 1);
+	}
+	if (input[i] == '>')
+	{
+		if (input[i + 1] == '>')
+			return (add_token(tok, TOKEN_REDIR_APPEND, ">>"), i + 2);
+		return (add_token(tok, TOKEN_REDIR_OUT, ">"), i + 1);
+	}
+	return (i);
+}
+
+int	is_separator(char c)
+{
+	return (ft_strchr(SEPARATORS, c) != NULL);
+}
+
+int	is_operator(char c)
+{
+	return (ft_strchr(OPERATORS, c)!= NULL);
+}
+
+int	is_quote(char c)
+{
+	return (ft_strchr(QUOTES, c) != NULL);
+}
+
 t_token	*tokenize(char *input, t_arena *memory)
 {
-	t_token	*head;
-	t_token	*tail;
-	int		i;
+	t_tokenizer	tok;
+	int			i;
 
-	head = NULL;
-	tail = NULL;
+	tok = (t_tokenizer){NULL, NULL, memory};
 	i = 0;
 	while (input[i])
 	{
-		while (input[i] == ' ' || input[i] == '\t')
+		while (input[i] && ft_strchr(" \t", input[i]))
 			i++;
 		if (!input[i])
 			break ;
-		if (input[i] == '\'' || input[i] == '"')
-			i = extract_quoted(input, i, &head, &tail, memory);
-		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			i = handle_operator(input, i, &head, &tail, memory);
+		if (is_quote(input[i]))
+			i = extract_quoted(input, i, &tok);
+		else if (is_operator(input[i]))
+			i = handle_operator(input, i, &tok);
 		else
-			i = extract_word(input, i, &head, &tail, memory);
+			i = extract_word(input, i, &tok);
 	}
-	return (head);
+	return (tok.head);
 }

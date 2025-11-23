@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
 #include "arena_allocator.h"
+#include "libft.h"
 #include "minishell.h"
+#include <stdio.h>
 
 int	handle_unset_command(t_command *cmd, t_context *ctx)
 {

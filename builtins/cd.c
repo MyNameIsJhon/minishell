@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "minishell.h"
-#include "libft.h"
 #include "fileft.h"
+#include "libft.h"
+#include "minishell.h"
+#include <unistd.h>
 
 int	handle_cd_command(t_command *command, t_context *ctx)
 {

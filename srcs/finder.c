@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "libft.h"
-#include <stdio.h>
+#include "minishell.h"
 #include <dirent.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -51,8 +51,8 @@ static int	init_prog_search(t_command *command, t_context *ctx)
 	if (!command->paths)
 		return (0);
 	command->exec_maxlen = find_max_len(command->paths) + EXEC_MAXLEN;
-	command->exec_path = arena_alloc(command->memory,
-			command->exec_maxlen * sizeof(char), 1);
+	command->exec_path = arena_alloc(command->memory, command->exec_maxlen
+			* sizeof(char), 1);
 	if (!command->exec_path)
 		return (0);
 	return (1);

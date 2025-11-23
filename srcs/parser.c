@@ -76,12 +76,15 @@ static void	init_command_struct(t_command *cmd, char **split, int len)
 	}
 }
 
-void print_token_list(t_token *tokens)
+void	print_token_list(t_token *tokens)
 {
-	t_token *current = tokens;
+	t_token	*current;
+
+	current = tokens;
 	while (current)
 	{
-		printf("Token Type: %d, Value: %s\n", current->type, current->value);
+		printf("Token Type: %d, Value: %s, Quotes type: %c\n", current->type,
+			current->value, current->quote_type);
 		current = current->next;
 	}
 }

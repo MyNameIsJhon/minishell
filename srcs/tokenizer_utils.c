@@ -10,131 +10,72 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "fileft.h"
 #include "minishell.h"
+#include <unistd.h>
 
-int	is_separator(char c)
-{
-	return (c == ' ' || c == '\t' || c == '|' || c == '<' || c == '>'
-		|| c == '\'' || c == '"');
-}
-
-static void	add_token_internal(t_token **head, t_token **tail, t_token_type type,
-		char *value, char quote_type, t_arena *memory)
+static void	add_token_internal(t_tokenizer *tok, t_token_type type,
+		char *value, char quote_type)
 {
 	t_token	*new;
 
-	new = arena_alloc(memory, sizeof(t_token), 8);
+	new = arena_alloc(tok->memory, sizeof(t_token), 8);
 	if (!new)
 		return ;
-	new->type = type;
-	new->value = value;
-	new->quote_type = quote_type;
-	new->next = NULL;
-	if (!*head)
-	{
-		*head = new;
-		*tail = new;
-	}
+	*new = (t_token){type, value, quote_type, NULL};
+	if (!tok->head)
+		tok->head = new;
 	else
-	{
-		(*tail)->next = new;
-		*tail = new;
-	}
+		tok->tail->next = new;
+	tok->tail = new;
 }
 
-void	add_token(t_token **head, t_token **tail, t_token_type type,
-		char *value, t_arena *memory)
+void	add_token(t_tokenizer *tok, t_token_type type, char *value)
 {
-	add_token_internal(head, tail, type, value, 0, memory);
+	add_token_internal(tok, type, value, 0);
 }
 
-int	extract_quoted(char *input, int i, t_token **head, t_token **tail,
-		t_arena *memory)
+int	extract_quoted(char *input, int i, t_tokenizer *tok)
 {
 	char	quote;
 	int		start;
 	int		j;
 	char	*value;
-	int		k;
 
-	quote = input[i];
-	start = i + 1;
-	j = start;
-	while (input[j] && input[j] != quote)
-		j++;
-	if (input[j] != quote)
+	quote = input[i++];
+	start = i;
+	while (input[i] && input[i] != quote)
+		i++;
+	if (input[i] != quote)
 	{
-		write(2, "Error: unclosed quote\n", 22);
-		return (j);
+		ft_putstr_fd("Error: unclosed quote\n", 2);
+		return (i);
 	}
-	value = arena_alloc(memory, j - start + 1, 1);
+	j = i - start;
+	value = arena_alloc(tok->memory, j + 1, 1);
 	if (!value)
-		return (j + 1);
-	k = 0;
-	while (k < j - start)
-	{
-		value[k] = input[start + k];
-		k++;
-	}
-	value[k] = '\0';
-	add_token_internal(head, tail, TOKEN_WORD, value, quote, memory);
-	return (j + 1);
+		return (i + 1);
+	ft_memcpy(value, &input[start], j);
+	value[j] = '\0';
+	add_token_internal(tok, TOKEN_WORD, value, quote);
+	return (i + 1);
 }
 
-int	extract_word(char *input, int i, t_token **head, t_token **tail,
-		t_arena *memory)
+int	extract_word(char *input, int i, t_tokenizer *tok)
 {
 	int		start;
 	int		len;
 	char	*value;
-	int		j;
 
 	start = i;
 	while (input[i] && !is_separator(input[i]))
 		i++;
 	len = i - start;
-	value = arena_alloc(memory, len + 1, 1);
+	value = arena_alloc(tok->memory, len + 1, 1);
 	if (!value)
 		return (i);
-	j = 0;
-	while (j < len)
-	{
-		value[j] = input[start + j];
-		j++;
-	}
-	value[j] = '\0';
-	add_token(head, tail, TOKEN_WORD, value, memory);
-	return (i);
-}
-
-int	handle_operator(char *input, int i, t_token **head, t_token **tail,
-		t_arena *memory)
-{
-	if (input[i] == '|')
-	{
-		add_token(head, tail, TOKEN_PIPE, "|", memory);
-		return (i + 1);
-	}
-	else if (input[i] == '<' && input[i + 1] == '<')
-	{
-		add_token(head, tail, TOKEN_HEREDOC, "<<", memory);
-		return (i + 2);
-	}
-	else if (input[i] == '>' && input[i + 1] == '>')
-	{
-		add_token(head, tail, TOKEN_REDIR_APPEND, ">>", memory);
-		return (i + 2);
-	}
-	else if (input[i] == '<')
-	{
-		add_token(head, tail, TOKEN_REDIR_IN, "<", memory);
-		return (i + 1);
-	}
-	else if (input[i] == '>')
-	{
-		add_token(head, tail, TOKEN_REDIR_OUT, ">", memory);
-		return (i + 1);
-	}
+	ft_memcpy(value, &input[start], len);
+	value[len] = '\0';
+	add_token(tok, TOKEN_WORD, value);
 	return (i);
 }

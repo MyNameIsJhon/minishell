@@ -15,16 +15,16 @@
 #include "minishell.h"
 #include <stdio.h>
 
-void print_export_env(t_context *ctx)
+void	print_export_env(t_context *ctx)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = ctx->env;
 	while (env)
 	{
 		if (env->value)
 			printf("declare -x %s=\"%s\"\n", env->name, env->value);
-		else 
+		else
 			printf("declare -x %s=\"\"\n", env->name);
 		env = env->next;
 	}

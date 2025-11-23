@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
 #include "arena_allocator.h"
+#include "libft.h"
+#include "minishell.h"
 #include <stdio.h>
 
 t_env	*new_env(char *name, char *value, t_arena *memory)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = arena_alloc(memory, sizeof(t_env), sizeof(t_env));
 	if (!env)
@@ -30,7 +30,7 @@ t_env	*new_env(char *name, char *value, t_arena *memory)
 
 void	env_add_back(t_env *env, t_env **envs)
 {
-	t_env *curs;
+	t_env	*curs;
 
 	curs = *envs;
 	while (curs->next)
@@ -38,7 +38,7 @@ void	env_add_back(t_env *env, t_env **envs)
 	curs->next = env;
 }
 
-t_env *find_env(char *name, t_env *envs)
+t_env	*find_env(char *name, t_env *envs)
 {
 	if (!name)
 		return (NULL);
@@ -53,7 +53,7 @@ t_env *find_env(char *name, t_env *envs)
 
 void	env_delete(char *name, t_env **envs)
 {
-	t_env *curs;
+	t_env	*curs;
 
 	curs = *envs;
 	if (!ft_strcmp(name, curs->name))
@@ -72,11 +72,11 @@ void	env_delete(char *name, t_env **envs)
 	}
 }
 
-t_env *env_init(char **envp, t_arena *memory)
+t_env	*env_init(char **envp, t_arena *memory)
 {
 	t_env	*env;
-	char 	**curs;
-	int 	i;
+	char	**curs;
+	int		i;
 
 	curs = ar_split(envp[0], '=', memory);
 	env = new_env(curs[0], curs[1], memory);
@@ -92,7 +92,7 @@ t_env *env_init(char **envp, t_arena *memory)
 
 int	env_len(t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env)
@@ -103,13 +103,13 @@ int	env_len(t_env *env)
 	return (i);
 }
 
-char **convert_env(t_env *env, t_arena *memory)
+char	**convert_env(t_env *env, t_arena *memory)
 {
-	int len;
-	int	i;
-	int y;
-	char **envc;
-	int entry_len;
+	int		len;
+	int		i;
+	int		y;
+	char	**envc;
+	int		entry_len;
 
 	if (!env || !memory)
 		return (NULL);
@@ -135,9 +135,10 @@ char **convert_env(t_env *env, t_arena *memory)
 	return (envc);
 }
 
-void print_env(t_env *envs)
+void	print_env(t_env *envs)
 {
-	t_env *curs;
+	t_env	*curs;
+
 	curs = envs;
 	while (curs)
 	{

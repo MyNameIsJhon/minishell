@@ -16,7 +16,6 @@
 #include <readline/readline.h>
 #include <stdlib.h>
 
-
 int	handle_exit_command(t_command *command, t_context *ctx)
 {
 	if (!ft_strcmp(command->program, "exit"))

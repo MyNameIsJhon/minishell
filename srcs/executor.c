@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <dirent.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 static void	child_process(t_command *cmd, char **envp, int *fd)
 {
@@ -36,13 +36,15 @@ static void	read_output(int fd_read)
 	char	buffer[1024];
 	ssize_t	n;
 
-	while ((n = read(fd_read, buffer, sizeof(buffer))) > 0)
+	n = read(fd_read, buffer, sizeof(buffer));
+	while (n > 0)
 	{
 		if (write(STDOUT_FILENO, buffer, n) == (-1))
 		{
 			close(fd_read);
 			break ;
 		}
+		n = read(fd_read, buffer, sizeof(buffer));
 	}
 }
 
@@ -70,17 +72,17 @@ int	run_cmd(t_command *command, char **envp)
 	return (0);
 }
 
-void	command_print(t_command *command)
-{
-	int	i;
-
-	if (!command)
-		return ;
-	printf("Program: %s\n", command->program);
-	printf("Arguments:\n");
-	for (i = 0; command->args[i]; i++)
-		printf("  %s\n", command->args[i]);
-	printf("Splitted Command:\n");
-	for (i = 0; command->com_splited[i]; i++)
-		printf("  %s\n", command->com_splited[i]);
-}
+/* void	command_print(t_command *command) */
+/* { */
+/* 	int	i; */
+/**/
+/* 	if (!command) */
+/* 		return ; */
+/* 	printf("Program: %s\n", command->program); */
+/* 	printf("Arguments:\n"); */
+/* 	for (i = 0; command->args[i]; i++) */
+/* 		printf("  %s\n", command->args[i]); */
+/* 	printf("Splitted Command:\n"); */
+/* 	for (i = 0; command->com_splited[i]; i++) */
+/* 		printf("  %s\n", command->com_splited[i]); */
+/* } */

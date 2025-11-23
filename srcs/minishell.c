@@ -31,7 +31,8 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 	char	*line;
 	size_t	tot;
 
-	tot = LEN_PROMPT + ft_strlen(pwd) + ft_strlen(ctx->user) + ft_strlen(ctx->domain);
+	tot = LEN_PROMPT + ft_strlen(pwd) + ft_strlen(ctx->user)
+		+ ft_strlen(ctx->domain);
 	prompt = arena_alloc(ctx->line_memory, tot + 1, 1);
 	if (!prompt)
 		return (NULL);
@@ -54,7 +55,7 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 /* 	t_context *context; */
 /**/
 /* 	content = malloc(sizeof(t_context)); */
-/* 	 */
+/* 		*/
 /* } */
 
 static char	*get_user_input(t_context *ctx)
@@ -84,9 +85,10 @@ static void	print_cmd_not_found(t_command *command)
 	ft_putstr_fd("\n", 2);
 }
 
-static int	execute_user_command(t_command *command, char **envp, t_context *ctx)
+static int	execute_user_command(t_command *command, char **envp,
+		t_context *ctx)
 {
-	char **env;
+	char	**env;
 
 	(void)envp;
 	if (!ft_strcmp(command->program, "cd"))
