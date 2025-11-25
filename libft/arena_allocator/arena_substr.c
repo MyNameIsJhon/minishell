@@ -28,7 +28,7 @@ char	*ar_substr(const char *s, unsigned int start, size_t len,
 		return (ar_strdup("", memory));
 	if (s_len - start < len)
 		len = s_len - start;
-	sub = malloc(len + 1);
+	sub = arena_alloc(memory, len + 1, sizeof(char));
 	if (!sub)
 		return (NULL);
 	i = 0;
