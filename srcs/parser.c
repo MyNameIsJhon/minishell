@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 13:26:33 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/24 00:25:49 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/25 03:59:09 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 {
 	t_command	*command;
 	t_token		*tokens;
+	t_tokenizer	tokenizer;
 	int			l_com;
 
 	if (!ctx || !ctx->line_memory)
@@ -102,6 +103,9 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 		return (NULL);
 	command->memory = ctx->line_memory;
 	tokens = tokenize(user_input, command->memory);
+	tokenizer.head = tokens;
+	tokenizer.memory = command->memory;
+	expand_tokens(&tokenizer, ctx);
 	command->tokens = tokens;
 	command->com_splited = tokens_to_array(tokens, command->memory);
 	if (!command->com_splited)

@@ -50,40 +50,66 @@ typedef struct s_header
 	size_t	size;
 }			t_header;
 
-int		ft_atoi(const char *str);
-void	ft_bzero(void *s, size_t n);
-void	*ft_calloc(size_t count, size_t size);
+/* Character checks */
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
-char	ft_ischarset(char c, const char *charset);
 int		ft_isprint(int c);
+int		ft_islower(int c);
+int		ft_isupper(int c);
+char	ft_ischarset(char c, const char *charset);
+char	ft_strisdigit(char *str);
+
+/* Conversions */
+int		ft_atoi(const char *str);
+long	ft_atol(const char *str);
 char	*ft_itoa(int n);
+int		ft_tolower(int c);
+int		ft_toupper(int c);
+
+/* Memory functions */
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t count, size_t size);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	*ft_memset(void *b, int c, size_t len);
-void	ft_revstr(char *tab);
-char	**ft_split(const char *s, char c);
+void	*ft_malloc(size_t size);
+void	ft_free(void *ptr);
+size_t	ft_sizeof(void *ptr);
+void	*ft_realloc(void *ptr, size_t size);
+
+/* String functions */
 char	*ft_strchr(const char *s, int c);
+char	*ft_strrchr(const char *s, int c);
+int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strncmp(char *s1, char *s2, unsigned int n);
+char	*ft_strcpy(char *dst, const char *src);
 char	*ft_strdup(char *str);
-void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 char	*ft_strjoin(const char *s1, const char *s2);
 size_t	ft_strlcat(char *dest, const char *src, unsigned int n);
 size_t	ft_strlcpy(char *dest, char *src, unsigned int size);
 size_t	ft_strlen(const char *str);
-char	*ft_strmapi(const char *s, char (*f)(unsigned int, char));
-int		ft_strncmp(char *s1, char *s2, unsigned int n);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
-char	*ft_strrchr(const char *s, int c);
 char	*ft_strtrim(const char *s1, const char *set);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
-int		ft_tolower(int c);
-int		ft_toupper(int c);
-int		ft_islower(int c);
-int		ft_isupper(int c);
+void	ft_striteri(char *s, void (*f)(unsigned int, char *));
+char	*ft_strmapi(const char *s, char (*f)(unsigned int, char));
+void	ft_revstr(char *tab);
+int		ft_strcount_char(const char *str, char c);
+char	**ft_split(const char *s, char c);
+char	**ft_split_charset(char *str, char *charset);
+
+/* String arrays */
+void	ft_strsfree(char **strs);
+int		ft_strslen(char **strs);
+void	freestrs(char **strs, size_t count);
+int		find_max_len(char **strs);
+int		count_params(char *params);
+
+/* Linked lists */
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstnew_i(int i);
 t_list	*ft_lstnew_chr(char chr);
@@ -95,43 +121,37 @@ void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstadd_front(t_list **lst, t_list *new);
-void	ft_putnbr(int nb);
+
+/* Output functions */
 void	ft_putchar(char c);
-void	ft_putnbr_hex(unsigned int n, char format);
-void	ft_putnbr_unsigned(unsigned int n);
-char	**ft_split_charset(char *str, char *charset);
-void	freestrs(char **strs, size_t count);
 void	ft_putstr(const char *str);
+void	ft_puterror(const char *str);
+void	ft_putnbr(int nb);
+void	ft_putnbr_unsigned(unsigned int n);
+void	ft_putnbr_hex(unsigned int n, char format);
 void	ft_putnbr_hex_ulong(unsigned long long n, char format);
 int		ft_printf(const char *str, ...);
-char	ft_strisdigit(char *str);
-void	ft_putnbr_hex_ulong(unsigned long long n, char format);
+
+/* Number utilities */
 int		ft_nbrlen(int nb);
+int		ft_nbrlen_u(unsigned int nb);
 int		ft_hexlen(unsigned int n);
 int		ft_hexlen_l(unsigned long n);
-int		ft_nbrlen_u(unsigned int nb);
-void	*ft_malloc(size_t size);
-void	ft_free(void *ptr);
-size_t	ft_sizeof(void *ptr);
-void	*ft_realloc(void *ptr, size_t size);
-int		ft_strcount_char(const char *str, char c);
+
+/* Math functions */
 int		ft_abs(int nb);
 int		ft_sgn(int n);
 int		ft_max(int a, int b);
 float	ft_abs_f(float nb);
 float	ft_sgn_f(float n);
-void	ft_swap_p(void **a, void **b);
-void	ft_swap(int *a, int *b);
-void	ft_puterror(const char *str);
-void	ft_strsfree(char **strs);
-int		ft_strslen(char **strs);
-int		count_params(char *params);
-long	ft_atol(const char *str);
 t_bool	ft_inrange(long nb, long min, long max);
+
+/* Swap functions */
+void	ft_swap(int *a, int *b);
+void	ft_swap_p(void **a, void **b);
+
+/* Algorithms */
 int		binary_search(int *tab, int size, int nb);
 void	quick_sort(int *tab, int low, int high);
-int		ft_strcmp(const char *s1, const char *s2);
-int		find_max_len(char **strs);
-char	*ft_strcpy(char *dst, const char *src);
 
 #endif

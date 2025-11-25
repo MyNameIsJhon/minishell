@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/23 03:02:25 by jriga            ###   ########.fr       */
+/*   Updated: 2025/11/25 04:01:28 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 #define SEPARATORS " \t|<>\"'"
 #define OPERATORS "|<>"
 #define QUOTES "\'\""
-
 
 typedef enum e_token_type
 {
@@ -109,7 +108,7 @@ int					handle_export_command(t_command *cmd, t_context *ctx);
 char				**convert_env(t_env *env, t_arena *memory);
 int					handle_cd_command(t_command *command, t_context *ctx);
 
-void				expand_tokens(t_token *tokens, t_context *ctx);
+void	expand_tokens(t_tokenizer *tokenizer, t_context *ctx);
 char				*expand_variables(char *str, t_context *ctx);
 
 #endif
