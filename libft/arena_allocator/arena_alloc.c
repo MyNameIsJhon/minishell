@@ -15,8 +15,14 @@
 static int	add_new_block(t_arena *a, size_t needed_size)
 {
 	t_arena_block	*new_block;
+	t_arena_block	*last;
 	size_t			block_size;
 
+	if (a->current->next && a->current->next->size >= needed_size)
+	{
+		a->current = a->current->next;
+		return (1);
+	}
 	if (needed_size > a->default_block_size)
 		block_size = needed_size;
 	else
@@ -24,7 +30,10 @@ static int	add_new_block(t_arena *a, size_t needed_size)
 	new_block = create_block(block_size);
 	if (!new_block)
 		return (0);
-	a->current->next = new_block;
+	last = a->current;
+	while (last->next)
+		last = last->next;
+	last->next = new_block;
 	a->current = new_block;
 	return (1);
 }

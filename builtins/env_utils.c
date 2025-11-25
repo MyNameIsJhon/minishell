@@ -78,7 +78,7 @@ t_env	*env_init(char **envp, t_arena *memory)
 
 	curs = ar_split(envp[0], '=', memory);
 	env = new_env(curs[0], curs[1], memory);
-	i = 0;
+	i = 1;
 	while (envp[i])
 	{
 		curs = ar_split(envp[i], '=', memory);
