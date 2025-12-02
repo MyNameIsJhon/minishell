@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 21:20:27 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/03 00:03:20 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ void redir_add_back(t_redir **head, t_redir *new);
 t_redir *extract_redirections(t_token **tokens, t_arena *memory);
 int apply_redirections(t_redir *redirs);
 int apply_redirections_with_backup(t_redir *redirs, int *saved_stdin,
-		int *saved_stdout);
+                                   int *saved_stdout);
 void restore_fds(int saved_stdin, int saved_stdout);
+int execute_builtin(t_command *command, t_context *ctx);
 
 #endif

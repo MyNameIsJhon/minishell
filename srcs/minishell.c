@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 22:32:54 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/03 00:01:53 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 		return (NULL);
 	prompt[0] = '\0';
 	ft_strlcat(prompt, ctx->user, tot + 1);
-	ft_strlcat(prompt, "㉿", tot + 1);      // Symbole Kali
+	ft_strlcat(prompt, "㉿", tot + 1);
 	ft_strlcat(prompt, ctx->domain, tot + 1);
-	ft_strlcat(prompt, ":[", tot + 1);      // Séparateur propre
+	ft_strlcat(prompt, ":[", tot + 1);
 	ft_strlcat(prompt, pwd, tot + 1);
-	ft_strlcat(prompt, "] $ ", tot + 1);    // Fin du prompt
+	ft_strlcat(prompt, "] $ ", tot + 1);
 	line = readline(prompt);
 	if (line && *line)
 		add_history(line);
@@ -84,32 +84,6 @@ static void	print_cmd_not_found(t_command *command)
 	ft_putstr_fd("minishell: command not found: ", 2);
 	ft_putstr_fd(command->program, 2);
 	ft_putstr_fd("\n", 2);
-}
-
-static int	execute_builtin(t_command *command, t_context *ctx)
-{
-	int	saved_stdin;
-	int	saved_stdout;
-
-	if (command->redirections)
-	{
-		if (apply_redirections_with_backup(command->redirections, &saved_stdin,
-				&saved_stdout) < 0)
-			return (0);
-	}
-	if (!ft_strcmp(command->program, "cd"))
-		handle_cd_command(command, ctx);
-	else if (!ft_strcmp(command->program, "exit"))
-		handle_exit_command(command, ctx);
-	else if (!ft_strcmp(command->program, "env"))
-		print_env(ctx->env);
-	else if (!ft_strcmp(command->program, "unset"))
-		handle_unset_command(command, ctx);
-	else if (!ft_strcmp(command->program, "export"))
-		handle_export_command(command, ctx);
-	if (command->redirections)
-		restore_fds(saved_stdin, saved_stdout);
-	return (1);
 }
 
 static int	execute_user_command(t_command *command, char **envp,
