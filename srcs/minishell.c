@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/23 03:02:46 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 21:20:45 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	init_signals();
 	ctx = context_init();
 	ctx->env = env_init(envp, ctx->global_memory);
 	if (!ctx)
