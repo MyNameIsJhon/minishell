@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 21:34:26 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 21:35:14 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 	ft_strlcat(prompt, ctx->user, tot + 1);
 	ft_strlcat(prompt, "㉿", tot + 1);      // Symbole Kali
 	ft_strlcat(prompt, ctx->domain, tot + 1);
-	ft_strlcat(prompt, " [", tot + 1);      // Séparateur propre
+	ft_strlcat(prompt, ":[", tot + 1);      // Séparateur propre
 	ft_strlcat(prompt, pwd, tot + 1);
 	ft_strlcat(prompt, "] $ ", tot + 1);    // Fin du prompt
 	line = readline(prompt);
