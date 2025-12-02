@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/02 00:00:00 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 00:00:00 by jriga            ###   ########.fr       */
+/*   Created: 2025/12/01 20:40:53 by jriga             #+#    #+#             */
+/*   Updated: 2025/12/02 22:47:03 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "fileft.h"
 
 static int	handle_input_redir(char *file)
 {
