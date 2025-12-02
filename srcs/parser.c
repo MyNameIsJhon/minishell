@@ -107,6 +107,7 @@ t_command	*mini_parser(char *user_input, t_context *ctx)
 	tokenizer.memory = command->memory;
 	expand_tokens(&tokenizer, ctx);
 	command->tokens = tokens;
+	command->redirections = extract_redirections(&tokens, command->memory);
 	command->com_splited = tokens_to_array(tokens, command->memory);
 	if (!command->com_splited)
 		return (NULL);

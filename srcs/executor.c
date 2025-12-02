@@ -27,6 +27,8 @@ static void	child_process(t_command *cmd, char **envp, int *fd)
 		exit(1);
 	}
 	close(fd[1]);
+	if (apply_redirections(cmd->redirections) < 0)
+		exit(1);
 	execve(cmd->exec_path, cmd->com_splited, envp);
 	exit(1);
 }
