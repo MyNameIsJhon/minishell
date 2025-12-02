@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 22:27:32 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 22:32:54 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,15 @@ static char	*get_user_input(t_context *ctx)
 	if (!path || !getcwd(path, 1024))
 	{
 		clear_history();
+		context_free(&ctx);
 		exit(1);
 	}
 	input = mini_prompt(path, ctx);
 	if (!input)
 	{
 		clear_history();
+		ft_putstr("exit\n");
+		context_free(&ctx);
 		exit(0);
 	}
 	return (input);
@@ -129,11 +132,6 @@ int	main(int ac, char **av, char **envp)
 	{
 		context_reset_line(ctx);
 		line = get_user_input(ctx);
-		if (!line)
-		{
-			ft_putstr("exit\n");
-			break;
-		}
 		command = mini_parser(line, ctx);
 		free(line);
 		if (!command || !command->program)
