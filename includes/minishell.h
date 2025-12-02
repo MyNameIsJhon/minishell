@@ -116,5 +116,8 @@ t_redir *new_redir(t_token_type type, char *file, t_arena *memory);
 void redir_add_back(t_redir **head, t_redir *new);
 t_redir *extract_redirections(t_token **tokens, t_arena *memory);
 int apply_redirections(t_redir *redirs);
+int apply_redirections_with_backup(t_redir *redirs, int *saved_stdin,
+		int *saved_stdout);
+void restore_fds(int saved_stdin, int saved_stdout);
 
 #endif

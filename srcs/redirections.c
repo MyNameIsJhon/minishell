@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 20:40:53 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 22:47:03 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 22:49:24 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,38 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <readline/readline.h>
+#include <stdlib.h>
 #include "fileft.h"
+
+static int	handle_heredoc(char *delimiter)
+{
+	int		pipefd[2];
+	char	*line;
+
+	if (pipe(pipefd) < 0)
+		return (-1);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(pipefd[1], line, ft_strlen(line));
+		write(pipefd[1], "\n", 1);
+		free(line);
+	}
+	close(pipefd[1]);
+	if (dup2(pipefd[0], STDIN_FILENO) < 0)
+	{
+		close(pipefd[0]);
+		return (-1);
+	}
+	close(pipefd[0]);
+	return (0);
+}
 
 static int	handle_input_redir(char *file)
 {
@@ -98,6 +129,11 @@ int	apply_redirections(t_redir *redirs)
 			if (handle_append_redir(redirs->file) < 0)
 				return (-1);
 		}
+		else if (redirs->type == TOKEN_HEREDOC)
+		{
+			if (handle_heredoc(redirs->file) < 0)
+				return (-1);
+		}
 		redirs = redirs->next;
 	}
 	return (0);
@@ -163,4 +199,40 @@ t_redir	*extract_redirections(t_token **tokens, t_arena *memory)
 		current = current->next;
 	}
 	return (redirs);
+}
+
+int	apply_redirections_with_backup(t_redir *redirs, int *saved_stdin,
+		int *saved_stdout)
+{
+	*saved_stdin = dup(STDIN_FILENO);
+	*saved_stdout = dup(STDOUT_FILENO);
+	if (*saved_stdin < 0 || *saved_stdout < 0)
+	{
+		if (*saved_stdin >= 0)
+			close(*saved_stdin);
+		if (*saved_stdout >= 0)
+			close(*saved_stdout);
+		return (-1);
+	}
+	if (apply_redirections(redirs) < 0)
+	{
+		close(*saved_stdin);
+		close(*saved_stdout);
+		return (-1);
+	}
+	return (0);
+}
+
+void	restore_fds(int saved_stdin, int saved_stdout)
+{
+	if (saved_stdin >= 0)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
+	if (saved_stdout >= 0)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
 }

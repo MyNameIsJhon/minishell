@@ -86,12 +86,17 @@ static void	print_cmd_not_found(t_command *command)
 	ft_putstr_fd("\n", 2);
 }
 
-static int	execute_user_command(t_command *command, char **envp,
-		t_context *ctx)
+static int	execute_builtin(t_command *command, t_context *ctx)
 {
-	char	**env;
+	int	saved_stdin;
+	int	saved_stdout;
 
-	(void)envp;
+	if (command->redirections)
+	{
+		if (apply_redirections_with_backup(command->redirections, &saved_stdin,
+				&saved_stdout) < 0)
+			return (0);
+	}
 	if (!ft_strcmp(command->program, "cd"))
 		handle_cd_command(command, ctx);
 	else if (!ft_strcmp(command->program, "exit"))
@@ -102,6 +107,23 @@ static int	execute_user_command(t_command *command, char **envp,
 		handle_unset_command(command, ctx);
 	else if (!ft_strcmp(command->program, "export"))
 		handle_export_command(command, ctx);
+	if (command->redirections)
+		restore_fds(saved_stdin, saved_stdout);
+	return (1);
+}
+
+static int	execute_user_command(t_command *command, char **envp,
+		t_context *ctx)
+{
+	char	**env;
+
+	(void)envp;
+	if (!ft_strcmp(command->program, "cd")
+		|| !ft_strcmp(command->program, "exit")
+		|| !ft_strcmp(command->program, "env")
+		|| !ft_strcmp(command->program, "unset")
+		|| !ft_strcmp(command->program, "export"))
+		return (execute_builtin(command, ctx));
 	else if (!find_prog(command, ctx))
 	{
 		print_cmd_not_found(command);
