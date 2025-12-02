@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 21:20:45 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 21:34:26 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,17 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 	char	*line;
 	size_t	tot;
 
-	tot = LEN_PROMPT + ft_strlen(pwd) + ft_strlen(ctx->user)
-		+ ft_strlen(ctx->domain);
+	tot = ft_strlen(ctx->user) + ft_strlen(ctx->domain) + ft_strlen(pwd) + 20;
 	prompt = arena_alloc(ctx->line_memory, tot + 1, 1);
 	if (!prompt)
 		return (NULL);
 	prompt[0] = '\0';
-	ft_strlcat(prompt, "┌──(", tot + 1);
 	ft_strlcat(prompt, ctx->user, tot + 1);
-	ft_strlcat(prompt, "㉿", tot + 1);
+	ft_strlcat(prompt, "㉿", tot + 1);      // Symbole Kali
 	ft_strlcat(prompt, ctx->domain, tot + 1);
-	ft_strlcat(prompt, ")-[", tot + 1);
+	ft_strlcat(prompt, " [", tot + 1);      // Séparateur propre
 	ft_strlcat(prompt, pwd, tot + 1);
-	ft_strlcat(prompt, "]\n└─$ ", tot + 1);
+	ft_strlcat(prompt, "] $ ", tot + 1);    // Fin du prompt
 	line = readline(prompt);
 	if (line && *line)
 		add_history(line);
