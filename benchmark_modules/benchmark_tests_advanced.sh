@@ -25,7 +25,7 @@ TESTSCRIPT
     echo -e "line 1\nline 2\nline 3" > "$TMP_DIR/expected_heredoc1.txt"
 
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/ms_heredoc1.txt" | grep -v "^\$" > "$TMP_DIR/ms_clean.txt"
+    clean_minishell_output "$TMP_DIR/ms_heredoc1.txt" "$TMP_DIR/ms_clean.txt"
     if diff -q "$TMP_DIR/ms_clean.txt" "$TMP_DIR/expected_heredoc1.txt" > /dev/null 2>&1; then
         print_pass "Basic heredoc"
         echo "  ✓ basic heredoc" >> "$REPORT_FILE"
@@ -51,7 +51,7 @@ TESTSCRIPT
     timeout 10 bash -c "cat '$TMP_DIR/heredoc_test2.txt' | bash --norc --noprofile > $TMP_DIR/bash_heredoc2.txt 2>&1"
 
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/ms_heredoc2.txt" | grep -v "^\$" > "$TMP_DIR/ms_clean2.txt"
+    clean_minishell_output "$TMP_DIR/ms_heredoc2.txt" "$TMP_DIR/ms_clean2.txt"
     if diff -q "$TMP_DIR/ms_clean2.txt" "$TMP_DIR/bash_heredoc2.txt" > /dev/null 2>&1; then
         print_pass "Heredoc with variable expansion"
         echo "  ✓ heredoc with variables" >> "$REPORT_FILE"
@@ -77,7 +77,7 @@ TESTSCRIPT
     timeout 10 bash -c "cat '$TMP_DIR/heredoc_test3.txt' | $MINISHELL > $TMP_DIR/ms_heredoc3.txt 2>&1"
 
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/ms_heredoc3.txt" | grep -v "^\$" > "$TMP_DIR/ms_clean3.txt"
+    clean_minishell_output "$TMP_DIR/ms_heredoc3.txt" "$TMP_DIR/ms_clean3.txt"
     if grep -q '\$HOME should not expand' "$TMP_DIR/ms_clean3.txt"; then
         print_pass "Heredoc with quoted delimiter (no expansion)"
         echo "  ✓ heredoc quoted delimiter" >> "$REPORT_FILE"
@@ -104,7 +104,7 @@ TESTSCRIPT
     timeout 10 bash -c "cat '$TMP_DIR/heredoc_test4.txt' | $MINISHELL > $TMP_DIR/ms_heredoc4.txt 2>&1"
 
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/ms_heredoc4.txt" | grep -v "^\$" > "$TMP_DIR/ms_clean4.txt"
+    clean_minishell_output "$TMP_DIR/ms_heredoc4.txt" "$TMP_DIR/ms_clean4.txt"
     if grep -q "first heredoc" "$TMP_DIR/ms_clean4.txt" && grep -q "second heredoc" "$TMP_DIR/ms_clean4.txt"; then
         print_pass "Multiple heredocs in sequence"
         echo "  ✓ multiple heredocs" >> "$REPORT_FILE"
@@ -130,7 +130,7 @@ TESTSCRIPT
     timeout 10 bash -c "cat '$TMP_DIR/heredoc_test5.txt' | $MINISHELL > $TMP_DIR/ms_heredoc5.txt 2>&1"
 
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/ms_heredoc5.txt" | grep -v "^\$" > "$TMP_DIR/ms_clean5.txt"
+    clean_minishell_output "$TMP_DIR/ms_heredoc5.txt" "$TMP_DIR/ms_clean5.txt"
     if grep -q "special chars" "$TMP_DIR/ms_clean5.txt"; then
         print_pass "Heredoc with special characters"
         echo "  ✓ heredoc special chars" >> "$REPORT_FILE"
@@ -157,7 +157,8 @@ test_exit_codes_ultra_strict() {
     echo -e "echo test\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep -v "^test" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep -v "^test" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if grep -q "^0$" "$TMP_DIR/clean.txt"; then
         print_pass "Exit code 0 after successful echo"
         echo "  ✓ exit code 0" >> "$REPORT_FILE"
@@ -174,7 +175,8 @@ test_exit_codes_ultra_strict() {
     echo -e "/bin/false\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | tail -1 > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    tail -1 "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if grep -q "^1$" "$TMP_DIR/clean.txt"; then
         print_pass "Exit code 1 after /bin/false"
         echo "  ✓ exit code 1" >> "$REPORT_FILE"
@@ -191,7 +193,8 @@ test_exit_codes_ultra_strict() {
     echo -e "nonexistentcommand123456789\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep "^127$" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep "^127$" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if [ -s "$TMP_DIR/clean.txt" ]; then
         print_pass "Exit code 127 for command not found"
         echo "  ✓ exit code 127" >> "$REPORT_FILE"
@@ -208,7 +211,8 @@ test_exit_codes_ultra_strict() {
     echo -e "cd /tmp\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep "^0$" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep "^0$" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if [ -s "$TMP_DIR/clean.txt" ]; then
         print_pass "Exit code 0 for successful cd"
         echo "  ✓ cd exit code 0" >> "$REPORT_FILE"
@@ -225,7 +229,8 @@ test_exit_codes_ultra_strict() {
     echo -e "cd /nonexistent_dir_12345\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep -E "^[1-9][0-9]*$" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep -E "^[1-9][0-9]*$" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if [ -s "$TMP_DIR/clean.txt" ]; then
         print_pass "Exit code non-zero for failed cd"
         echo "  ✓ cd exit code non-zero" >> "$REPORT_FILE"
@@ -260,7 +265,8 @@ test_exit_codes_ultra_strict() {
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | bash --norc --noprofile > $TMP_DIR/bash_result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | tail -1 > "$TMP_DIR/ms_exit.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    tail -1 "$TMP_DIR/result_clean.txt" > "$TMP_DIR/ms_exit.txt"
     tail -1 "$TMP_DIR/bash_result.txt" > "$TMP_DIR/bash_exit.txt"
     if diff -q "$TMP_DIR/ms_exit.txt" "$TMP_DIR/bash_exit.txt" > /dev/null 2>&1; then
         print_pass "Exit code propagation through pipe"
@@ -278,7 +284,8 @@ test_exit_codes_ultra_strict() {
     echo -e "export TEST_VAR=value\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep "^0$" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep "^0$" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if [ -s "$TMP_DIR/clean.txt" ]; then
         print_pass "Exit code 0 for export"
         echo "  ✓ export exit code" >> "$REPORT_FILE"
@@ -295,7 +302,8 @@ test_exit_codes_ultra_strict() {
     echo -e "unset PATH\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep "^0$" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep "^0$" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if [ -s "$TMP_DIR/clean.txt" ]; then
         print_pass "Exit code 0 for unset"
         echo "  ✓ unset exit code" >> "$REPORT_FILE"
@@ -312,7 +320,8 @@ test_exit_codes_ultra_strict() {
     echo -e "env\necho \$?\nexit" > "$TMP_DIR/test.txt"
     timeout 10 bash -c "cat '$TMP_DIR/test.txt' | $MINISHELL > $TMP_DIR/result.txt 2>&1"
     ((TESTS_TOTAL++))
-    grep -v "^minishell" "$TMP_DIR/result.txt" | grep -v "^\$" | grep "^0$" > "$TMP_DIR/clean.txt"
+    clean_minishell_output "$TMP_DIR/result.txt" "$TMP_DIR/result_clean.txt"
+    grep "^0$" "$TMP_DIR/result_clean.txt" > "$TMP_DIR/clean.txt"
     if [ -s "$TMP_DIR/clean.txt" ]; then
         print_pass "Exit code 0 for env"
         echo "  ✓ env exit code" >> "$REPORT_FILE"

@@ -39,6 +39,30 @@ cleanup() {
 #                            MEASUREMENT FUNCTIONS                             #
 # ============================================================================ #
 
+clean_minishell_output() {
+    local input_file=$1
+    local output_file=$2
+
+    # Nettoyer la sortie du minishell en supprimant les lignes de prompt
+    # Le prompt minishell a le format: "user㉿domain:[path] $ "
+    # On supprime aussi les lignes vides et les artefacts du prompt
+    sed -E \
+        -e '/.*\] \$ $/d' \
+        -e '/.*㉿.*\] \$ $/d' \
+        -e '/^>$/d' \
+        -e '/^\$$/d' \
+        -e '/^[[:space:]]*$/d' \
+        "$input_file" > "$output_file" 2>/dev/null || touch "$output_file"
+}
+
+clean_bash_output() {
+    local input_file=$1
+    local output_file=$2
+
+    # Supprimer les lignes vides dans la sortie bash pour une comparaison équitable
+    sed -E '/^[[:space:]]*$/d' "$input_file" > "$output_file" 2>/dev/null || touch "$output_file"
+}
+
 measure_time_ms() {
     local shell=$1
     local input_file=$2
@@ -75,7 +99,9 @@ run_and_compare() {
     echo "$cmd" | bash --norc --noprofile > "$TMP_DIR/bash_out.txt" 2>&1
     local bash_exit=$?
 
-    grep -v "^minishell" "$TMP_DIR/minishell_out.txt" | grep -v "^\$" | grep -v "^>" > "$TMP_DIR/minishell_clean.txt" 2>/dev/null || touch "$TMP_DIR/minishell_clean.txt"
+    # Nettoyer les sorties avec les fonctions helper
+    clean_minishell_output "$TMP_DIR/minishell_out.txt" "$TMP_DIR/minishell_clean.txt"
+    clean_bash_output "$TMP_DIR/bash_out.txt" "$TMP_DIR/bash_clean.txt"
 
     if [ $ms_exit -eq 124 ]; then
         print_fail "$test_name - ${RED}${BOLD}TIMEOUT${RESET}"
@@ -93,7 +119,7 @@ run_and_compare() {
     fi
 
     # ULTRA-STRICT MODE: Any difference from bash is a FAILURE
-    if diff -q "$TMP_DIR/minishell_clean.txt" "$TMP_DIR/bash_out.txt" > /dev/null 2>&1; then
+    if diff -q "$TMP_DIR/minishell_clean.txt" "$TMP_DIR/bash_clean.txt" > /dev/null 2>&1; then
         print_pass "$test_name"
         echo "  ✓ $test_name" >> "$REPORT_FILE"
         ((TESTS_PASSED++))
@@ -104,7 +130,7 @@ run_and_compare() {
         fi
         return 0
     else
-        local expected=$(cat "$TMP_DIR/bash_out.txt" 2>/dev/null | head -5 || echo "(empty)")
+        local expected=$(cat "$TMP_DIR/bash_clean.txt" 2>/dev/null | head -5 || echo "(empty)")
         local got=$(cat "$TMP_DIR/minishell_clean.txt" 2>/dev/null | head -5 || echo "(empty)")
 
         print_fail "$test_name - ${RED}${BOLD}OUTPUT MISMATCH${RESET}"

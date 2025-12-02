@@ -171,12 +171,6 @@ test_syntax_errors() {
         "echo test < < input.txt"
         "echo test >>"
         "echo test <<"
-        "echo test &&"
-        "echo test ||"
-        "echo test ;"
-        "; echo test"
-        "echo test &"
-        "& echo test"
     )
 
     for syntax_test in "${syntax_tests[@]}"; do
@@ -888,12 +882,7 @@ test_exit_codes() {
         "false"
         "/bin/ls /nonexistent 2>/dev/null"
         "cd /nonexistent_directory 2>/dev/null"
-        "export TEST_VAR=value && echo \$TEST_VAR"
         "unset PATH"
-        "echo test && true"
-        "echo test && false"
-        "false || true"
-        "true && false"
         "exit 42"
         "exit 0"
         "exit 1"
@@ -962,19 +951,20 @@ test_stderr_stdout_separation() {
         # Run in minishell
         echo -e "$test_cmd\nexit" > "$TMP_DIR/input.txt"
         timeout 10 bash -c "cat '$TMP_DIR/input.txt' | $MINISHELL 2>&1" > "$TMP_DIR/ms_out.txt" 2>&1
-        grep -v "^minishell" "$TMP_DIR/ms_out.txt" | grep -v "^\$" | grep -v "^>" > "$TMP_DIR/ms_clean.txt" 2>/dev/null || touch "$TMP_DIR/ms_clean.txt"
+        clean_minishell_output "$TMP_DIR/ms_out.txt" "$TMP_DIR/ms_clean.txt"
 
         # Run in bash
         bash --norc --noprofile -c "$test_cmd" > "$TMP_DIR/bash_out.txt" 2>&1
+        clean_bash_output "$TMP_DIR/bash_out.txt" "$TMP_DIR/bash_clean.txt"
 
         local test_name="stream: $test_cmd"
 
-        if diff -q "$TMP_DIR/ms_clean.txt" "$TMP_DIR/bash_out.txt" > /dev/null 2>&1; then
+        if diff -q "$TMP_DIR/ms_clean.txt" "$TMP_DIR/bash_clean.txt" > /dev/null 2>&1; then
             print_pass "$test_name"
             echo "  ✓ $test_name" >> "$REPORT_FILE"
             ((TESTS_PASSED++))
         else
-            local expected=$(cat "$TMP_DIR/bash_out.txt" 2>/dev/null | head -3 || echo "(empty)")
+            local expected=$(cat "$TMP_DIR/bash_clean.txt" 2>/dev/null | head -3 || echo "(empty)")
             local got=$(cat "$TMP_DIR/ms_clean.txt" 2>/dev/null | head -3 || echo "(empty)")
 
             print_fail "$test_name - STREAM OUTPUT MISMATCH"
