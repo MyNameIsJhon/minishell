@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 21:35:14 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 22:27:32 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ static int	execute_user_command(t_command *command, char **envp,
 
 int	main(int ac, char **av, char **envp)
 {
-	char		*hello;
+	char		*line;
 	t_command	*command;
 	t_context	*ctx;
 
@@ -128,9 +128,14 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		context_reset_line(ctx);
-		hello = get_user_input(ctx);
-		command = mini_parser(hello, ctx);
-		free(hello);
+		line = get_user_input(ctx);
+		if (!line)
+		{
+			ft_putstr("exit\n");
+			break;
+		}
+		command = mini_parser(line, ctx);
+		free(line);
 		if (!command || !command->program)
 			continue ;
 		execute_user_command(command, envp, ctx);

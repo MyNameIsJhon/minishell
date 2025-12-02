@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 20:36:22 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 21:21:46 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/02 22:22:32 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,24 @@ static void set_signal_sigint(struct sigaction *sa)
 		perror("sigaction");
 }
 
+/* static void sigint_handler(int sig) */
+/* { */
+/* 	(void)sig; */
+/* 	signal_status = 130; */
+/* 	ft_putchar('\n'); */
+/* 	rl_on_new_line(); */
+/* 	rl_replace_line("", 0); */
+/* 	rl_redisplay(); */
+/* } */
+/**/
+/* static void set_signal_sigint(struct sigaction *sa) */
+/* { */
+/* 	sigemptyset(&sa->sa_mask); */
+/* 	sa->sa_flags = 0; */
+/* 	sa->sa_handler = sigint_handler; */
+/* 	if (sigaction(SIGINT, sa, NULL) == -1) */
+/* 		perror("sigaction"); */
+/* } */
 void init_signals()
 {
 	struct sigaction sa;
