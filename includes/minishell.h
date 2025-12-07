@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/07 16:34:53 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/07 16:44:15 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,6 @@ int					apply_redirections_with_backup(t_redir *redirs,
 void				restore_fds(int saved_stdin, int saved_stdout);
 int					execute_builtin(t_command *command, t_context *ctx);
 int					handle_echo_command(t_command *cmd);
+int					handle_pwd_command();
 
 #endif

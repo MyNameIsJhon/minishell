@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 00:02:04 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/07 16:35:56 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/07 16:44:27 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	execute_builtin(t_command *command, t_context *ctx)
 		handle_export_command(command, ctx);
 	else if (!ft_strcmp(command->program, "echo"))
 		handle_echo_command(command);
+	else if (!ft_strcmp(command->program, "pwd"))
+		handle_pwd_command();
 	if (command->redirections)
 		restore_fds(saved_stdin, saved_stdout);
 	return (1);
