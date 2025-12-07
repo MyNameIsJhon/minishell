@@ -5,18 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/01 20:40:53 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/02 22:49:24 by jriga            ###   ########.fr       */
+/*   Created: 2025/12/07 16:18:47 by jriga             #+#    #+#             */
+/*   Updated: 2025/12/07 16:19:01 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fileft.h"
 #include "minishell.h"
 #include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
 #include <readline/readline.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include "fileft.h"
+#include <unistd.h>
 
 static int	handle_heredoc(char *delimiter)
 {
@@ -180,8 +180,7 @@ t_redir	*extract_redirections(t_token **tokens, t_arena *memory)
 	prev = NULL;
 	while (current)
 	{
-		if (current->type >= TOKEN_REDIR_IN
-			&& current->type <= TOKEN_HEREDOC)
+		if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
 		{
 			if (current->next && current->next->type == TOKEN_WORD)
 			{

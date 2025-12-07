@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/03 00:03:20 by jriga            ###   ########.fr       */
+/*   Updated: 2025/12/03 01:30:11 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_token {
   t_token_type type;
   char *value;
   char quote_type;
-  struct s_token *next;
+	  struct s_token *next;
 } t_token;
 
 typedef struct s_tokenizer {
