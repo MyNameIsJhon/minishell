@@ -129,6 +129,7 @@ int	main(int ac, char **av, char **envp)
 		context_reset_line(ctx);
 		line = get_user_input(ctx);
 		command = mini_parser(line, ctx);
+		print_tokens(command->tokens);
 		free(line);
 		if (!command || !command->program)
 			continue ;
