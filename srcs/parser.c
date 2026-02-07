@@ -76,7 +76,7 @@ static void	init_command_struct(t_command *cmd, char **split, int len)
 	}
 }
 
-void	print_token_list(t_token *tokens)
+void	print_tokens(t_token *tokens)
 {
 	t_token	*current;
 
