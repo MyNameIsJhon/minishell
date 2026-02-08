@@ -24,6 +24,7 @@
 /* { */
 /* 		*/
 /* } */
+//TODO: faire en sorte que la les quotes agissent comme dans bash
 
 char	*mini_prompt(char *pwd, t_context *ctx)
 {
@@ -42,6 +43,7 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 	ft_strlcat(prompt, ":[", tot + 1);
 	ft_strlcat(prompt, pwd, tot + 1);
 	ft_strlcat(prompt, "] $ ", tot + 1);
+	//INFO:right here
 	line = readline(prompt);
 	if (line && *line)
 		add_history(line);
@@ -111,6 +113,19 @@ static int	execute_user_command(t_command *command, char **envp,
 	return (1);
 }
 
+void print_cmds(t_command *command)
+{
+	printf("prog name: %s\n", command->program);
+	for (int i = 0; command->args[i]; i++)
+		printf("command args[%d]: %s\n", i,command->args[i]);
+	for (int i = 0; command->com_splited[i]; i++)
+		printf("command args[%d]: %s\n", i,command->args[i]);
+	for (int i = 0; command->com_splited[i]; i++)
+		printf("command args[%d]: %s\n", i,command->args[i]);
+	print_tokens(command->tokens);
+	printf("size: %d\n", command->size);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
@@ -129,6 +144,7 @@ int	main(int ac, char **av, char **envp)
 		context_reset_line(ctx);
 		line = get_user_input(ctx);
 		command = mini_parser(line, ctx);
+		print_cmds(command);
 		print_tokens(command->tokens);
 		free(line);
 		if (!command || !command->program)
