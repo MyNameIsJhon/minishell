@@ -119,9 +119,7 @@ void print_cmds(t_command *command)
 	for (int i = 0; command->args[i]; i++)
 		printf("command args[%d]: %s\n", i,command->args[i]);
 	for (int i = 0; command->com_splited[i]; i++)
-		printf("command args[%d]: %s\n", i,command->args[i]);
-	for (int i = 0; command->com_splited[i]; i++)
-		printf("command args[%d]: %s\n", i,command->args[i]);
+		printf("command args[%d]: %s\n", i,command->com_splited[i]);
 	print_tokens(command->tokens);
 	printf("size: %d\n", command->size);
 }
