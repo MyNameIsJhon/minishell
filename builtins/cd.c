@@ -19,7 +19,7 @@ int	handle_cd_command(t_command *command, t_context *ctx)
 {
 	t_env	*home;
 
-	if (!command->args[0])
+	if (!command->com_splited[1])
 	{
 		home = find_env("HOME", ctx->env);
 		if (!home || !home->value)
@@ -30,6 +30,6 @@ int	handle_cd_command(t_command *command, t_context *ctx)
 		chdir(home->value);
 		return (0);
 	}
-	chdir(command->args[0]);
+	chdir(command->com_splited[1]);
 	return (0);
 }

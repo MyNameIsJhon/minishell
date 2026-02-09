@@ -58,22 +58,52 @@ static char	**tokens_to_array(t_token *tokens, t_arena *memory)
 	return (array);
 }
 
-static void	init_command_struct(t_command *cmd, char **split, int len)
+static void	init_command_struct(t_command *cmd, char **split)
 {
 	cmd->com_splited = split;
 	cmd->paths = NULL;
 	cmd->exec_path = NULL;
 	cmd->exec_maxlen = 0;
-	if (len >= 1)
+}
+
+static t_token	*split_at_pipe(t_token **segment)
+{
+	t_token	*prev;
+	t_token	*current;
+
+	prev = NULL;
+	current = *segment;
+	while (current)
 	{
-		cmd->program = split[0];
-		cmd->args = split + 1;
+		if (current->type == TOKEN_PIPE)
+		{
+			if (prev)
+				prev->next = NULL;
+			else
+				*segment = NULL;
+			return (current->next);
+		}
+		prev = current;
+		current = current->next;
 	}
-	else
-	{
-		cmd->program = NULL;
-		cmd->args = NULL;
-	}
+	return (NULL);
+}
+
+static t_command	*build_command(t_token *tokens, t_arena *memory)
+{
+	t_command	*cmd;
+
+	cmd = arena_alloc(memory, sizeof(t_command), 8);
+	if (!cmd)
+		return (NULL);
+	cmd->memory = memory;
+	cmd->next = NULL;
+	cmd->redirections = extract_redirections(&tokens, memory);
+	cmd->com_splited = tokens_to_array(tokens, memory);
+	if (!cmd->com_splited)
+		return (NULL);
+	init_command_struct(cmd, cmd->com_splited);
+	return (cmd);
 }
 
 void	print_tokens(t_token *tokens)
@@ -91,29 +121,30 @@ void	print_tokens(t_token *tokens)
 
 t_command	*mini_parser(char *user_input, t_context *ctx)
 {
-	t_command	*command;
 	t_token		*tokens;
 	t_tokenizer	tokenizer;
-	int			l_com;
+	t_command	*cmds;
+	t_command	**tail;
+	t_token		*rest;
 
 	if (!ctx || !ctx->line_memory)
 		return (NULL);
-	command = arena_alloc(ctx->line_memory, sizeof(t_command), 8);
-	if (!command)
-		return (NULL);
-	command->memory = ctx->line_memory;
-	tokens = tokenize(user_input, command->memory);
+	tokens = tokenize(user_input, ctx->line_memory);
 	tokenizer.head = tokens;
-	tokenizer.memory = command->memory;
+	tokenizer.memory = ctx->line_memory;
 	expand_tokens(&tokenizer, ctx);
-	command->tokens = tokens;
-	command->redirections = extract_redirections(&tokens, command->memory);
-	command->com_splited = tokens_to_array(tokens, command->memory);
-	if (!command->com_splited)
-		return (NULL);
-	l_com = ft_strslen(command->com_splited);
-	init_command_struct(command, command->com_splited, l_com);
-	return (command);
+	cmds = NULL;
+	tail = &cmds;
+	while (tokens)
+	{
+		rest = split_at_pipe(&tokens);
+		*tail = build_command(tokens, ctx->line_memory);
+		if (!*tail)
+			return (NULL);
+		tail = &(*tail)->next;
+		tokens = rest;
+	}
+	return (cmds);
 }
 
 char	**get_executable_paths(t_command *cmd, t_context *ctx)

@@ -21,17 +21,17 @@ int	handle_echo_command(t_command *cmd)
 
 	if (!cmd)
 		return (1);
-	i = 0;
+	i = 1;
 	newline = 1;
-	if (cmd->args[0] && !ft_strcmp(cmd->args[0], "-n"))
+	if (cmd->com_splited[1] && !ft_strcmp(cmd->com_splited[1], "-n"))
 	{
 		newline = 0;
-		i = 1;
+		i = 2;
 	}
-	while (cmd->args[i])
+	while (cmd->com_splited[i])
 	{
-		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
-		if (cmd->args[i + 1])
+		ft_putstr_fd(cmd->com_splited[i], STDOUT_FILENO);
+		if (cmd->com_splited[i + 1])
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}

@@ -18,7 +18,7 @@
 
 int	handle_exit_command(t_command *command, t_context *ctx)
 {
-	if (!ft_strcmp(command->program, "exit"))
+	if (!ft_strcmp(command->com_splited[0], "exit"))
 	{
 		context_free(&ctx);
 		clear_history();

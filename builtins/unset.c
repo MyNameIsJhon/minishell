@@ -19,6 +19,6 @@ int	handle_unset_command(t_command *cmd, t_context *ctx)
 {
 	if (!cmd || !ctx)
 		return (1);
-	env_delete(cmd->args[0], &ctx->env);
+	env_delete(cmd->com_splited[1], &ctx->env);
 	return (0);
 }

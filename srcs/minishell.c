@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/03 00:01:53 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/09 00:12:51 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-/* char	*mini_prompt(void) */
-/* { */
-/* 		*/
-/* } */
-//TODO: faire en sorte que la les quotes agissent comme dans bash
 
 char	*mini_prompt(char *pwd, t_context *ctx)
 {
@@ -32,18 +27,17 @@ char	*mini_prompt(char *pwd, t_context *ctx)
 	char	*line;
 	size_t	tot;
 
-	tot = ft_strlen(ctx->user) + ft_strlen(ctx->domain) + ft_strlen(pwd) + 20;
+	tot = ft_strlen(ctx->user) + ft_strlen(ctx->hostname) + ft_strlen(pwd) + 10;
 	prompt = arena_alloc(ctx->line_memory, tot + 1, 1);
 	if (!prompt)
 		return (NULL);
 	prompt[0] = '\0';
 	ft_strlcat(prompt, ctx->user, tot + 1);
 	ft_strlcat(prompt, "㉿", tot + 1);
-	ft_strlcat(prompt, ctx->domain, tot + 1);
+	ft_strlcat(prompt, ctx->hostname, tot + 1);
 	ft_strlcat(prompt, ":[", tot + 1);
 	ft_strlcat(prompt, pwd, tot + 1);
 	ft_strlcat(prompt, "] $ ", tot + 1);
-	//INFO:right here
 	line = readline(prompt);
 	if (line && *line)
 		add_history(line);
@@ -84,7 +78,7 @@ static char	*get_user_input(t_context *ctx)
 static void	print_cmd_not_found(t_command *command)
 {
 	ft_putstr_fd("minishell: command not found: ", 2);
-	ft_putstr_fd(command->program, 2);
+	ft_putstr_fd(command->com_splited[0], 2);
 	ft_putstr_fd("\n", 2);
 }
 
@@ -94,11 +88,13 @@ static int	execute_user_command(t_command *command, char **envp,
 	char	**env;
 
 	(void)envp;
-	if (!ft_strcmp(command->program, "cd")
-		|| !ft_strcmp(command->program, "exit")
-		|| !ft_strcmp(command->program, "env")
-		|| !ft_strcmp(command->program, "unset")
-		|| !ft_strcmp(command->program, "export"))
+	if (!ft_strcmp(command->com_splited[0], "cd")
+		|| !ft_strcmp(command->com_splited[0], "exit")
+		|| !ft_strcmp(command->com_splited[0], "env")
+		|| !ft_strcmp(command->com_splited[0], "unset")
+		|| !ft_strcmp(command->com_splited[0], "export")
+		|| !ft_strcmp(command->com_splited[0], "echo")
+		|| !ft_strcmp(command->com_splited[0], "pwd"))
 		return (execute_builtin(command, ctx));
 	else if (!find_prog(command, ctx))
 	{
@@ -113,15 +109,22 @@ static int	execute_user_command(t_command *command, char **envp,
 	return (1);
 }
 
-void print_cmds(t_command *command)
+void	print_cmds(t_command *command)
 {
-	printf("prog name: %s\n", command->program);
-	for (int i = 0; command->args[i]; i++)
-		printf("command args[%d]: %s\n", i,command->args[i]);
-	for (int i = 0; command->com_splited[i]; i++)
-		printf("command args[%d]: %s\n", i,command->com_splited[i]);
-	print_tokens(command->tokens);
-	printf("size: %d\n", command->size);
+	t_redir	*redir;
+
+	redir = command->redirections;
+	printf("prog name: %s\n", command->com_splited[0]);
+	while (redir)
+	{
+		printf("redir type: %d\n", redir->type);
+		redir = redir->next;
+	}
+	while (command)
+	{
+		printf("Program: %s\n", command->com_splited[0]);
+		command = command->next;
+	}
 }
 
 int	main(int ac, char **av, char **envp)
@@ -143,9 +146,8 @@ int	main(int ac, char **av, char **envp)
 		line = get_user_input(ctx);
 		command = mini_parser(line, ctx);
 		print_cmds(command);
-		print_tokens(command->tokens);
 		free(line);
-		if (!command || !command->program)
+		if (!command || !command->com_splited[0])
 			continue ;
 		execute_user_command(command, envp, ctx);
 	}

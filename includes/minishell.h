@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 14:07:59 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/07 16:44:15 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/09 00:12:31 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,12 @@ typedef struct s_redir
 
 typedef struct s_command
 {
-	char				*program;
-	char				**args;
 	char				**com_splited;
-	t_token				*tokens;
 	t_redir				*redirections;
 	char				**paths;
 	int					exec_maxlen;
 	char				*exec_path;
 	t_arena				*memory;
-	int					size;
 	struct s_command	*next;
 }						t_command;
 
@@ -83,7 +79,7 @@ typedef struct s_context
 	t_arena				*global_memory;
 	t_arena				*line_memory;
 	char				*user;
-	char				*domain;
+	char				*hostname;
 	int					paths_maxlen;
 	int					last_exit_status;
 }						t_context;

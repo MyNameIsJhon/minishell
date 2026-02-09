@@ -37,7 +37,7 @@ int	handle_export_command(t_command *cmd, t_context *ctx)
 
 	if (!cmd || !ctx)
 		return (0);
-	args = ar_split(cmd->args[0], '=', ctx->line_memory);
+	args = ar_split(cmd->com_splited[1], '=', ctx->line_memory);
 	if (!args)
 	{
 		print_export_env(ctx);

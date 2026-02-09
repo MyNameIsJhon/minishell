@@ -35,7 +35,7 @@ static char	*search_in_dir(t_command *cmd, DIR *dir, int path_idx)
 	s_dir = readdir(dir);
 	while (s_dir)
 	{
-		if (ft_strcmp(s_dir->d_name, cmd->program))
+		if (ft_strcmp(s_dir->d_name, cmd->com_splited[0]))
 		{
 			s_dir = readdir(dir);
 			continue ;
@@ -78,11 +78,12 @@ char	*find_prog(t_command *command, t_context *ctx)
 	int		i;
 	char	*result;
 
-	if (ft_strchr(command->program, '/'))
+	if (ft_strchr(command->com_splited[0], '/'))
 	{
-		if (!access(command->program, X_OK))
+		if (!access(command->com_splited[0], X_OK))
 		{
-			command->exec_path = ar_strdup(command->program, command->memory);
+			command->exec_path = ar_strdup(command->com_splited[0],
+					command->memory);
 			return (command->exec_path);
 		}
 		else
