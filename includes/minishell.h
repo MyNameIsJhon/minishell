@@ -12,8 +12,27 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
 # include "arena_allocator.h"
 # include "libft.h"
+#include "fileft.h"
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <string.h>
+#include <signal.h>
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/dir.h>
+
+#include <dirent.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+
 # define EXEC_MAXLEN 256
 # define LEN_PROMPT 30
 # define USER_POS 5
