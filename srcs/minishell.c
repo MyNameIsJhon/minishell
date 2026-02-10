@@ -10,15 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena_allocator.h"
-#include "fileft.h"
-#include "libft.h"
 #include "minishell.h"
-#include <fcntl.h>
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdio.h>
-#include <unistd.h>
 
 
 char	*mini_prompt(char *pwd, t_context *ctx)

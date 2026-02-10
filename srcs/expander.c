@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena_allocator.h"
-#include "libft.h"
 #include "minishell.h"
 
 char	*find_end_var(char *var)

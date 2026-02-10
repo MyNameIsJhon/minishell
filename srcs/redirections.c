@@ -10,13 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fileft.h"
 #include "minishell.h"
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 static int	handle_heredoc(char *delimiter)
 {

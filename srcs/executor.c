@@ -11,12 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <dirent.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
 static void	child_process(t_command *cmd, char **envp, int *fd)
 {
