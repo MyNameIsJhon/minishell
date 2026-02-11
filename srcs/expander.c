@@ -6,12 +6,12 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 00:00:00 by jriga             #+#    #+#             */
-/*   Updated: 2025/11/25 04:11:51 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/11 21:36:31 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include  <stdio.h>
+#include <stdio.h>
 
 char	*find_end_var(char *var)
 {
@@ -23,7 +23,8 @@ char	*find_end_var(char *var)
 	}
 	return (var);
 }
-void print_vars(char **vars)
+
+void	print_vars(char **vars)
 {
 	while (*vars)
 	{
@@ -31,13 +32,13 @@ void print_vars(char **vars)
 		vars++;
 	}
 }
+
 char	**recup_vars_in_token(t_token *token, t_arena *memory)
 {
 	char	**vars;
 	char	*var;
 	int		i;
 	char	*end_var;
-	/* char	*tild; */
 
 	vars = arena_alloc(memory, (ft_strcount_char(token->value, '$') + 1)
 			* sizeof(char *), 8);
@@ -47,13 +48,6 @@ char	**recup_vars_in_token(t_token *token, t_arena *memory)
 	var = token->value;
 	while (var)
 	{
-		/* tild = ft_strchr(var, '~'); */
-		/* if (tild && (tild == var || ft_strchr(" /", *(tild - 1)))) */
-		/* { */
-		/* 	vars[i++] = ar_strdup("~", memory); */
-		/* 	var = tild + 1; */
-		/* 	continue ; */
-		/* } */
 		var = ft_strchr(var, '$');
 		if (!var)
 			break ;
@@ -154,7 +148,7 @@ void	expand_tokens(t_tokenizer *tokenizer, t_context *ctx)
 	token = tokenizer->head;
 	while (token)
 	{
-		if (token->quote_type != '\'' && (ft_strchr(token->value, '$') || ft_strchr(token->value, '~')))
+		if (token->quote_type != '\'' && (ft_strchr(token->value, '$')))
 			token->value = join_token_var(token, ctx);
 		token = token->next;
 	}

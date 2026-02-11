@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:18:47 by jriga             #+#    #+#             */
-/*   Updated: 2025/12/07 16:19:01 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/11 21:26:33 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,14 @@ void	redir_add_back(t_redir **head, t_redir *new)
 	current->next = new;
 }
 
+static void	remove_redir_tokens(t_token **tokens, t_token *prev, t_token *curr)
+{
+	if (prev)
+		prev->next = curr->next->next;
+	else
+		*tokens = curr->next->next;
+}
+
 t_redir	*extract_redirections(t_token **tokens, t_arena *memory)
 {
 	t_redir	*redirs;
@@ -59,10 +67,7 @@ t_redir	*extract_redirections(t_token **tokens, t_arena *memory)
 			{
 				redir_add_back(&redirs, new_redir(current->type,
 						current->next->value, memory));
-				if (prev)
-					prev->next = current->next->next;
-				else
-					*tokens = current->next->next;
+				remove_redir_tokens(tokens, prev, current);
 				current = current->next->next;
 				continue ;
 			}

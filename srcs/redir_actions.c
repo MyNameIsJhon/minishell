@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_actions.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/11 21:21:01 by jriga             #+#    #+#             */
+/*   Updated: 2026/02/11 21:21:03 by jriga            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	heredoc(char *delimiter)
@@ -97,13 +109,15 @@ int	apply_redirections(t_redir *redirs)
 	while (redirs)
 	{
 		if (redirs->type == TOKEN_REDIR_IN && input_redir(redirs->file) < 0)
-				return (-1);
-		else if (redirs->type == TOKEN_REDIR_OUT && output_redir(redirs->file) < 0)
-				return (-1);
-		else if (redirs->type == TOKEN_REDIR_APPEND && append_redir(redirs->file) < 0)
-				return (-1);
+			return (-1);
+		else if (redirs->type == TOKEN_REDIR_OUT
+			&& output_redir(redirs->file) < 0)
+			return (-1);
+		else if (redirs->type == TOKEN_REDIR_APPEND
+			&& append_redir(redirs->file) < 0)
+			return (-1);
 		else if (redirs->type == TOKEN_HEREDOC && heredoc(redirs->file) < 0)
-				return (-1);
+			return (-1);
 		redirs = redirs->next;
 	}
 	return (0);

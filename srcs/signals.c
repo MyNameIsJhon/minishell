@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t signal_status = 0;
+volatile sig_atomic_t	signal_status = 0;
 
-void rl_replace_line(const char *text, int clear_undo);
+void					rl_replace_line(const char *text, int clear_undo);
 
-static void sigint_handler(int sig)
+static void	sigint_handler(int sig)
 {
 	(void)sig;
 	signal_status = 130;
@@ -26,7 +26,7 @@ static void sigint_handler(int sig)
 	rl_redisplay();
 }
 
-static void set_signal_sigint(struct sigaction *sa)
+static void	set_signal_sigint(struct sigaction *sa)
 {
 	sigemptyset(&sa->sa_mask);
 	sa->sa_flags = 0;
@@ -35,9 +35,10 @@ static void set_signal_sigint(struct sigaction *sa)
 		perror("sigaction");
 }
 
-void init_signals()
+void	init_signals(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
+
 	set_signal_sigint(&sa);
 	signal(SIGQUIT, SIG_IGN);
 }

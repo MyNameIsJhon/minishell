@@ -6,12 +6,11 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2026/02/09 00:12:51 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/11 21:27:28 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 char	*mini_prompt(char *pwd, t_context *ctx)
 {
@@ -74,12 +73,12 @@ static void	print_cmd_not_found(t_command *command)
 	ft_putstr_fd("\n", 2);
 }
 
-static char	execute_user_command(t_command *command, char **envp,
-		t_context *ctx)
+static char	execute_user_command(t_command *command, t_context *ctx)
 {
-	char	**env;
+	char		**env;
+	t_command	*current;
 
-	(void)envp;
+	current = command;
 	if (!ft_strcmp(command->com_splited[0], "cd")
 		|| !ft_strcmp(command->com_splited[0], "exit")
 		|| !ft_strcmp(command->com_splited[0], "env")
@@ -88,10 +87,11 @@ static char	execute_user_command(t_command *command, char **envp,
 		|| !ft_strcmp(command->com_splited[0], "echo")
 		|| !ft_strcmp(command->com_splited[0], "pwd"))
 		return (execute_builtin(command, ctx));
-	else if (!find_prog(command, ctx))
+	while (current)
 	{
-		print_cmd_not_found(command);
-		return (127);
+		if (!find_prog(current, ctx))
+			return (print_cmd_not_found(current), 0);
+		current = current->next;
 	}
 	env = convert_env(ctx->env, ctx->line_memory);
 	return (run_cmd(command, env));
@@ -102,6 +102,7 @@ void	print_cmds(t_command *command)
 	t_redir	*redir;
 	int		i;
 
+	printf("\n---Printing prog---\n\n");
 	while (command)
 	{
 		redir = command->redirections;
@@ -119,8 +120,11 @@ void	print_cmds(t_command *command)
 		}
 		if (command->exec_path)
 			printf("  exec_path: %s\n", command->exec_path);
+		else
+			printf("exec_path: (null)");
 		command = command->next;
 	}
+	printf("\n");
 }
 
 int	main(int ac, char **av, char **envp)
@@ -144,8 +148,8 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 		if (!command || !command->com_splited[0])
 			continue ;
-		printf("return value: %d\n",execute_user_command(command, envp, ctx));
-		/* print_cmds(command); */
+		printf("return value: %d\n", execute_user_command(command, ctx));
+		print_cmds(command);
 	}
 	context_free(&ctx);
 	return (0);
