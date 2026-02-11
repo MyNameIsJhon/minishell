@@ -64,7 +64,7 @@ int	main(int ac, char **av, char **envp)
 		if (!command || !command->com_splited[0])
 			continue ;
 		printf("return value: %d\n", execute_user_command(command, ctx));
-		print_cmds(command);
+		//print_cmds(command);//TODO debug
 	}
 	context_free(&ctx);
 	return (0);
