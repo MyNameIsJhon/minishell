@@ -69,7 +69,7 @@ static void	child_process(t_command *cmd, char **envp, int *fd)
 
 //}
 
-int	run_cmd(t_command *command, char **envp)
+char	run_cmd(t_command *command, char **envp)
 {
 	pid_t		pid;
 	int			status;
@@ -101,7 +101,7 @@ int	run_cmd(t_command *command, char **envp)
 	set_dup(save_std[0], STDIN_FILENO);
 	set_dup(save_std[1], STDOUT_FILENO);
 	//dprintf(2, "current->fd0:%d - current->fd1:%d\n", STDIN_FILENO, STDOUT_FILENO);
-	return (0);
+	return (WEXITSTATUS(status));
 }
 
 //read_output(fd[0]);//TODO Read of pipe is bad, what is the purpose, save the previous result

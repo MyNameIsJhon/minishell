@@ -110,7 +110,7 @@ void					context_reset_line(t_context *ctx);
 t_command				*mini_parser(char *user_input, t_context *ctx);
 void					command_print(t_command *command);
 char					*find_prog(t_command *command, t_context *ctx);
-int						run_cmd(t_command *command, char **envp);
+char					run_cmd(t_command *command, char **envp);
 char					**get_executable_paths(t_command *cmd, t_context *ctx);
 
 t_token					*tokenize(char *input, t_arena *memory);

@@ -74,7 +74,7 @@ static void	print_cmd_not_found(t_command *command)
 	ft_putstr_fd("\n", 2);
 }
 
-static int	execute_user_command(t_command *command, char **envp,
+static char	execute_user_command(t_command *command, char **envp,
 		t_context *ctx)
 {
 	char	**env;
@@ -91,15 +91,10 @@ static int	execute_user_command(t_command *command, char **envp,
 	else if (!find_prog(command, ctx))
 	{
 		print_cmd_not_found(command);
-		return (0);
+		return (127);
 	}
-	else
-	{
-		env = convert_env(ctx->env, ctx->line_memory);
-		run_cmd(command, env);
-		printf("Now after run_cmd\n");	
-	}
-	return (1);
+	env = convert_env(ctx->env, ctx->line_memory);
+	return (run_cmd(command, env));
 }
 
 void	print_cmds(t_command *command)
@@ -149,11 +144,8 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 		if (!command || !command->com_splited[0])
 			continue ;
-		while (command)
-		{
-			execute_user_command(command, envp, ctx);
-		}
-		print_cmds(command);
+		printf("return value: %d\n",execute_user_command(command, envp, ctx));
+		/* print_cmds(command); */
 	}
 	context_free(&ctx);
 	return (0);
