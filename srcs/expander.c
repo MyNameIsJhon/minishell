@@ -13,6 +13,7 @@
 #include "arena_allocator.h"
 #include "libft.h"
 #include "minishell.h"
+#include  <stdio.h>
 
 char	*find_end_var(char *var)
 {
@@ -24,13 +25,21 @@ char	*find_end_var(char *var)
 	}
 	return (var);
 }
-
+void print_vars(char **vars)
+{
+	while (*vars)
+	{
+		printf("Var: %s\n", *vars);
+		vars++;
+	}
+}
 char	**recup_vars_in_token(t_token *token, t_arena *memory)
 {
 	char	**vars;
 	char	*var;
 	int		i;
 	char	*end_var;
+	/* char	*tild; */
 
 	vars = arena_alloc(memory, (ft_strcount_char(token->value, '$') + 1)
 			* sizeof(char *), 8);
@@ -40,14 +49,23 @@ char	**recup_vars_in_token(t_token *token, t_arena *memory)
 	var = token->value;
 	while (var)
 	{
+		/* tild = ft_strchr(var, '~'); */
+		/* if (tild && (tild == var || ft_strchr(" /", *(tild - 1)))) */
+		/* { */
+		/* 	vars[i++] = ar_strdup("~", memory); */
+		/* 	var = tild + 1; */
+		/* 	continue ; */
+		/* } */
 		var = ft_strchr(var, '$');
 		if (!var)
 			break ;
 		end_var = find_end_var(var + 1);
+		printf("Var found: %.*s\n", (int)(end_var - var), var);
 		vars[i++] = ar_substr(var, 0, end_var - var, memory);
 		var = end_var;
 	}
 	vars[i] = NULL;
+	print_vars(vars);
 	return (vars);
 }
 
@@ -138,7 +156,7 @@ void	expand_tokens(t_tokenizer *tokenizer, t_context *ctx)
 	token = tokenizer->head;
 	while (token)
 	{
-		if (token->quote_type != '\'' && ft_strchr(token->value, '$'))
+		if (token->quote_type != '\'' && (ft_strchr(token->value, '$') || ft_strchr(token->value, '~')))
 			token->value = join_token_var(token, ctx);
 		token = token->next;
 	}

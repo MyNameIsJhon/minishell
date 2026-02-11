@@ -112,17 +112,25 @@ static int	execute_user_command(t_command *command, char **envp,
 void	print_cmds(t_command *command)
 {
 	t_redir	*redir;
+	int		i;
 
-	redir = command->redirections;
-	printf("prog name: %s\n", command->com_splited[0]);
-	while (redir)
-	{
-		printf("redir type: %d\n", redir->type);
-		redir = redir->next;
-	}
 	while (command)
 	{
-		printf("Program: %s\n", command->com_splited[0]);
+		redir = command->redirections;
+		printf("prog name: %s\n", command->com_splited[0]);
+		i = 0;
+		while (command->com_splited[i])
+		{
+			printf("  arg[%d]: %s\n", i, command->com_splited[i]);
+			i++;
+		}
+		while (redir)
+		{
+			printf("  redir type: %d\n", redir->type);
+			redir = redir->next;
+		}
+		if (command->exec_path)
+			printf("  exec_path: %s\n", command->exec_path);
 		command = command->next;
 	}
 }
@@ -145,11 +153,14 @@ int	main(int ac, char **av, char **envp)
 		context_reset_line(ctx);
 		line = get_user_input(ctx);
 		command = mini_parser(line, ctx);
-		print_cmds(command);
 		free(line);
 		if (!command || !command->com_splited[0])
 			continue ;
-		execute_user_command(command, envp, ctx);
+		while (command)
+		{
+			execute_user_command(command, envp, ctx);
+		}
+		print_cmds(command);
 	}
 	context_free(&ctx);
 	return (0);
