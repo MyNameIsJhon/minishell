@@ -6,13 +6,13 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 00:00:00 by jriga             #+#    #+#             */
-/*   Updated: 2026/02/09 00:36:02 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/11 21:40:00 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_hostname(t_arena *memory)
+static char	*get_hostname(t_arena *memory)
 {
 	int		fd;
 	char	*hostname;

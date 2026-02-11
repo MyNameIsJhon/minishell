@@ -5,111 +5,120 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/07 16:18:47 by jriga             #+#    #+#             */
-/*   Updated: 2026/02/11 21:26:33 by jriga            ###   ########.fr       */
+/*   Created: 2026/02/11 21:21:01 by jriga             #+#    #+#             */
+/*   Updated: 2026/02/11 22:13:36 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_redir	*new_redir(t_token_type type, char *file, t_arena *memory)
+static int	heredoc(char *delimiter)
 {
-	t_redir	*redir;
+	int		pipefd[2];
+	char	*line;
 
-	redir = arena_alloc(memory, sizeof(t_redir), 8);
-	if (!redir)
-		return (NULL);
-	redir->type = type;
-	redir->file = file;
-	redir->next = NULL;
-	return (redir);
-}
-
-void	redir_add_back(t_redir **head, t_redir *new)
-{
-	t_redir	*current;
-
-	if (!head || !new)
-		return ;
-	if (!*head)
+	if (pipe(pipefd) < 0)
+		return (-1);
+	while (1)
 	{
-		*head = new;
-		return ;
-	}
-	current = *head;
-	while (current->next)
-		current = current->next;
-	current->next = new;
-}
-
-static void	remove_redir_tokens(t_token **tokens, t_token *prev, t_token *curr)
-{
-	if (prev)
-		prev->next = curr->next->next;
-	else
-		*tokens = curr->next->next;
-}
-
-t_redir	*extract_redirections(t_token **tokens, t_arena *memory)
-{
-	t_redir	*redirs;
-	t_token	*current;
-	t_token	*prev;
-
-	redirs = NULL;
-	current = *tokens;
-	prev = NULL;
-	while (current)
-	{
-		if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
-			if (current->next && current->next->type == TOKEN_WORD)
-			{
-				redir_add_back(&redirs, new_redir(current->type,
-						current->next->value, memory));
-				remove_redir_tokens(tokens, prev, current);
-				current = current->next->next;
-				continue ;
-			}
+			free(line);
+			break ;
 		}
-		prev = current;
-		current = current->next;
+		write(pipefd[1], line, ft_strlen(line));
+		write(pipefd[1], "\n", 1);
+		free(line);
 	}
-	return (redirs);
-}
-
-int	apply_redirections_with_backup(t_redir *redirs, int *saved_stdin,
-		int *saved_stdout)
-{
-	*saved_stdin = dup(STDIN_FILENO);
-	*saved_stdout = dup(STDOUT_FILENO);
-	if (*saved_stdin < 0 || *saved_stdout < 0)
+	close(pipefd[1]);
+	if (dup2(pipefd[0], STDIN_FILENO) < 0)
 	{
-		if (*saved_stdin >= 0)
-			close(*saved_stdin);
-		if (*saved_stdout >= 0)
-			close(*saved_stdout);
+		close(pipefd[0]);
 		return (-1);
 	}
-	if (apply_redirections(redirs) < 0)
-	{
-		close(*saved_stdin);
-		close(*saved_stdout);
-		return (-1);
-	}
+	close(pipefd[0]);
 	return (0);
 }
 
-void	restore_fds(int saved_stdin, int saved_stdout)
+static int	input_redir(char *file)
 {
-	if (saved_stdin >= 0)
+	int	fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 	{
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (-1);
 	}
-	if (saved_stdout >= 0)
+	if (dup2(fd, STDIN_FILENO) < 0)
 	{
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdout);
+		close(fd);
+		return (-1);
 	}
+	close(fd);
+	return (0);
+}
+
+static int	output_redir(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		return (-1);
+	}
+	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	append_redir(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		return (-1);
+	}
+	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (0);
+}
+
+int	apply_redirections(t_redir *redirs)
+{
+	while (redirs)
+	{
+		if (redirs->type == TOKEN_REDIR_IN && input_redir(redirs->file) < 0)
+			return (-1);
+		else if (redirs->type == TOKEN_REDIR_OUT
+			&& output_redir(redirs->file) < 0)
+			return (-1);
+		else if (redirs->type == TOKEN_REDIR_APPEND
+			&& append_redir(redirs->file) < 0)
+			return (-1);
+		else if (redirs->type == TOKEN_HEREDOC && heredoc(redirs->file) < 0)
+			return (-1);
+		redirs = redirs->next;
+	}
+	return (0);
 }
