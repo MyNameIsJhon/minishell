@@ -16,19 +16,22 @@
 # include "arena_allocator.h"
 # include "fileft.h"
 # include "libft.h"
+
 # include <dirent.h>
 # include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
+
+# include <readline/history.h>
+# include <readline/readline.h>
+
 # include <sys/dir.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <unistd.h>
 
 # define EXEC_MAXLEN 256
 # define LEN_PROMPT 30

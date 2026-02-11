@@ -4,3 +4,4 @@ a faire:
 - double and simple quote on different lines
 - sortie des erreurs
 - mettre le bon domain et user
+- REMOVE HISTORY BEFORE FINAL PUSH !!!!!!!
