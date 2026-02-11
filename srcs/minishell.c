@@ -6,7 +6,7 @@
 /*   By: jriga <jriga@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:45 by jriga             #+#    #+#             */
-/*   Updated: 2026/02/11 22:26:36 by jriga            ###   ########.fr       */
+/*   Updated: 2026/02/11 22:46:42 by jriga            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 		if (!command || !command->com_splited[0])
 			continue ;
-		printf("return value: %d\n", execute_user_command(command, ctx));
-		//print_cmds(command);//TODO debug
+		/* printf("return value: %d\n", execute_user_command(command, ctx)); */
 	}
 	context_free(&ctx);
 	return (0);
