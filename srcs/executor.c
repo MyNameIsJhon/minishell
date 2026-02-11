@@ -24,14 +24,14 @@ static int	set_dup(int fd, int stream)
 
 static void	child_process(t_command *cmd, char **envp, int *fd)
 {
-	if (set_dup(fd[0], STDIN_FILENO) == EXIT_FAILURE)
-		exit(1);
 	if (cmd->next && set_dup(fd[1], STDOUT_FILENO) == EXIT_FAILURE)
 		exit(1);
-	printf("sin:%d - sout:%d\n", STDIN_FILENO, STDOUT_FILENO);
+	close(fd[0]);
+	//dprintf(2, "sin:%d - sout:%d\n", fd[0], fd[1]);
 	if (apply_redirections(cmd->redirections) < 0)
 		exit(1);
 	execve(cmd->exec_path, cmd->com_splited, envp);
+	//dprintf(2, "\nexex_path: %s\n", cmd->exec_path);
 	exit(1);//TODO Proper error statuses
 }
 
@@ -71,37 +71,36 @@ static void	child_process(t_command *cmd, char **envp, int *fd)
 
 int	run_cmd(t_command *command, char **envp)
 {
-	int			fd[2];
 	pid_t		pid;
 	int			status;
 	t_command	*current;
-	int			prev_fd;
+	int			save_std[2];
 
 	current = command;
-	prev_fd = STDIN_FILENO;
-	printf("Passed by run_cmd\n");
+	save_std[0] = dup(STDIN_FILENO);
+	save_std[1] = dup(STDOUT_FILENO);
+	//printf("\nPassed by run_cmd\n");
 	while (current)
 	{
-		if (current->next && pipe(fd) == -1)
+		if (pipe(current->fd) == -1)
 			return (-1);
-		if (!current->next)//TODO can be cleaner than this
-			fd[1] = STDOUT_FILENO;
-		printf("prev_fd:%d\n", prev_fd);
-		fd[0] = prev_fd;
-		printf("fd0:%d - fd1:%d\n", fd[0], fd[1]);
+		//dprintf(2, "current->fd0:%d - current->fd1:%d\n", current->fd[0], current->fd[1]);
+		//dprintf(2, "stdin:%d - stdout:%d\n", STDIN_FILENO, STDOUT_FILENO);
 		pid = fork();
 		if (pid < 0)
-			return (close(fd[0]), close(fd[1]), -1);
+			return (close(current->fd[0]), close(current->fd[1]), -1);
 		if (!pid)
-			child_process(current, envp, fd);
-		if (current->next && close(fd[1]) == -1)
+			child_process(current, envp, current->fd);
+		set_dup(current->fd[0], STDIN_FILENO);
+		if (close(current->fd[1]) == -1)
 			return (-1);
-		if (current->next && prev_fd != STDIN_FILENO && close(prev_fd) == -1)
-			return (-1);
-		prev_fd = fd[1];
 		current = current->next;
 	}
 	waitpid(pid, &status, 0);
+	//dprintf(2, "sstd0:%d - sstd1:%d\n", save_std[0], save_std[1]);
+	set_dup(save_std[0], STDIN_FILENO);
+	set_dup(save_std[1], STDOUT_FILENO);
+	//dprintf(2, "current->fd0:%d - current->fd1:%d\n", STDIN_FILENO, STDOUT_FILENO);
 	return (0);
 }
 

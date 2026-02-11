@@ -97,6 +97,7 @@ static int	execute_user_command(t_command *command, char **envp,
 	{
 		env = convert_env(ctx->env, ctx->line_memory);
 		run_cmd(command, env);
+		printf("Now after run_cmd\n");	
 	}
 	return (1);
 }

@@ -89,6 +89,7 @@ typedef struct s_command
 	int					exec_maxlen;
 	char				*exec_path;
 	t_arena				*memory;
+	int					fd[2];
 	struct s_command	*next;
 }						t_command;
 
