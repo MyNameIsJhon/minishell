@@ -10,11 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdlib.h>
 
 int	handle_exit_command(t_command *command, t_context *ctx)
 {

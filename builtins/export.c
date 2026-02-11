@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena_allocator.h"
-#include "libft.h"
 #include "minishell.h"
-#include <stdio.h>
 
 void	print_export_env(t_context *ctx)
 {

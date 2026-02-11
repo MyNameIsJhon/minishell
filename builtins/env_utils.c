@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "arena_allocator.h"
 
 t_env	*new_env(char *name, char *value, t_arena *memory)
 {
