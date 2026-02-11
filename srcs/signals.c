@@ -11,11 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <signal.h>
-#include "libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <unistd.h>
 
 volatile sig_atomic_t signal_status = 0;
 

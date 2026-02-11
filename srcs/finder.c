@@ -10,12 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <dirent.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 static char	*build_exec_path(t_command *cmd, char *path_dir, char *prog_name)
 {

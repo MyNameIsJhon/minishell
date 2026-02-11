@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <unistd.h>
 
 int	handle_operator(char *input, int i, t_tokenizer *tok)
 {
