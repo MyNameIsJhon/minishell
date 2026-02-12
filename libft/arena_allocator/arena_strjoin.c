@@ -13,11 +13,12 @@
 #include "arena_allocator.h"
 #include "libft.h"
 
-char *ar_strjoin(t_arena *arena, const char *s1, const char *s2)
+char	*ar_strjoin(t_arena *arena, const char *s1, const char *s2)
 {
 	size_t	len1;
 	size_t	len2;
 	char	*result;
+
 	if (!s1 || !s2 || !arena)
 		return (NULL);
 	len1 = ft_strlen(s1);

@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "arena_allocator.h"
 #include "libft.h"
 #include <stdlib.h>
-#include "arena_allocator.h"
 
 char	*ar_strdup(char *str, t_arena *memory)
 {
@@ -24,7 +24,7 @@ char	*ar_strdup(char *str, t_arena *memory)
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	dup = arena_alloc(memory,len + 1, 8);
+	dup = arena_alloc(memory, len + 1, 8);
 	if (!dup)
 		return (NULL);
 	while (i < len)
