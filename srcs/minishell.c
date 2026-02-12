@@ -42,6 +42,20 @@
 /* 	printf("\n"); */
 /* } */
 
+void	restore_fds(int saved_stdin, int saved_stdout)
+{
+	if (saved_stdin >= 0)
+	{
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
+	}
+	if (saved_stdout >= 0)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
+}
+
 static void	handle_empty_cmd(t_command *command)
 {
 	int	saved_in;

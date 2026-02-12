@@ -34,9 +34,9 @@ static void	copy_var_value(char *dest, int *z, char *var_name, t_context *ctx)
 static void	copy_with_expansion(char *new_value, char *curs, char **vars,
 		t_context *ctx)
 {
-	int		i;
-	int		y;
-	int		z;
+	int	i;
+	int	y;
+	int	z;
 
 	i = 0;
 	y = 0;
@@ -81,7 +81,6 @@ static char	*expand_tilde(t_token *token, t_context *ctx)
 		return (ar_strjoin(ctx->line_memory, home->value, token->value + 1));
 	return (token->value);
 }
-
 
 void	expand_tokens(t_tokenizer *tokenizer, t_context *ctx)
 {
