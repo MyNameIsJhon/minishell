@@ -62,15 +62,15 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
-	init_signals();
 	ctx = context_init();
 	ctx->env = env_init(envp, ctx->global_memory);
 	if (!ctx)
 		return (1);
 	while (1)
 	{
+		init_signals();
 		context_reset_line(ctx);
-		line = get_user_input(ctx);
+		line = get_user_input(ctx);//TODO secur
 		command = mini_parser(line, ctx);
 		free(line);
 		if (!command)

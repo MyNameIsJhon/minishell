@@ -1,10 +1,5 @@
 a faire:
-- $?
-- Handle tilde
-- double and simple quote on different lines
 - sortie des erreurs
-- mettre le bon domain et user
-- Ajouter la possibilite avec exit de mettre un int en argument
 - regarder ce que -n fait reellement avec echo
 - proteger les arena allocs
 - exit command say too many arguments when its not
@@ -12,3 +7,8 @@ a faire:
 Normalement non necessaire:
 - gere par ex le \ lors des tabs sur des elements possedant des espaces
 - REMOVE HISTORY BEFORE FINAL PUSH !!!!!!!
+
+# Not handled
+- ./minishell in minishell execute bash, exit now says there are too many arg
+-
+

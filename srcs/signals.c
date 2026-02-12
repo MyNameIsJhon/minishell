@@ -42,3 +42,9 @@ void	init_signals(void)
 	set_signal_sigint(&sa);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void	set_sig(void *sig)
+{
+	signal(SIGQUIT, sig);
+	signal(SIGINT, sig);
+}

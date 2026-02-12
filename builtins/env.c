@@ -54,7 +54,7 @@ char	**convert_env(t_env *env, t_arena *memory)
 	return (envc);
 }
 
-void	print_env(t_env *envs)
+int	print_env(t_env *envs)
 {
 	t_env	*curs;
 
@@ -67,4 +67,5 @@ void	print_env(t_env *envs)
 			printf("%s=\n", curs->name);
 		curs = curs->next;
 	}
+	return (0);
 }
