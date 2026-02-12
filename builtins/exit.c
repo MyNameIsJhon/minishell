@@ -33,17 +33,18 @@ int	handle_exit_command(t_command *command, t_context *ctx)
 	long	arg;
 
 	arg = 0;
-	if (command->com_splited[1] && ft_isarray_onlydigit(command->com_splited[1]) == EXIT_FAILURE)
+	if (command->com_splited[1]
+		&& ft_isarray_onlydigit(command->com_splited[1]) == EXIT_FAILURE)
 	{
 		context_free(&ctx);
-		clear_history();
 		ft_puterror("exit\n");
 		ft_puterror("exit: ");
 		ft_puterror(command->com_splited[1]);
 		ft_puterror(": numeric argument required\n");
+		clear_history();
 		exit(2);
 	}
-	if (command->com_splited[1] && command->com_splited[2])//TODO must have exit num 1
+	if (command->com_splited[1] && command->com_splited[2])
 	{
 		ft_puterror("exit\n");
 		ft_puterror("exit: too many arguments\n");
@@ -52,10 +53,10 @@ int	handle_exit_command(t_command *command, t_context *ctx)
 	if (command->com_splited[1])
 	{
 		arg = ft_atol(command->com_splited[1]);
-		if (arg > 256 || arg < - 256)
+		if (arg > 256 || arg < -256)
 			arg %= 256;
 	}
-	if (!ft_strcmp(command->com_splited[0], "exit"))//TODO Does this security makes any sense ?
+	if (!ft_strcmp(command->com_splited[0], "exit"))
 	{
 		context_free(&ctx);
 		clear_history();
