@@ -22,8 +22,28 @@ static int	set_dup(int fd, int stream)
 	return (EXIT_SUCCESS);
 }
 
+static int	handle_exit_status(int status)
+{
+	int	last_status;
+
+	if (WIFEXITED(status))
+		last_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		last_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT)
+			write(1, "Quit (core dumped)\n", 19);
+		else if (WTERMSIG(status) == SIGINT)
+			write(1, "\n", 1);
+	}
+	else
+		last_status = 1;
+	return (last_status);
+}
+
 static void	child_process(t_command *cmd, char **envp, int *fd)
 {
+	set_sig(SIG_DFL);
 	if (cmd->next && set_dup(fd[1], STDOUT_FILENO) == EXIT_FAILURE)
 		exit(1);
 	close(fd[0]);
@@ -38,6 +58,7 @@ static int	execute_loop(t_command *current, char **envp, pid_t *pid)
 {
 	if (pipe(current->fd) == -1)
 		return (-1);
+	set_sig(SIG_IGN);
 	*pid = fork();
 	if (*pid < 0)
 	{
@@ -72,5 +93,5 @@ char	run_cmd(t_command *command, char **envp)
 	waitpid(pid, &status, 0);
 	set_dup(save_std[0], STDIN_FILENO);
 	set_dup(save_std[1], STDOUT_FILENO);
-	return (WEXITSTATUS(status));
+	return (handle_exit_status(status));
 }

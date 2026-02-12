@@ -28,19 +28,6 @@ static int	ft_isarray_onlydigit(char *str)
 	return (EXIT_SUCCESS);
 }
 
-static long	handle_arg_toobig(long arg)
-{
-	int	nbr;
-	
-	if (arg < -256)
-		nbr = 256;
-	else if (arg > 256)
-		nbr = -256;
-	while (arg > 256 || arg < -256)
-		arg += nbr;
-	return (arg);
-}
-
 int	handle_exit_command(t_command *command, t_context *ctx)
 {
 	long	arg;
@@ -60,13 +47,13 @@ int	handle_exit_command(t_command *command, t_context *ctx)
 	{
 		ft_puterror("exit\n");
 		ft_puterror("exit: too many arguments\n");
-		return (0);
+		return (1);
 	}
 	if (command->com_splited[1])
 	{
 		arg = ft_atol(command->com_splited[1]);
 		if (arg > 256 || arg < - 256)
-			handle_arg_toobig(arg);
+			arg %= 256;
 	}
 	if (!ft_strcmp(command->com_splited[0], "exit"))//TODO Does this security makes any sense ?
 	{

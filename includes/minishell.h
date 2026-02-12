@@ -127,7 +127,7 @@ t_env					*new_env(char *name, char *value, t_arena *memory);
 void					env_add_back(t_env *env, t_env **envs);
 void					env_delete(char *name, t_env **envs);
 t_env					*find_env(char *name, t_env *envs);
-void					print_env(t_env *envs);
+int						print_env(t_env *envs);
 int						handle_unset_command(t_command *cmd, t_context *ctx);
 int						handle_export_command(t_command *cmd, t_context *ctx);
 char					**convert_env(t_env *env, t_arena *memory);
@@ -159,5 +159,6 @@ int						count_tokens(t_token *tokens);
 void					init_command_struct(t_command *cmd, char **split);
 t_command				*build_command(t_token *tokens, t_arena *memory);
 t_token					*split_at_pipe(t_token **segment);
+void					set_sig(void *sig);
 
 #endif

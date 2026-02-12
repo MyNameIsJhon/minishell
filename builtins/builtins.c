@@ -16,7 +16,9 @@ int	execute_builtin(t_command *command, t_context *ctx)
 {
 	int	saved_stdin;
 	int	saved_stdout;
+	int	retval;
 
+	retval = 0;
 	if (command->redirections)
 	{
 		if (apply_redirections_with_backup(command->redirections, &saved_stdin,
@@ -24,21 +26,21 @@ int	execute_builtin(t_command *command, t_context *ctx)
 			return (0);
 	}
 	if (!ft_strcmp(command->com_splited[0], "cd"))
-		handle_cd_command(command, ctx);
+		retval = handle_cd_command(command, ctx);
 	else if (!ft_strcmp(command->com_splited[0], "exit"))
-		handle_exit_command(command, ctx);
+		retval = handle_exit_command(command, ctx);
 	else if (!ft_strcmp(command->com_splited[0], "env"))
-		print_env(ctx->env);
+		retval = print_env(ctx->env);
 	else if (!ft_strcmp(command->com_splited[0], "unset"))
-		handle_unset_command(command, ctx);
+		retval = handle_unset_command(command, ctx);
 	else if (!ft_strcmp(command->com_splited[0], "export"))
-		handle_export_command(command, ctx);
+		retval = handle_export_command(command, ctx);
 	else if (!ft_strcmp(command->com_splited[0], "echo"))
-		handle_echo_command(command);
+		retval = handle_echo_command(command);
 	else if (!ft_strcmp(command->com_splited[0], "pwd"))
-		handle_pwd_command();
+		retval = handle_pwd_command();
 	if (command->redirections)
 		restore_fds(saved_stdin, saved_stdout);
-	return (1);
+	return (retval);
 }
 
