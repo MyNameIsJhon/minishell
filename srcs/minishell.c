@@ -42,6 +42,18 @@
 /* 	printf("\n"); */
 /* } */
 
+static void	handle_empty_cmd(t_command *command)
+{
+	int	saved_in;
+	int	saved_out;
+
+	if (!command->redirections)
+		return ;
+	if (apply_redirections_with_backup(command->redirections,
+			&saved_in, &saved_out) >= 0)
+		restore_fds(saved_in, saved_out);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
@@ -61,8 +73,13 @@ int	main(int ac, char **av, char **envp)
 		line = get_user_input(ctx);
 		command = mini_parser(line, ctx);
 		free(line);
-		if (!command || !command->com_splited[0])
+		if (!command)
 			continue ;
+		if (!command->com_splited[0])
+		{
+			handle_empty_cmd(command);
+			continue ;
+		}
 		ctx->last_exit_status = execute_user_command(command, ctx);
 	}
 	context_free(&ctx);

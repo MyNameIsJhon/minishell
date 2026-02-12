@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdbool.h>
 // check if last char of key = +
 // find key
 // alloc new str
