@@ -150,14 +150,14 @@ int						execute_builtin(t_command *command, t_context *ctx);
 int						handle_echo_command(t_command *cmd);
 int						handle_pwd_command(void);
 char					**recup_vars_in_token(t_token *token, t_arena *memory);
-int						count_len_expandeds(char **vars, t_env *env);
+int						count_len_expandeds(char **vars, t_context *ctx);
 int						count_len_vars(char **vars);
 char					*get_user_input(t_context *ctx);
 char					execute_user_command(t_command *command,
 							t_context *ctx);
-int	count_tokens(t_token *tokens);
-void	init_command_struct(t_command *cmd, char **split);
-t_command	*build_command(t_token *tokens, t_arena *memory);
-t_token	*split_at_pipe(t_token **segment);
+int						count_tokens(t_token *tokens);
+void					init_command_struct(t_command *cmd, char **split);
+t_command				*build_command(t_token *tokens, t_arena *memory);
+t_token					*split_at_pipe(t_token **segment);
 
 #endif

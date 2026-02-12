@@ -14,10 +14,10 @@
 
 int	find_max_len(char **strs)
 {
-	int i;
-	int max;
-	int cur;
-	
+	int	i;
+	int	max;
+	int	cur;
+
 	i = 0;
 	max = 0;
 	if (strs || *strs)
@@ -28,5 +28,5 @@ int	find_max_len(char **strs)
 		if (max < cur)
 			max = cur;
 	}
-	return max;
+	return (max);
 }

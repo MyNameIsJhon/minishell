@@ -1,6 +1,10 @@
 a faire:
-- $?
 - sortie des erreurs
+- regarder ce que -n fait reellement avec echo
+- proteger les arena allocs
+
+Normalement non necessaire:
+- gere par ex le \ lors des tabs sur des elements possedant des espaces
 - REMOVE HISTORY BEFORE FINAL PUSH !!!!!!!
 
 # Not handled
