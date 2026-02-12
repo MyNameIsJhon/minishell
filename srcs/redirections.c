@@ -106,19 +106,29 @@ static int	append_redir(char *file)
 
 int	apply_redirections(t_redir *redirs)
 {
+	int	saved_stdin;
+
+	saved_stdin = dup(STDIN_FILENO);
+	if (saved_stdin < 0)
+		return (-1);
 	while (redirs)
 	{
 		if (redirs->type == TOKEN_REDIR_IN && input_redir(redirs->file) < 0)
-			return (-1);
+			return (close(saved_stdin), -1);
 		else if (redirs->type == TOKEN_REDIR_OUT
 			&& output_redir(redirs->file) < 0)
-			return (-1);
+			return (close(saved_stdin), -1);
 		else if (redirs->type == TOKEN_REDIR_APPEND
 			&& append_redir(redirs->file) < 0)
-			return (-1);
-		else if (redirs->type == TOKEN_HEREDOC && heredoc(redirs->file) < 0)
-			return (-1);
+			return (close(saved_stdin), -1);
+		else if (redirs->type == TOKEN_HEREDOC)
+		{
+			dup2(saved_stdin, STDIN_FILENO);
+			if (heredoc(redirs->file) < 0)
+				return (close(saved_stdin), -1);
+		}
 		redirs = redirs->next;
 	}
+	close(saved_stdin);
 	return (0);
 }
