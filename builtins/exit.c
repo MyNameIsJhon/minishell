@@ -45,29 +45,35 @@ int	handle_exit_command(t_command *command, t_context *ctx)
 {
 	long	arg;
 
+	arg = 0;
 	if (command->com_splited[1] && ft_isarray_onlydigit(command->com_splited[1]) == EXIT_FAILURE)
 	{
 		context_free(&ctx);
 		clear_history();
-		printf("exit\n");
-		printf("exit: %s: numeric argument required", command->com_splited[1]);//TODO I'm getting a different error message here
+		ft_puterror("exit\n");
+		ft_puterror("exit: ");
+		ft_puterror(command->com_splited[1]);
+		ft_puterror(": numeric argument required\n");
 		exit(2);
 	}
-	if (command->com_splited[2])
+	if (command->com_splited[1] && command->com_splited[2])//TODO must have exit num 1
 	{
-		printf("exit\n");
-		printf("exit: too many arguments\n");
+		ft_puterror("exit\n");
+		ft_puterror("exit: too many arguments\n");
 		return (0);
 	}
-	arg = ft_atol(command->com_splited[1]);
-	if (arg > 256 || arg < - 256)
-		handle_arg_toobig(arg);
+	if (command->com_splited[1])
+	{
+		arg = ft_atol(command->com_splited[1]);
+		if (arg > 256 || arg < - 256)
+			handle_arg_toobig(arg);
+	}
 	if (!ft_strcmp(command->com_splited[0], "exit"))//TODO Does this security makes any sense ?
 	{
 		context_free(&ctx);
 		clear_history();
-		printf("exit\n");
-		exit(0);
+		ft_puterror("exit\n");
+		exit(arg);
 	}
 	return (0);
 }
