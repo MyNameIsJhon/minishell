@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena_allocator.h"
-#include "libft.h"
 #include "minishell.h"
-#include <stdio.h>
 
 int	env_len(t_env *env)
 {

@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
-#include <unistd.h>
 
 int handle_pwd_command()
 {

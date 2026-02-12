@@ -10,3 +10,4 @@ a faire:
 
 Normalement non necessaire:
 - gere par ex le \ lors des tabs sur des elements possedant des espaces
+- REMOVE HISTORY BEFORE FINAL PUSH !!!!!!!

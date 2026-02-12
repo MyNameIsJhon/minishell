@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fileft.h"
-#include "libft.h"
 #include "minishell.h"
 
 int	handle_echo_command(t_command *cmd)

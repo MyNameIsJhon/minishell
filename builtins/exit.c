@@ -10,18 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdlib.h>
+
+static int	ft_isarray_onlydigit(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isdigit(str[i]) == 0)
+			return (EXIT_FAILURE);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
 
 int	handle_exit_command(t_command *command, t_context *ctx)
 {
-	if (!ft_strcmp(command->com_splited[0], "exit"))
+
+	if (command->com_splited[1] && ft_isarray_onlydigit(command->com_splited[1]) == EXIT_FAILURE)
 	{
 		context_free(&ctx);
 		clear_history();
+		printf("exit\n");
+		printf("exit: %s: numeric argument required", command->com_splited[1]);//TODO I'm getting a different error message here
+		exit(2);
+	}
+	if (command->com_splited[2])
+	{
+		printf("exit\n");
+		printf("exit: too many arguments\n");
+		return (0);
+	}
+	if (!ft_strcmp(command->com_splited[0], "exit"))//TODO Does this security makes any sense ?
+	{
+		context_free(&ctx);
+		clear_history();
+		printf("exit\n");
 		exit(0);
 	}
 	return (0);
