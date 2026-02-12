@@ -56,4 +56,3 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 	a->current->offset = aligned + size;
 	return (ptr);
 }
-

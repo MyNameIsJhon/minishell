@@ -45,7 +45,7 @@ static int	input_redir(char *file)
 {
 	int	fd;
 
-	fd = open(file, O_RDONLY);
+	fd = open(file, O_RDONLY | O_CLOEXEC);
 	if (fd < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -66,7 +66,7 @@ static int	output_redir(char *file)
 {
 	int	fd;
 
-	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC);
 	if (fd < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);

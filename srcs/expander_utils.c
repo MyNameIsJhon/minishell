@@ -14,6 +14,8 @@
 
 static char	*find_end_var(char *var)
 {
+	if (*var == '?')
+		return (var + 1);
 	while (*var)
 	{
 		if (!ft_isalnum(*var) && *var != '_')
@@ -73,7 +75,7 @@ int	count_len_vars(char **vars)
 	return (len);
 }
 
-int	count_len_expandeds(char **vars, t_env *env)
+int	count_len_expandeds(char **vars, t_context *ctx)
 {
 	int		len;
 	t_env	*env_var;
@@ -81,9 +83,14 @@ int	count_len_expandeds(char **vars, t_env *env)
 	len = 0;
 	while (*vars)
 	{
-		env_var = find_env(*vars + 1, env);
-		if (env_var && env_var->value)
-			len += ft_strlen(env_var->value);
+		if ((*vars)[1] == '?')
+			len += ft_strlen(ft_itoa(ctx->last_exit_status));
+		else
+		{
+			env_var = find_env(*vars + 1, ctx->env);
+			if (env_var && env_var->value)
+				len += ft_strlen(env_var->value);
+		}
 		vars++;
 	}
 	return (len);

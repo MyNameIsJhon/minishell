@@ -63,7 +63,7 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 		if (!command || !command->com_splited[0])
 			continue ;
-		/* printf("return value: %d\n", execute_user_command(command, ctx)); */
+		ctx->last_exit_status = execute_user_command(command, ctx);
 	}
 	context_free(&ctx);
 	return (0);

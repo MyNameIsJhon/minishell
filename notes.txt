@@ -4,3 +4,9 @@ a faire:
 - double and simple quote on different lines
 - sortie des erreurs
 - mettre le bon domain et user
+- Ajouter la possibilite avec exit de mettre un int en argument
+- regarder ce que -n fait reellement avec echo
+- proteger les arena allocs
+
+Normalement non necessaire:
+- gere par ex le \ lors des tabs sur des elements possedant des espaces
