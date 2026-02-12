@@ -1,7 +1,9 @@
 a faire:
 - $?
-- Handle tilde
-- double and simple quote on different lines
 - sortie des erreurs
-- mettre le bon domain et user
 - REMOVE HISTORY BEFORE FINAL PUSH !!!!!!!
+
+# Not handled
+- ./minishell in minishell execute bash, exit now says there are too many arg
+-
+
