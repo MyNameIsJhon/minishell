@@ -16,6 +16,7 @@
 # include "arena_allocator.h"
 # include "fileft.h"
 # include "libft.h"
+# include "stdbool.h"
 
 # include <dirent.h>
 # include <fcntl.h>
