@@ -50,7 +50,7 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 	if (is_cmd_builtin(cmd) == true)
 	{
 		execute_builtin(cmd, ctx);
-		return ;
+		exit(1);
 	}	
 	else
 	{

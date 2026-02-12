@@ -83,8 +83,11 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		init_signals();
+		rl_catch_signals = 0;
 		context_reset_line(ctx);
-		line = get_user_input(ctx);//TODO secur
+		line = get_user_input(ctx);
+		if (!line)
+			return (1);
 		command = mini_parser(line, ctx);
 		free(line);
 		if (!command)
