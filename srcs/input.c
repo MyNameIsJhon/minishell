@@ -86,9 +86,9 @@ char	execute_user_command(t_command *command, t_context *ctx)
 
 	current = command;
 	env = convert_env(ctx->env, ctx->line_memory);
-	if (current->next && is_cmd_builtin(command) == true)
-		return (run_cmd(command, env, ctx));
-	if (is_cmd_builtin(command) == true)
+	command->fd[0] = STDIN_FILENO;
+	command->fd[1] = STDOUT_FILENO;
+	if (!command->next && is_cmd_builtin(command) == true)
 		return (execute_builtin(command, ctx));
 	while (current)
 	{
@@ -97,7 +97,6 @@ char	execute_user_command(t_command *command, t_context *ctx)
 			ft_putstr_fd("minishell: command not found: ", 2);
 			ft_putstr_fd(command->com_splited[0], 2);
 			ft_putstr_fd("\n", 2);
-			return (0);
 		}
 		current = current->next;
 	}

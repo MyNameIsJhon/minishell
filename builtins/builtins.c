@@ -44,14 +44,14 @@ int	execute_builtin(t_command *command, t_context *ctx)
 	int	saved_stdout;
 	int	retval;
 
-	if (command->redirections)
+	if (!command->next && command->redirections)
 	{
 		if (apply_redirections_with_backup(command->redirections, &saved_stdin,
 				&saved_stdout) < 0)
 			return (0);
 	}
 	retval = handle_builtins(command, ctx);
-	if (command->redirections)
+	if (!command->next && command->redirections)
 		restore_fds(saved_stdin, saved_stdout);
 	return (retval);
 }

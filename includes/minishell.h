@@ -131,7 +131,6 @@ int						handle_unset_command(t_command *cmd, t_context *ctx);
 int						handle_export_command(t_command *cmd, t_context *ctx);
 char					**convert_env(t_env *env, t_arena *memory);
 int						handle_cd_command(t_command *command, t_context *ctx);
-
 void					expand_tokens(t_tokenizer *tokenizer, t_context *ctx);
 char					*expand_variables(char *str, t_context *ctx);
 void					init_signals(void);
