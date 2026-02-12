@@ -12,10 +12,8 @@
 
 #include "minishell.h"
 #include <stdbool.h>
-// check if last char of key = +
-// find key
-// alloc new str
-void	print_export_env(t_context *ctx)//TODO is this the proper way to handle failure ?
+
+void	print_export_env(t_context *ctx)
 {
 	t_env	*env;
 
@@ -43,7 +41,7 @@ static char	*ft_rm_pluschar(char *str, t_arena *global_mem)
 	return (new_str);
 }
 
-static char *write_append(char *ogval, char *apval, t_arena *global_mem)
+static char	*write_append(char *ogval, char *apval, t_arena *global_mem)
 {
 	int		totlen;
 	char	*new_val;
@@ -59,8 +57,19 @@ static char *write_append(char *ogval, char *apval, t_arena *global_mem)
 	ft_strlcpy(new_val + ogval_len, apval, ft_strlen(apval) + 1);
 	return (new_val);
 }
+//env (t_env*)
+//bool is_append
+//args (char **)
+// ctx (t_content*)
 
-//TODO Securite sur empty old val, ou empty new val
+void	export_append(t_env *env, bool is_append, char **args, t_context *ctx)
+{
+	if (is_append == true)
+		env->value = write_append(env->value, args[1], ctx->global_memory);
+	if (is_append == false)
+		env->value = ar_strdup(args[1], ctx->global_memory);
+}
+
 int	handle_export_command(t_command *cmd, t_context *ctx)
 {
 	t_env	*env;
@@ -86,9 +95,6 @@ int	handle_export_command(t_command *cmd, t_context *ctx)
 		env_add_back(new_env(args[0], args[1], ctx->global_memory), &ctx->env);
 		return (1);
 	}
-	if (is_append == true)
-		env->value = write_append(env->value, args[1], ctx->global_memory);
-	if (is_append == false)
-		env->value = ar_strdup(args[1], ctx->global_memory);
+	export_append(env, is_append, args, ctx);
 	return (1);
 }

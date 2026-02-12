@@ -12,19 +12,15 @@
 
 #include "minishell.h"
 
-int	execute_builtin(t_command *command, t_context *ctx)
+// retval (int)
+// command (t_command *)
+// ctx (t_context *)
+
+int	handle_builtins(t_command *command, t_context *ctx)
 {
-	int	saved_stdin;
-	int	saved_stdout;
 	int	retval;
 
 	retval = 0;
-	if (command->redirections)
-	{
-		if (apply_redirections_with_backup(command->redirections, &saved_stdin,
-				&saved_stdout) < 0)
-			return (0);
-	}
 	if (!ft_strcmp(command->com_splited[0], "cd"))
 		retval = handle_cd_command(command, ctx);
 	else if (!ft_strcmp(command->com_splited[0], "exit"))
@@ -39,8 +35,23 @@ int	execute_builtin(t_command *command, t_context *ctx)
 		retval = handle_echo_command(command);
 	else if (!ft_strcmp(command->com_splited[0], "pwd"))
 		retval = handle_pwd_command();
+	return (retval);
+}
+
+int	execute_builtin(t_command *command, t_context *ctx)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+	int	retval;
+
+	if (command->redirections)
+	{
+		if (apply_redirections_with_backup(command->redirections, &saved_stdin,
+				&saved_stdout) < 0)
+			return (0);
+	}
+	retval = handle_builtins(command, ctx);
 	if (command->redirections)
 		restore_fds(saved_stdin, saved_stdout);
 	return (retval);
 }
-

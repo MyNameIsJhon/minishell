@@ -99,17 +99,3 @@ int	apply_redirections_with_backup(t_redir *redirs, int *saved_stdin,
 	}
 	return (0);
 }
-
-void	restore_fds(int saved_stdin, int saved_stdout)
-{
-	if (saved_stdin >= 0)
-	{
-		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
-	}
-	if (saved_stdout >= 0)
-	{
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdout);
-	}
-}

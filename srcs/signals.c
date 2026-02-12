@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-volatile sig_atomic_t	signal_status = 0;
+volatile sig_atomic_t	g_signal_status = 0;
 
 void					rl_replace_line(const char *text, int clear_undo);
 
 static void	sigint_handler(int sig)
 {
 	(void)sig;
-	signal_status = 130;
+	g_signal_status = 130;
 	ft_putchar('\n');
 	rl_on_new_line();
 	rl_replace_line("", 0);

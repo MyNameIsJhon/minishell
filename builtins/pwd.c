@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int handle_pwd_command()
+int	handle_pwd_command(void)
 {
 	char	cwd[4096];
 
