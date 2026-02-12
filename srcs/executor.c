@@ -41,20 +41,27 @@ static int	handle_exit_status(int status)
 	return (last_status);
 }
 
-static void	child_process(t_command *cmd, char **envp, int *fd)
+static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 {
 	set_sig(SIG_DFL);
 	if (cmd->next && set_dup(fd[1], STDOUT_FILENO) == EXIT_FAILURE)
 		exit(1);
 	close(fd[0]);
-	if (apply_redirections(cmd->redirections) < 0)
-		exit(1);
-	execve(cmd->exec_path, cmd->com_splited, envp);
-	dprintf(2, "\nexec_path: %s\n", cmd->exec_path);
+	if (is_cmd_builtin(cmd) == true)
+	{
+		execute_builtin(cmd, ctx);
+		return ;
+	}	
+	else
+	{
+		if (apply_redirections(cmd->redirections) < 0)
+			exit(1);
+		execve(cmd->exec_path, cmd->com_splited, envp);
+	}
 	exit(1);
 }
 
-static int	execute_loop(t_command *current, char **envp, pid_t *pid)
+static int	execute_loop(t_command *current, char **envp, pid_t *pid, t_context *ctx)
 {
 	if (pipe(current->fd) == -1)
 		return (-1);
@@ -67,14 +74,14 @@ static int	execute_loop(t_command *current, char **envp, pid_t *pid)
 		return (-1);
 	}
 	if (!*pid)
-		child_process(current, envp, current->fd);
+		child_process(current, envp, current->fd, ctx);
 	set_dup(current->fd[0], STDIN_FILENO);
 	if (close(current->fd[1]) == -1)
 		return (-1);
 	return (0);
 }
 
-char	run_cmd(t_command *command, char **envp)
+char	run_cmd(t_command *command, char **envp, t_context *ctx)
 {
 	pid_t		pid;
 	int			status;
@@ -86,7 +93,7 @@ char	run_cmd(t_command *command, char **envp)
 	save_std[1] = dup(STDOUT_FILENO);
 	while (current)
 	{
-		if (execute_loop(current, envp, &pid) == -1)
+		if (execute_loop(current, envp, &pid, ctx) == -1)
 			return (-1);
 		current = current->next;
 	}

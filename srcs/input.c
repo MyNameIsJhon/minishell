@@ -66,11 +66,17 @@ char	*get_user_input(t_context *ctx)
 	return (input);
 }
 
-static void	print_cmd_not_found(t_command *command)
+int	is_cmd_builtin(t_command *command)
 {
-	ft_putstr_fd("minishell: command not found: ", 2);
-	ft_putstr_fd(command->com_splited[0], 2);
-	ft_putstr_fd("\n", 2);
+	if (!ft_strcmp(command->com_splited[0], "cd")
+		|| !ft_strcmp(command->com_splited[0], "exit")
+		|| !ft_strcmp(command->com_splited[0], "env")
+		|| !ft_strcmp(command->com_splited[0], "unset")
+		|| !ft_strcmp(command->com_splited[0], "export")
+		|| !ft_strcmp(command->com_splited[0], "echo")
+		|| !ft_strcmp(command->com_splited[0], "pwd"))
+		return (true);
+	return (false);
 }
 
 char	execute_user_command(t_command *command, t_context *ctx)
@@ -79,20 +85,21 @@ char	execute_user_command(t_command *command, t_context *ctx)
 	t_command	*current;
 
 	current = command;
-	if (!ft_strcmp(command->com_splited[0], "cd")
-		|| !ft_strcmp(command->com_splited[0], "exit")
-		|| !ft_strcmp(command->com_splited[0], "env")
-		|| !ft_strcmp(command->com_splited[0], "unset")
-		|| !ft_strcmp(command->com_splited[0], "export")
-		|| !ft_strcmp(command->com_splited[0], "echo")
-		|| !ft_strcmp(command->com_splited[0], "pwd"))
+	env = convert_env(ctx->env, ctx->line_memory);
+	if (current->next && is_cmd_builtin(command) == true)
+		return (run_cmd(command, env, ctx));
+	if (is_cmd_builtin(command) == true)
 		return (execute_builtin(command, ctx));
 	while (current)
 	{
 		if (!find_prog(current, ctx))
-			return (print_cmd_not_found(current), 0);
+		{
+			ft_putstr_fd("minishell: command not found: ", 2);
+			ft_putstr_fd(command->com_splited[0], 2);
+			ft_putstr_fd("\n", 2);
+			return (0);
+		}
 		current = current->next;
 	}
-	env = convert_env(ctx->env, ctx->line_memory);
-	return (run_cmd(command, env));
+	return (run_cmd(command, env, ctx));
 }

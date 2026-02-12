@@ -110,7 +110,6 @@ void					context_reset_line(t_context *ctx);
 t_command				*mini_parser(char *user_input, t_context *ctx);
 void					command_print(t_command *command);
 char					*find_prog(t_command *command, t_context *ctx);
-char					run_cmd(t_command *command, char **envp);
 char					**get_executable_paths(t_command *cmd, t_context *ctx);
 
 t_token					*tokenize(char *input, t_arena *memory);
@@ -149,6 +148,7 @@ void					restore_fds(int saved_stdin, int saved_stdout);
 int						execute_builtin(t_command *command, t_context *ctx);
 int						handle_echo_command(t_command *cmd);
 int						handle_pwd_command(void);
+char					run_cmd(t_command *command, char **envp, t_context *ctx);
 char					**recup_vars_in_token(t_token *token, t_arena *memory);
 int						count_len_expandeds(char **vars, t_context *ctx);
 int						count_len_vars(char **vars);
@@ -160,5 +160,6 @@ void					init_command_struct(t_command *cmd, char **split);
 t_command				*build_command(t_token *tokens, t_arena *memory);
 t_token					*split_at_pipe(t_token **segment);
 void					set_sig(void *sig);
+int						is_cmd_builtin(t_command *command);
 
 #endif
