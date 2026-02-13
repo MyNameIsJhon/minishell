@@ -21,7 +21,7 @@ int	handle_echo_command(t_command *cmd)
 		return (1);
 	i = 1;
 	newline = 1;
-	if (cmd->com_splited[1] && !ft_strcmp(cmd->com_splited[1], "-n"))
+	if (cmd->com_splited[1] && !ft_strncmp(cmd->com_splited[1], "-n", 2))
 	{
 		newline = 0;
 		i = 2;
