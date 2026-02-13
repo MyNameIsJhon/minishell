@@ -117,8 +117,6 @@ char	run_cmd(t_command *command, char **envp, t_context *ctx)
 	}
 	set_dup(save_std[0], STDIN_FILENO);
 	set_dup(save_std[1], STDOUT_FILENO);
-	close(save_std[0]);
-	close(save_std[1]);
 	return (status[1]);
 }
 /*char	run_cmd(t_command *command, char **envp, t_context *ctx)
