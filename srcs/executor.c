@@ -22,24 +22,6 @@ static int	set_dup(int fd, int stream)
 	return (EXIT_SUCCESS);
 }
 
-static int	handle_exit_status(int status)
-{
-	int	last_status;
-
-	if (WIFEXITED(status))
-		last_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		last_status = 128 + WTERMSIG(status);
-		if (WTERMSIG(status) == SIGQUIT)
-			write(1, "Quit (core dumped)\n", 19);
-		else if (WTERMSIG(status) == SIGINT)
-			write(1, "\n", 1);
-	}
-	else
-		last_status = 1;
-	return (last_status);
-}
 
 static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 {
@@ -92,7 +74,6 @@ static int	execute_loop(t_command *current, char **envp, pid_t *pid,
 char	run_cmd(t_command *command, char **envp, t_context *ctx)
 {
 	pid_t		pid;
-	pid_t		temp_pid;
 	int			status[2];
 	t_command	*current;
 	int			save_std[2];
@@ -106,18 +87,7 @@ char	run_cmd(t_command *command, char **envp, t_context *ctx)
 		execute_loop(current, envp, &pid, ctx);
 		current = current->next;
 	}
-	while (1)
-	{
-		temp_pid = waitpid(-1, &status[0], 0);
-		if (temp_pid == -1)
-			break ;
-		if (temp_pid == pid)
-		{
-			status[1] = handle_exit_status(status[0]);
-			if (status[0] == 256)
-				status[1] = 127;
-		}
-	}
+	waitpid_func(status, pid);
 	set_dup(save_std[0], STDIN_FILENO);
 	set_dup(save_std[1], STDOUT_FILENO);
 	return (status[1]);

@@ -105,6 +105,7 @@ typedef struct s_context
 	int					last_exit_status;
 }						t_context;
 
+void					waitpid_func(int *status, int pid);
 t_context				*context_init(void);
 void					context_free(t_context **ctx);
 void					context_reset_line(t_context *ctx);
