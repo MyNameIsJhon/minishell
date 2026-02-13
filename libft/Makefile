@@ -21,36 +21,28 @@ SRC         := $(wildcard $(LIB_DIR)/*.c) $(wildcard $(PRINTF_DIR)/*.c) $(wildca
 
 OBJ         := $(SRC:%.c=$(OBJ_DIR)/%.o)
 
-# === COLORS / ICONS ===
-
-BOLD        := \033[1m
-GREEN       := \033[0;32m
-YELLOW      := \033[0;33m
-CYAN        := \033[0;36m
-RESET       := \033[0m
-
 # === BUILD RULES ===
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "$(CYAN)[🔧] Archiving into $(NAME)...$(RESET)"
+	@echo "Archiving into $(NAME)..."
 	@$(AR) $@ $^
-	@echo "$(GREEN)[✅] Build complete.$(RESET)"
+	@echo "Build complete."
 
 $(OBJ_DIR)/%.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	@echo "$(YELLOW)[⚙️] Compiling: $<$(RESET)"
+	@echo "Compiling: $<"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # === CLEANUP ===
 
 clean:
-	@echo "$(CYAN)[🧹] Removing object files...$(RESET)"
+	@echo "Removing object files..."
 	@$(RM) -r $(OBJ_DIR)
 
 fclean: clean
-	@echo "$(CYAN)[💥] Removing binary: $(NAME)$(RESET)"
+	@echo "Removing binary: $(NAME)"
 	@$(RM) $(NAME)
 
 re: fclean all

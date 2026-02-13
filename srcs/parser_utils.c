@@ -37,7 +37,6 @@ static char	**tokens_to_array(t_token *tokens, t_arena *memory)
 	if (!array)
 		return (NULL);
 	i = 0;
-	/* print_tokens(tokens); */
 	while (tokens)
 	{
 		if (tokens->type == TOKEN_WORD)

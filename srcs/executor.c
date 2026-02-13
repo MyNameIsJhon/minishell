@@ -108,7 +108,7 @@ char	run_cmd(t_command *command, char **envp, t_context *ctx)
 		if (temp_pid == pid)
 		{
 			status[1] = handle_exit_status(status[0]);
-			if (status[0])
+			if (status[0] == 256)
 				status[1] = 127;
 		}
 	}

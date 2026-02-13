@@ -68,10 +68,32 @@ static void	handle_empty_cmd(t_command *command)
 		restore_fds(saved_in, saved_out);
 }
 
-int	main(int ac, char **av, char **envp)
+static int loop_main(t_context *ctx)
 {
 	char		*line;
 	t_command	*command;
+
+	init_signals();
+	rl_catch_signals = 0;
+	context_reset_line(ctx);
+	line = get_user_input(ctx);
+	if (!line)
+		return (1);
+	command = mini_parser(line, ctx);
+	free(line);
+	if (!command)
+		return (0);
+	if (!command->com_splited[0])
+	{
+		handle_empty_cmd(command);
+		return (0);
+	}
+	ctx->last_exit_status = execute_user_command(command, ctx);
+	return (0);
+}
+
+int	main(int ac, char **av, char **envp)
+{
 	t_context	*ctx;
 
 	(void)ac;
@@ -82,22 +104,8 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	while (1)
 	{
-		init_signals();
-		rl_catch_signals = 0;
-		context_reset_line(ctx);
-		line = get_user_input(ctx);
-		if (!line)
+		if (loop_main(ctx) == 1)
 			return (1);
-		command = mini_parser(line, ctx);
-		free(line);
-		if (!command)
-			continue ;
-		if (!command->com_splited[0])
-		{
-			handle_empty_cmd(command);
-			continue ;
-		}
-		ctx->last_exit_status = execute_user_command(command, ctx);
 	}
 	context_free(&ctx);
 	return (0);

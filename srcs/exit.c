@@ -28,6 +28,17 @@ static int	ft_isarray_onlydigit(char *str)
 	return (EXIT_SUCCESS);
 }
 
+static void	handle_misinput(t_command *command, t_context **ctx)
+{
+	context_free(ctx);
+	ft_puterror("exit\n");
+	ft_puterror("exit: ");
+	ft_puterror(command->com_splited[1]);
+	ft_puterror(": numeric argument required\n");
+	clear_history();
+	exit(2);
+}
+
 int	handle_exit_command(t_command *command, t_context *ctx)
 {
 	long	arg;
@@ -35,21 +46,9 @@ int	handle_exit_command(t_command *command, t_context *ctx)
 	arg = 0;
 	if (command->com_splited[1]
 		&& ft_isarray_onlydigit(command->com_splited[1]) == EXIT_FAILURE)
-	{
-		context_free(&ctx);
-		ft_puterror("exit\n");
-		ft_puterror("exit: ");
-		ft_puterror(command->com_splited[1]);
-		ft_puterror(": numeric argument required\n");
-		clear_history();
-		exit(2);
-	}
+		handle_misinput(command, &ctx);
 	if (command->com_splited[1] && command->com_splited[2])
-	{
-		ft_puterror("exit\n");
-		ft_puterror("exit: too many arguments\n");
-		return (1);
-	}
+		return (ft_puterror("exit\nexit: too many arguments\n"), 1);
 	if (command->com_splited[1])
 	{
 		arg = ft_atol(command->com_splited[1]);

@@ -26,9 +26,7 @@ static char	*mini_prompt(char *pwd, t_context *ctx)
 	ft_strlcat(prompt, ctx->user, tot + 1);
 	ft_strlcat(prompt, "㉿", tot + 1);
 	ft_strlcat(prompt, ctx->hostname, tot + 1);
-	ft_strlcat(prompt, ":[", tot + 1);
-	ft_strlcat(prompt, pwd, tot + 1);
-	ft_strlcat(prompt, "] $ ", tot + 1);
+	ft_strlcat(prompt, " » ", tot + 1);
 	line = readline(prompt);
 	if (line && *line)
 		add_history(line);

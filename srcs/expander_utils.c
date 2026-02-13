@@ -25,15 +25,6 @@ static char	*find_end_var(char *var)
 	return (var);
 }
 
-/* static void	print_vars(char **vars) */
-/* { */
-/* 	while (*vars) */
-/* 	{ */
-/* 		printf("Var: %s\n", *vars); */
-/* 		vars++; */
-/* 	} */
-/* } */
-
 char	**recup_vars_in_token(t_token *token, t_arena *memory)
 {
 	char	**vars;
@@ -53,12 +44,10 @@ char	**recup_vars_in_token(t_token *token, t_arena *memory)
 		if (!var)
 			break ;
 		end_var = find_end_var(var + 1);
-		/* printf("Var found: %.*s\n", (int)(end_var - var), var); */
 		vars[i++] = ar_substr(var, 0, end_var - var, memory);
 		var = end_var;
 	}
 	vars[i] = NULL;
-	/* print_vars(vars); */
 	return (vars);
 }
 

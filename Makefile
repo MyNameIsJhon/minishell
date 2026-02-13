@@ -37,23 +37,15 @@ LIBFT       := $(LIBFT_DIR)/libft.a
 #                                   SOURCES                                    #
 # ============================================================================ #
 
-SRCS        := $(wildcard $(SRC_DIR)/*.c)
+
+SRCS := builtins.c  echo.c       executor.c  expander_utils.c  input.c      parser_utils.c  redirections_utils.c  tokenizer.c cd.c        env.c        exit.c      export.c          minishell.c  pwd.c           signals.c             tokenizer_utils.c context.c   env_utils.c  expander.c  finder.c          parser.c     redirections.c   unset.c
+OBJS := $(SRCS:.c=.o)
+SRCS := $(addprefix $(SRCDIR)/, $(SRCS))
+OBJS := $(addprefix $(OBJ_DIR)/, $(OBJS))
 BUILTINS    := $(wildcard $(BUILTINS_DIR)/*.c)
-OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 BUILTINS_OBJS := $(BUILTINS:$(BUILTINS_DIR)/%.c=$(OBJ_DIR)/builtins/%.o)
 DEPS        := $(OBJS:.o=.d) $(BUILTINS_OBJS:.o=.d)
 INCLUDES    := -I$(INC_DIR) -I$(LIBFT_DIR)/includes
-
-# ============================================================================ #
-#                                   COLORS                                     #
-# ============================================================================ #
-
-BOLD        := \033[1m
-GREEN       := \033[0;32m
-YELLOW      := \033[0;33m
-CYAN        := \033[0;36m
-RED         := \033[0;31m
-RESET       := \033[0m
 
 # ============================================================================ #
 #                                   RULES                                      #
@@ -64,25 +56,25 @@ RESET       := \033[0m
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS) $(BUILTINS_OBJS)
-	@echo "$(CYAN)$(BOLD)[🔗] Linking executable $(NAME)...$(RESET)"
+	@echo "Linking executable $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJS) $(BUILTINS_OBJS) -L$(LIBFT_DIR) -lft $(LDLIBS) -o $@
-	@echo "$(GREEN)$(BOLD)[✅] Build complete: $(NAME)$(RESET)"
+	@echo "Build complete: $(NAME)"
 	@echo ""
 
 $(LIBFT):
-	@echo "$(CYAN)$(BOLD)[📚] Building libft...$(RESET)"
+	@echo "Building libft..."
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
-	@echo "$(GREEN)$(BOLD)[✅] Libft ready.$(RESET)"
+	@echo "Libft ready."
 	@echo ""
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(MKDIR_P) $(dir $@)
-	@echo "$(YELLOW)[⚙️ ] Compiling: $<$(RESET)"
+	@echo "Compiling: $<"
 	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
 $(OBJ_DIR)/builtins/%.o: $(BUILTINS_DIR)/%.c
 	@$(MKDIR_P) $(dir $@)
-	@echo "$(YELLOW)[⚙️ ] Compiling builtin: $<$(RESET)"
+	@echo "Compiling builtin: $<"
 	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
 # ============================================================================ #
@@ -91,23 +83,23 @@ $(OBJ_DIR)/builtins/%.o: $(BUILTINS_DIR)/%.c
 
 debug: CFLAGS += $(DFLAGS)
 debug: fclean $(NAME)
-	@echo "$(BOLD)$(GREEN)[🐛] Debug build ready with sanitizers$(RESET)"
+	@echo "Debug build ready with sanitizers"
 
 # ============================================================================ #
 #                                   CLEANUP                                    #
 # ============================================================================ #
 
 clean:
-	@echo "$(CYAN)[🧹] Cleaning object files...$(RESET)"
+	@echo "Cleaning object files..."
 	@$(RM) -r $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
-	@echo "$(GREEN)[✅] Clean complete.$(RESET)"
+	@echo " Clean complete."
 
 fclean: clean
-	@echo "$(CYAN)[💥] Removing executable: $(NAME)$(RESET)"
+	@echo "Removing executable: $(NAME)"
 	@$(RM) $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory
-	@echo "$(GREEN)[✅] Full clean complete.$(RESET)"
+	@echo " Full clean complete."
 
 re: fclean all
 
@@ -116,14 +108,14 @@ re: fclean all
 # ============================================================================ #
 
 help:
-	@echo "$(BOLD)$(CYAN)Minishell Makefile Commands:$(RESET)"
+	@echo "Minishell Makefile Commands:"
 	@echo ""
-	@echo "  $(BOLD)make$(RESET) or $(BOLD)make all$(RESET)    - Build the project"
-	@echo "  $(BOLD)make debug$(RESET)           - Build with sanitizers (address + undefined)"
-	@echo "  $(BOLD)make clean$(RESET)           - Remove object files"
-	@echo "  $(BOLD)make fclean$(RESET)          - Remove object files and executable"
-	@echo "  $(BOLD)make re$(RESET)              - Rebuild everything from scratch"
-	@echo "  $(BOLD)make help$(RESET)            - Show this help message"
+	@echo "  make or $(BOLD)make all    - Build the project"
+	@echo "  make debug           - Build with sanitizers (address + undefined)"
+	@echo "  make clean           - Remove object files"
+	@echo "  make fclean          - Remove object files and executable"
+	@echo "  make re              - Rebuild everything from scratch"
+	@echo "  make help            - Show this help message"
 	@echo ""
 
 # ============================================================================ #
