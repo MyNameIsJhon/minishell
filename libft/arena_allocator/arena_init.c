@@ -22,10 +22,10 @@ t_arena_block	*create_block(size_t size)
 {
 	t_arena_block	*block;
 
-	block = malloc(sizeof(t_arena_block));
+	block = ft_calloc(sizeof(t_arena_block));
 	if (!block)
 		return (NULL);
-	block->data = malloc(size);
+	block->data = ft_calloc(size, 1);
 	if (!block->data)
 	{
 		free(block);
@@ -41,7 +41,7 @@ t_arena	*arena_init(size_t size)
 {
 	t_arena	*a;
 
-	a = malloc(sizeof(t_arena));
+	a = ft_calloc(sizeof(t_arena), 1);
 	if (!a)
 		return (NULL);
 	a->head = create_block(size);
