@@ -17,7 +17,7 @@
 NAME        := minishell
 CC          := cc
 CFLAGS      := -Wall -Wextra -Werror -g
-DFLAGS      := -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer
+DFLAGS      := #-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer
 LDLIBS      := -lreadline
 RM          := rm -f
 MKDIR_P     := mkdir -p
