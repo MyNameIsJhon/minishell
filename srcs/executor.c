@@ -15,7 +15,7 @@
 static int	set_dup(int fd, int stream)
 {
 	if (fd == stream)
-		return (EXIT_SUCCESS);
+		return (close(fd), EXIT_SUCCESS);
 	if (dup2(fd, stream) == (-1))
 		return (close(fd), EXIT_FAILURE);
 	close(fd);
@@ -53,6 +53,8 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 			exit(1);
 		execute_builtin(cmd, ctx);
 		context_free(&ctx);
+		close(fd[0]);
+		close(fd[1]);
 		exit(1);
 	}
 	else
@@ -119,24 +121,3 @@ char	run_cmd(t_command *command, char **envp, t_context *ctx)
 	set_dup(save_std[1], STDOUT_FILENO);
 	return (status[1]);
 }
-/*char	run_cmd(t_command *command, char **envp, t_context *ctx)
-{
-	pid_t		pid;
-	int			status;
-	t_command	*current;
-	int			save_std[2];
-
-	current = command;
-	save_std[0] = dup(STDIN_FILENO);
-	save_std[1] = dup(STDOUT_FILENO);
-	while (current)
-	{
-		if (execute_loop(current, envp, &pid, ctx) == -1)
-			return (-1);
-		current = current->next;
-	}
-	waitpid(pid, &status, 0);
-	set_dup(save_std[0], STDIN_FILENO);
-	set_dup(save_std[1], STDOUT_FILENO);
-	return (handle_exit_status(status));
-}*/
