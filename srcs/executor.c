@@ -52,6 +52,7 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 		if (apply_redirections(cmd->redirections) < 0)
 			exit(1);
 		execute_builtin(cmd, ctx);
+		context_free(&ctx);
 		exit(1);
 	}
 	else
@@ -59,6 +60,7 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 		if (apply_redirections(cmd->redirections) < 0)
 			exit(1);
 		execve(cmd->exec_path, cmd->com_splited, envp);
+		context_free(&ctx);
 	}
 	exit(1);
 }
@@ -115,6 +117,8 @@ char	run_cmd(t_command *command, char **envp, t_context *ctx)
 	}
 	set_dup(save_std[0], STDIN_FILENO);
 	set_dup(save_std[1], STDOUT_FILENO);
+	close(save_std[0]);
+	close(save_std[1]);
 	return (status[1]);
 }
 /*char	run_cmd(t_command *command, char **envp, t_context *ctx)
