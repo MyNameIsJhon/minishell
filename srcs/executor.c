@@ -62,6 +62,9 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 		if (apply_redirections(cmd->redirections) < 0)
 			exit(1);
 		execve(cmd->exec_path, cmd->com_splited, envp);
+		dprintf(2, "fd0: %d fd:1 %d", fd[0], fd[1]);
+		close(fd[0]);
+		close(fd[1]);
 		context_free(&ctx);
 	}
 	exit(1);
