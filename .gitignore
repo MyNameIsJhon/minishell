@@ -1,8 +1,0 @@
-.cache/clangd/index
-*.o
-*.a
-obj/
-libft/obj/
-libft/libft.a
-minishell
-compile_commands.json
