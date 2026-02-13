@@ -53,7 +53,7 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 			exit(1);
 		execute_builtin(cmd, ctx);
 		exit(1);
-	}	
+	}
 	else
 	{
 		if (apply_redirections(cmd->redirections) < 0)
@@ -63,7 +63,8 @@ static void	child_process(t_command *cmd, char **envp, int *fd, t_context *ctx)
 	exit(1);
 }
 
-static int	execute_loop(t_command *current, char **envp, pid_t *pid, t_context *ctx)
+static int	execute_loop(t_command *current, char **envp, pid_t *pid,
+		t_context *ctx)
 {
 	if (pipe(current->fd) == -1)
 		return (-1);

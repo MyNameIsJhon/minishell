@@ -63,12 +63,12 @@ static void	handle_empty_cmd(t_command *command)
 
 	if (!command->redirections)
 		return ;
-	if (apply_redirections_with_backup(command->redirections,
-			&saved_in, &saved_out) >= 0)
+	if (apply_redirections_with_backup(command->redirections, &saved_in,
+			&saved_out) >= 0)
 		restore_fds(saved_in, saved_out);
 }
 
-static int loop_main(t_context *ctx)
+static int	loop_main(t_context *ctx)
 {
 	char		*line;
 	t_command	*command;
