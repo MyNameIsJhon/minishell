@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "arena_allocator.h"
+#include "libft.h"
 #include <stdlib.h>
 
 size_t	align_up(size_t offset, size_t alignment)
@@ -22,7 +23,7 @@ t_arena_block	*create_block(size_t size)
 {
 	t_arena_block	*block;
 
-	block = ft_calloc(sizeof(t_arena_block));
+	block = ft_calloc(sizeof(t_arena_block), 1);
 	if (!block)
 		return (NULL);
 	block->data = ft_calloc(size, 1);
